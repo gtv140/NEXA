@@ -1,199 +1,89 @@
-# NEXA<!DOCTYPE html>
+<NEXA>
 <html lang="ur">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA Investment</title>
-
 <style>
-:root{
---main:#00ffd5;
---accent:#ff4fd8;
---bg:#050505;
-}
-*{box-sizing:border-box;font-family:Arial}
-body{margin:0;background:var(--bg);color:#fff}
-
-header{
-text-align:center;
-padding:18px;
-font-size:26px;
-font-weight:900;
-background:linear-gradient(90deg,var(--main),var(--accent));
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
-
-.page{
-max-width:420px;
-margin:14px auto;
-padding:16px;
-border-radius:14px;
-background:linear-gradient(180deg,#0c0c0c,#050505);
-border:1px solid rgba(0,255,213,0.15);
-}
-
+body{margin:0;background:#050505;color:#fff;font-family:Arial}
 .hidden{display:none}
-
-input,select,button{
-width:100%;
-padding:10px;
-margin-top:10px;
-border-radius:8px;
-border:1px solid rgba(0,255,213,0.2);
-background:#000;
-color:#fff;
-font-size:14px;
-}
-
-button{
-background:linear-gradient(90deg,var(--main),var(--accent));
-color:#000;
-font-weight:800;
-border:none;
-cursor:pointer;
-}
-
-.nav{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-display:flex;
-justify-content:space-around;
-background:#000;
-border-top:1px solid rgba(255,255,255,0.1);
-padding:10px 0;
-}
-
-.nav div{
-text-align:center;
-font-size:13px;
-cursor:pointer;
-}
-
-.ico{font-size:20px}
-
-.card{
-padding:12px;
-border-radius:10px;
-margin:10px 0;
-background:#0b0b0b;
-border:1px solid rgba(0,255,213,0.15);
-}
-
-.plan{
-display:flex;
-justify-content:space-between;
-gap:10px;
-}
-
-.badge{
-padding:6px 10px;
-border-radius:999px;
-background:rgba(0,255,213,0.1);
-color:var(--main);
-font-weight:800;
-font-size:13px;
-}
-
-.support{
-display:flex;
-gap:10px;
-margin-bottom:10px;
-cursor:pointer;
-font-weight:700;
-}
-
-.support span{font-size:20px}
+header{text-align:center;padding:18px;font-size:26px;font-weight:900;color:#00ffd5}
+.page{max-width:420px;margin:14px auto;padding:16px;border-radius:14px;background:#0b0b0b}
+input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:none}
+button{background:#00ffd5;color:#000;font-weight:800;cursor:pointer}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#000;padding:10px 0}
+.nav div{text-align:center;font-size:13px;cursor:pointer}
+.card{background:#111;padding:12px;border-radius:10px;margin:10px 0}
+.plan{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.copy{background:#222;color:#00ffd5}
+.countdown{font-size:13px;color:#0ff;font-weight:700;margin-top:4px}
 </style>
 </head>
-
 <body>
 
 <header>NEXA Investment</header>
 
 <!-- LOGIN -->
 <div id="login" class="page">
-<h3>لاگ ان / نیا اکاؤنٹ</h3>
+<h3>خوش آمدید</h3>
 <input id="user" placeholder="یوزر نیم">
-<input id="pass" type="password" placeholder="پاس ورڈ">
 <button onclick="login()">جاری رکھیں</button>
 </div>
 
 <!-- DASHBOARD -->
 <div id="dashboard" class="page hidden">
 <div class="card">
-<b>خوش آمدید:</b> <span id="uName"></span><br>
+<b>یوزر:</b> <span id="uName"></span><br>
 بیلنس: Rs <span id="balance">0</span><br>
-<span class="badge">روزانہ منافع: Rs <span id="daily">0</span></span>
+روزانہ منافع: Rs <span id="daily">0</span>
 </div>
 
 <div class="card">
-<b>ریفرل لنک</b>
-<input id="ref" readonly>
-<button onclick="copyRef()">کاپی کریں</button>
+<b>ممبر آئی ڈی</b>
+<input id="memberID" readonly>
+<button class="copy" onclick="copyID()">کاپی کریں</button>
 </div>
-
-<button onclick="logout()">لاگ آؤٹ</button>
 </div>
 
 <!-- PLANS -->
 <div id="plans" class="page hidden">
-<h3>انویسٹمنٹ پلانز</h3>
+<h3>سمال پلانز</h3>
 <div id="plansBox"></div>
 </div>
 
 <!-- DEPOSIT -->
 <div id="deposit" class="page hidden">
 <h3>ڈیپازٹ</h3>
-
+<input id="amount" readonly>
 <select id="method" onchange="updateNum()">
 <option value="jazz">JazzCash</option>
 <option value="easy">EasyPaisa</option>
 </select>
-
 <input id="number" readonly>
-<input id="amount" placeholder="رقم">
-<button onclick="submitDeposit()">ڈیپازٹ جمع کریں</button>
-</div>
-
-<!-- HISTORY -->
-<div id="history" class="page hidden">
-<h3>ہسٹری / سپورٹ</h3>
-
-<div class="support" onclick="openWA()">
-<span>💬</span> WhatsApp سپورٹ
-</div>
-
-<div class="support" onclick="openMail()">
-<span>📧</span> Email سپورٹ
-</div>
-
-<div id="historyBox"></div>
+<button onclick="submitDeposit()">سبمٹ</button>
 </div>
 
 <!-- NAV -->
 <div id="nav" class="nav hidden">
-<div onclick="show('dashboard')"><div class="ico">🏠</div>ہوم</div>
-<div onclick="show('plans')"><div class="ico">📦</div>پلانز</div>
-<div onclick="show('deposit')"><div class="ico">💰</div>ڈیپازٹ</div>
-<div onclick="show('history')"><div class="ico">📜</div>ہسٹری</div>
+<div onclick="show('dashboard')">🏠 ہوم</div>
+<div onclick="show('plans')">📦 پلانز</div>
+<div onclick="show('deposit')">💰 ڈیپازٹ</div>
 </div>
 
 <script>
-let user=null;
-let balance=5000;
-let daily=0;
-let history=[];
+// ===== VARIABLES =====
+let user="", balance=0, daily=0, selectedAmount=0;
+const plans=[];
+const planCount=50;
+for(let i=0;i<planCount;i++){
+  let price=200 + i*200;
+  let days=25 + i;
+  let dailyProfit=Math.floor(price*0.07);
+  let endDate=new Date().getTime() + days*24*60*60*1000;
+  plans.push({price,days,dailyProfit,endDate});
+}
 
-const plans=[
-{id:1,price:500,days:20,profit:40},
-{id:2,price:1000,days:25,profit:90},
-{id:3,price:3000,days:30,profit:300},
-{id:4,price:5000,days:40,profit:600}
-];
-
+// ===== LOGIN =====
 function login(){
 user=document.getElementById("user").value;
 if(!user)return alert("نام درج کریں");
@@ -201,85 +91,84 @@ document.getElementById("login").classList.add("hidden");
 document.getElementById("dashboard").classList.remove("hidden");
 document.getElementById("nav").classList.remove("hidden");
 document.getElementById("uName").innerText=user;
-updateUI();
+document.getElementById("memberID").value="NEXA-"+Math.floor(100000+Math.random()*900000);
 renderPlans();
+updateDashboard();
 }
 
-function logout(){location.reload()}
+// ===== DASHBOARD =====
+function updateDashboard(){
+document.getElementById("balance").innerText=balance.toFixed(2);
+document.getElementById("daily").innerText=daily.toFixed(2);
+}
 
+// ===== SHOW PAGE =====
 function show(p){
 document.querySelectorAll(".page").forEach(x=>x.classList.add("hidden"));
 document.getElementById(p).classList.remove("hidden");
 }
 
-function updateUI(){
-document.getElementById("balance").innerText=balance;
-document.getElementById("daily").innerText=daily;
-document.getElementById("ref").value="https://nexa-invest.com/?ref="+user;
-}
-
+// ===== RENDER PLANS =====
 function renderPlans(){
 let box=document.getElementById("plansBox");
 box.innerHTML="";
-plans.forEach(p=>{
-let d=document.createElement("div");
-d.className="card plan";
-d.innerHTML=`
-<div>
-<b>Rs ${p.price}</b><br>
-${p.days} دن<br>
-روزانہ: Rs ${p.profit}
-</div>
-<button onclick="buy(${p.id})">خریدیں</button>
-`;
-box.appendChild(d);
+plans.forEach((p,i)=>{
+  let d=document.createElement("div");
+  d.className="card plan";
+  d.innerHTML=`
+  <div>
+  <b>Rs ${p.price}</b><br>
+  ${p.days} دن<br>
+  روزانہ Rs ${p.dailyProfit}
+  <div class="countdown" id="cd${i}"></div>
+  </div>
+  <button onclick="buyNow(${i})">Buy Now</button>
+  `;
+  box.appendChild(d);
+  startCountdown(i);
 });
 }
 
-function buy(id){
-let p=plans.find(x=>x.id===id);
-if(balance<p.price)return alert("بیلنس ناکافی");
-balance-=p.price;
-daily+=p.profit;
-history.push(`پلان خریدا: Rs ${p.price}`);
-updateUI();
-renderHistory();
-show("dashboard");
+// ===== BUY NOW =====
+function buyNow(index){
+let plan=plans[index];
+selectedAmount=plan.price;
+document.getElementById("amount").value="Rs "+plan.price;
+show("deposit");
+updateNum();
 }
 
-function renderHistory(){
-let h=document.getElementById("historyBox");
-h.innerHTML="";
-history.forEach(x=>{
-let d=document.createElement("div");
-d.className="card";
-d.innerText=x;
-h.appendChild(d);
-});
-}
-
+// ===== DEPOSIT =====
 function updateNum(){
 document.getElementById("number").value=
-method.value==="jazz"?"03705519562":"03379827882";
+document.getElementById("method").value==="jazz"?"03705519562":"03379827882";
 }
-
 function submitDeposit(){
-let amt=document.getElementById("amount").value;
-history.push("ڈیپازٹ ریکویسٹ: Rs "+amt);
-renderHistory();
-alert("ڈیپازٹ سبمٹ ہو گیا");
+balance += selectedAmount;
+daily += Math.floor(selectedAmount*0.07);
+updateDashboard();
+alert("ڈیپازٹ کامیاب ہو گیا");
 }
 
-function copyRef(){
-navigator.clipboard.writeText(ref.value);
-alert("کاپی ہو گیا");
+// ===== COPY MEMBER ID =====
+function copyID(){
+navigator.clipboard.writeText(memberID.value);
+alert("ممبر آئی ڈی کاپی ہو گئی");
 }
 
-function openWA(){
-window.open("https://chat.whatsapp.com/GJEVKhdDeNKCNkA8r3gONu");
+// ===== COUNTDOWN =====
+function startCountdown(i){
+function updateCD(){
+let remaining=Math.floor((plans[i].endDate - new Date().getTime())/1000);
+if(remaining<0){document.getElementById("cd"+i).innerText="ختم ہو گیا";return;}
+let d=Math.floor(remaining/86400);
+let h=Math.floor((remaining%86400)/3600);
+let m=Math.floor((remaining%3600)/60);
+let s=remaining%60;
+document.getElementById("cd"+i).innerText=`باقی: ${d} دن ${h}:${m}:${s}`;
+setTimeout(updateCD,1000);
 }
-function openMail(){
-window.location="mailto:rock.earn92@gmail.com";
+updateCD();
 }
 </script>
 
