@@ -8,31 +8,31 @@
 :root{
   --primary:#00f7ff;
   --secondary:#ff5cff;
-  --bg-dark:#111;
-  --bg-light:#f2f2f2;
+  --bg-dark:#0a0a0a;
+  --text-light:#fff;
 }
 *{box-sizing:border-box;}
 body{
   margin:0;
   font-family:Arial,sans-serif;
   overflow-x:hidden;
-  background:#111;
-  color:#fff;
-  animation:bgAnim 25s linear infinite;
+  background:#0a0a0a;
+  color:var(--text-light);
+  animation:bgAnim 30s linear infinite;
 }
 @keyframes bgAnim{
-  0%{background:linear-gradient(135deg,#00f7ff,#ff5cff);}
-  25%{background:linear-gradient(135deg,#ff4081,#1e90ff);}
-  50%{background:linear-gradient(135deg,#7b2ff7,#12c2e9);}
-  75%{background:linear-gradient(135deg,#ff8a00,#f107a3);}
-  100%{background:linear-gradient(135deg,#00f7ff,#ff5cff);}
+  0%{background:linear-gradient(120deg,#0a0a0a,#00f7ff);}
+  25%{background:linear-gradient(120deg,#0a0a0a,#ff5cff);}
+  50%{background:linear-gradient(120deg,#0a0a0a,#12c2e9);}
+  75%{background:linear-gradient(120deg,#0a0a0a,#f107a3);}
+  100%{background:linear-gradient(120deg,#0a0a0a,#00f7ff);}
 }
 header{
   text-align:center;
-  font-size:28px;
-  font-weight:800;
-  padding:20px;
-  color:#fff;
+  font-size:32px;
+  font-weight:900;
+  padding:25px;
+  color:var(--text-light);
   text-shadow:0 0 15px var(--primary),0 0 25px var(--secondary);
   transition:0.3s all;
 }
@@ -40,73 +40,69 @@ header:hover{
   text-shadow:0 0 25px var(--primary),0 0 40px var(--secondary);
 }
 .login-box,.page{
-  max-width:500px;
+  max-width:550px;
   margin:20px auto;
-  background:rgba(255,255,255,0.05);
+  background:rgba(255,255,255,0.03);
   padding:20px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,0.1);
-  box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);
+  border-radius:15px;
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 0 15px var(--primary),0 0 25px var(--secondary);
   transition:0.3s all;
 }
 .login-box:hover,.page:hover{
-  box-shadow:0 0 20px var(--primary),0 0 35px var(--secondary);
+  box-shadow:0 0 25px var(--primary),0 0 40px var(--secondary);
 }
 input,button,select{
   width:100%;
-  padding:10px;
+  padding:12px;
   margin-top:10px;
-  border-radius:8px;
+  border-radius:10px;
   border:none;
   background:transparent;
   color:#fff;
   outline:none;
-  font-size:14px;
+  font-size:15px;
 }
 input::placeholder{color:rgba(255,255,255,0.7);}
 button{
   background:linear-gradient(90deg,var(--primary),var(--secondary));
   color:#000;
-  font-weight:700;
+  font-weight:800;
   cursor:pointer;
   transition:0.2s all;
   box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);
 }
 button:hover{
   transform:translateY(-2px);
-  box-shadow:0 0 20px var(--primary),0 0 35px var(--secondary);
+  box-shadow:0 0 25px var(--primary),0 0 40px var(--secondary);
 }
 .nav{
   position:fixed;bottom:0;left:0;right:0;
-  display:flex;justify-content:space-around;padding:12px 6px;font-size:14px;background:rgba(255,255,255,0.1);
-  backdrop-filter:blur(6px);
+  display:flex;justify-content:space-around;padding:14px;font-size:14px;background:rgba(0,0,0,0.2);
+  backdrop-filter:blur(8px);
 }
-.nav div{text-align:center;cursor:pointer;width:64px;}
-.nav div .ico{font-size:20px;display:block;margin-bottom:4px;}
+.nav div{text-align:center;cursor:pointer;width:60px;}
+.nav div .ico{font-size:22px;display:block;margin-bottom:4px;}
 .hidden{display:none;}
 .small{font-size:13px;color:rgba(255,255,255,0.7);}
-.user-box,.plan-box,.referral-box,.help-box,.alert-box,.support-icon{
-  border-radius:12px;padding:14px;margin-bottom:12px;
-}
-.user-box,.plan-box,.referral-box,.help-box{
+.user-box,.plan-box,.referral-box,.help-box,.alert-box{
+  border-radius:15px;padding:16px;margin-bottom:12px;
   background:rgba(255,255,255,0.05);
-  box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary) inset;
+  box-shadow:0 0 15px var(--primary),0 0 25px var(--secondary) inset;
   transition:0.3s all;
 }
 .user-box:hover,.plan-box:hover{
-  box-shadow:0 0 25px var(--primary),0 0 40px var(--secondary) inset;
+  box-shadow:0 0 30px var(--primary),0 0 45px var(--secondary) inset;
 }
-.alert-box{background:rgba(255,0,136,0.12);color:#fff;box-shadow:0 0 15px #ff00ff inset;}
-.support-icon{display:flex;align-items:center;gap:6px;padding:12px;cursor:pointer;width:fit-content;font-weight:700;transition:0.2s all;}
-.support-icon:hover{transform:translateY(-2px);box-shadow:0 0 25px var(--primary),0 0 40px var(--secondary);}
+.alert-box{background:rgba(255,0,136,0.12);color:#fff;box-shadow:0 0 20px #ff00ff inset;}
 .countdown{font-weight:700;color:var(--secondary);}
-#popup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--primary),var(--secondary));padding:20px;border-radius:12px;color:#000;font-weight:800;z-index:9999;text-align:center;box-shadow:0 0 25px var(--primary),0 0 40px var(--secondary);}
-#popup button{margin-top:10px;padding:8px 12px;border:none;border-radius:8px;background:#000;color:#fff;cursor:pointer;}
-@media(max-width:480px){.login-box,.page{margin:12px;padding:14px}.nav div{width:48px}header{font-size:22px}}
+#popup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--primary),var(--secondary));padding:20px;border-radius:15px;color:#000;font-weight:800;z-index:9999;text-align:center;box-shadow:0 0 25px var(--primary),0 0 40px var(--secondary);}
+#popup button{margin-top:10px;padding:8px 14px;border:none;border-radius:10px;background:#000;color:#fff;cursor:pointer;}
+@media(max-width:480px){.login-box,.page{margin:12px;padding:14px}.nav div{width:48px}header{font-size:26px}}
 </style>
 </head>
 <body>
-<header>NEXA Dashboard</header>
+<header>NEXA Premium Dashboard</header>
 
 <!-- LOGIN -->
 <div id="loginPage" class="login-box">
@@ -124,7 +120,7 @@ button:hover{
   <div class="user-box">
     <div class="left">
       <div style="display:flex;gap:12px;align-items:center">
-        <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(90deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;color:#000;font-weight:900">N</div>
+        <div style="width:56px;height:56px;border-radius:15px;background:linear-gradient(90deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;color:#000;font-weight:900">N</div>
         <div>
           <div id="dashUser" style="font-size:16px;font-weight:800">—</div>
           <div class="small">Member since: <span id="dashSince">—</span></div>
@@ -133,8 +129,8 @@ button:hover{
     </div>
     <div class="right">
       <div class="small">Balance</div>
-      <div style="font-size:18px;font-weight:900">Rs <span id="dashBalance">0</span></div>
-      <div class="badge">Daily: Rs <span id="dashDaily">0</span></div>
+      <div style="font-size:20px;font-weight:900">Rs <span id="dashBalance">0</span></div>
+      <div class="small">Daily Profit: Rs <span id="dashDaily">0</span></div>
     </div>
   </div>
 
@@ -200,8 +196,8 @@ button:hover{
 
 <!-- ABOUT -->
 <div id="about" class="page hidden">
-  <h2>About NEXA</h2>
-  <p>NEXA is a modern, safe, and professional investment platform. Earn daily profit through small to large plans with full transparency and security.</p>
+  <h2>About NEXA Premium</h2>
+  <p>NEXA Premium Dashboard is a modern, secure, and professional platform. Earn daily profits with a variety of plans. All balances, profits, and transactions are safely stored in your device.</p>
 </div>
 
 <!-- POPUP -->
@@ -311,9 +307,12 @@ function renderHistory(){
   });
 }
 
-// ===== ACTIVE MEMBERS =====
+// ===== ACTIVE MEMBERS & BALANCE =====
 function updateActiveMembers(){
-  document.getElementById('activeMembers').innerText=Math.floor(Math.random()*500+50);
+  let randomMembers=Math.floor(Math.random()*500+50);
+  let randomBalance=(balance + Math.random()*5000).toFixed(2);
+  document.getElementById('activeMembers').innerText=randomMembers;
+  document.getElementById('dashBalance').innerText=randomBalance;
   setTimeout(updateActiveMembers,5000);
 }
 
