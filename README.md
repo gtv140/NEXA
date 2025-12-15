@@ -14,7 +14,7 @@
 }
 body{
   margin:0;
-  font-family: 'Noto Nastaliq Urdu', Arial, sans-serif;
+  font-family:'Noto Nastaliq Urdu', Arial, sans-serif;
   background:#0c0c0c;
   color:var(--light);
   overflow-x:hidden;
@@ -37,7 +37,7 @@ header{
   50%{background-position:100% 50%;}
   100%{background-position:0% 50%;}
 }
-.login-box, .page{
+.login-box,.page{
   max-width:480px;
   margin:20px auto;
   background:rgba(255,255,255,0.02);
@@ -47,7 +47,7 @@ header{
   box-shadow:0 12px 40px rgba(0,0,0,0.6);
   transition:0.3s;
 }
-.login-box:hover, .page:hover{box-shadow:0 12px 50px rgba(255,79,163,0.5);}
+.login-box:hover,.page:hover{box-shadow:0 12px 50px rgba(255,79,163,0.5);}
 input,button,select{
   width:100%;
   padding:12px;
@@ -140,6 +140,13 @@ button:hover{
   font-weight:700;
 }
 .support-icon:hover{box-shadow:0 6px 25px rgba(255,79,163,0.3);transform:translateY(-2px);}
+.about-box{
+  background:rgba(255,255,255,0.02);
+  padding:16px;
+  margin:16px 0;
+  border-radius:14px;
+  border:1px solid rgba(255,79,163,0.1);
+}
 @media(max-width:480px){.login-box,.page{margin:12px;padding:14px}.nav div{width:48px}header{font-size:26px}.logout-btn{padding:10px 12px;font-size:14px}}
 </style>
 </head>
@@ -178,6 +185,13 @@ button:hover{
       <div style="margin-top:8px" class="badge">روزانہ: Rs <span id="dashDaily">0</span></div>
     </div>
   </div>
+  <div class="about-box">
+    <h3>کمپنی کے بارے میں</h3>
+    <p>
+      NEXA ایک جدید سرمایہ کاری اور مالیاتی پلیٹ فارم ہے جہاں صارفین آسانی سے منصوبے خرید سکتے ہیں اور روزانہ منافع حاصل کر سکتے ہیں۔
+      ہمارے تمام نظام شفاف اور محفوظ ہیں۔ کسی بھی مسئلے کی صورت میں سپورٹ دستیاب ہے۔
+    </p>
+  </div>
   <div id="activePlansBox"></div>
   <div class="referral-box">
     <div style="display:flex;gap:8px;align-items:center">
@@ -185,6 +199,10 @@ button:hover{
       <button onclick="copyReferral()">لنک کاپی کریں</button>
     </div>
     <div class="small">دوستوں کو مدعو کریں اور بونس خود بخود لگے گا۔</div>
+  </div>
+  <div class="support-icon" onclick="openSupport()">
+    <span class="ico">🛠️</span>
+    سپورٹ کے لیے رابطہ کریں
   </div>
   <button class="logout-btn" onclick="logout()">لاگ آؤٹ</button>
 </div>
@@ -239,7 +257,7 @@ button:hover{
   <h2>تاریخچہ</h2>
   <div class="support-icon" onclick="openSupport()">
     <span class="ico">🛠️</span>
-    <div class="small">سپورٹ</div>
+    سپورٹ
   </div>
   <div id="historyList"></div>
 </div>
@@ -279,9 +297,9 @@ function animate(){
 }
 animate();
 window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
-  
+
 // ===== DASHBOARD LOGIC =====
-let currentUser=null, balance=0, dailyProfit=0, plansData=[];
+let currentUser=null,balance=0,dailyProfit=0,plansData=[];
 for(let i=1;i<=25;i++){
   let invest=200*i; if(invest>10000) invest=10000;
   let days=25+i;
