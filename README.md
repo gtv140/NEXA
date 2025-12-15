@@ -9,7 +9,6 @@
   --primary:#00f7ff;
   --secondary:#ff5cff;
   --bg-dark:#0a0a0a;
-  --hover-glow:0 0 15px #00f7ff,0 0 25px #ff5cff;
 }
 *{box-sizing:border-box;}
 body{
@@ -18,34 +17,31 @@ body{
   overflow-x:hidden;
   background:#0a0a0a;
   color:#fff;
-  animation:bgAnim 25s linear infinite;
+  animation:bgAnim 30s linear infinite;
 }
 @keyframes bgAnim{
-0%{background:linear-gradient(135deg,#0a0a0a,#1a1a1a);}
-25%{background:linear-gradient(135deg,#0a0a0a,#0f0f2a);}
-50%{background:linear-gradient(135deg,#0a0a0a,#1a0a2a);}
-75%{background:linear-gradient(135deg,#0a0a0a,#2a0a1a);}
-100%{background:linear-gradient(135deg,#0a0a0a,#1a1a1a);}
+  0%{background:linear-gradient(135deg,#0a0a0a,#1a1a1a);}
+  25%{background:linear-gradient(135deg,#0a0a0a,#0f0f2a);}
+  50%{background:linear-gradient(135deg,#0a0a0a,#1a0a2a);}
+  75%{background:linear-gradient(135deg,#0a0a0a,#2a0a1a);}
+  100%{background:linear-gradient(135deg,#0a0a0a,#1a1a1a);}
 }
 header{text-align:center;font-size:28px;font-weight:800;padding:20px;text-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);}
 .login-box,.page{max-width:480px;margin:20px auto;background:rgba(255,255,255,0.05);padding:20px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);}
 input,button,select{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:none;background:transparent;color:#fff;outline:none;font-size:14px;}
 input::placeholder{color:rgba(255,255,255,0.6);}
 button{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#000;font-weight:700;cursor:pointer;transition:0.2s all;box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);}
-button:hover{transform:translateY(-2px);box-shadow:var(--hover-glow);}
+button:hover{transform:translateY(-2px);box-shadow:0 0 15px var(--primary),0 0 25px var(--secondary);}
 .nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:12px 6px;font-size:14px;background:rgba(255,255,255,0.1);}
 .nav div{text-align:center;cursor:pointer;width:64px;transition:0.2s all;position:relative;}
-.nav div:hover{transform:translateY(-2px);text-shadow:var(--hover-glow);}
+.nav div:hover{transform:translateY(-2px);text-shadow:0 0 15px var(--primary),0 0 25px var(--secondary);}
 .nav div .ico{font-size:20px;display:block;margin-bottom:4px;}
-.nav div .badge{position:absolute;top:0;right:5px;background:red;color:#fff;font-size:10px;padding:2px 5px;border-radius:50%;display:none;}
 .hidden{display:none;}
 .small{font-size:13px;color:rgba(255,255,255,0.7);}
-.user-box,.plan-box,.referral-box,.alert-box{border-radius:10px;padding:12px;margin-bottom:12px;transition:0.3s all;}
+.user-box,.plan-box,.referral-box,.alert-box{border-radius:10px;padding:12px;margin-bottom:12px;}
 .user-box,.plan-box,.referral-box{background:rgba(255,255,255,0.05);box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary) inset;}
-.user-box:hover,.plan-box:hover{box-shadow:var(--hover-glow);}
 .alert-box{background:rgba(255,0,136,0.12);color:#fff;box-shadow:0 0 10px #ff00ff inset;}
-.countdown{font-weight:700;color:var(--secondary);}
-#popup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--primary),var(--secondary));padding:20px;border-radius:12px;color:#000;font-weight:800;z-index:9999;text-align:center;box-shadow:var(--hover-glow);}
+#popup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--primary),var(--secondary));padding:20px;border-radius:12px;color:#000;font-weight:800;z-index:9999;text-align:center;box-shadow:0 0 15px var(--primary),0 0 25px var(--secondary);}
 #popup button{margin-top:10px;padding:8px 12px;border:none;border-radius:8px;background:#000;color:#fff;cursor:pointer;}
 @media(max-width:480px){.login-box,.page{margin:12px;padding:14px}.nav div{width:48px}header{font-size:22px}}
 </style>
@@ -127,7 +123,7 @@ button:hover{transform:translateY(-2px);box-shadow:var(--hover-glow);}
 
 <div class="nav hidden">
   <div onclick="showPage('dashboard')"><span class="ico">🏠</span>Home</div>
-  <div onclick="showPage('plans')"><span class="ico">📦</span>Plans <span class="badge" id="plansBadge"></span></div>
+  <div onclick="showPage('plans')"><span class="ico">📦</span>Plans</div>
   <div onclick="showPage('deposit')"><span class="ico">💰</span>Deposit</div>
   <div onclick="showPage('withdrawal')"><span class="ico">💵</span>Withdraw</div>
   <div onclick="showPage('history')"><span class="ico">📜</span>History</div>
@@ -137,29 +133,21 @@ button:hover{transform:translateY(-2px);box-shadow:var(--hover-glow);}
 <div id="popup" class="hidden"><span id="popupText"></span><br><button onclick="closePopup()">Close</button></div>
 
 <script>
-// ===== STORAGE =====
 let currentUser = localStorage.getItem('nexa_user') || null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 let history = JSON.parse(localStorage.getItem('nexa_history')||'[]');
 let referralCode = localStorage.getItem('nexa_referral')||'';
 
-// ===== PLANS =====
 let plansData = [];
-let planStart = 200;
-let planEnd = 10000;
-let planStep = 200;
-let idCounter = 1;
-
-for(let invest=planStart; invest<=planEnd; invest+=planStep){
-    let days = Math.floor(25 + invest/100);
-    let multiplier = (invest <= 1000) ? 2.4 : 2.2;
-    let total = Math.round(invest * multiplier);
-    let daily = Math.round(total / days);
-    plansData.push({id:idCounter++, name:`Plan ${invest}`, invest, total, daily, days});
+for(let i=200;i<=10000;i+=200){
+    let days = Math.floor(25 + i/100);
+    let multiplier = (i <= 1000) ? 2.4 : 2.2;
+    let total = Math.round(i*multiplier);
+    let daily = Math.round(total/days);
+    plansData.push({id:i, invest:i, total, daily, days});
 }
 
-// ===== FUNCTIONS =====
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
@@ -174,7 +162,8 @@ function login(){
   localStorage.setItem('nexa_balance',balance);
   localStorage.setItem('nexa_daily',dailyProfit);
   localStorage.setItem('nexa_referral',referralCode);
-  updateDashboard(); showPopup('Login successful!');
+  updateDashboard();
+  showPopup('Login successful!');
 }
 
 function logout(){currentUser=null; localStorage.removeItem('nexa_user'); showPage('loginPage');}
@@ -186,27 +175,23 @@ function updateDashboard(){
   document.getElementById('dashSince').innerText=new Date().toLocaleDateString();
   document.querySelector('.nav').classList.remove('hidden');
   showPage('dashboard');
-  renderPlans(); renderHistory(); updateActiveMembers(); updateBadge();
+  renderPlans(); renderHistory(); updateActiveMembers();
 }
 
 function renderPlans(){
   const list=document.getElementById('plansList'); list.innerHTML='';
   plansData.forEach(p=>{
     const div=document.createElement('div'); div.className='plan-box';
-    div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} <button onclick="buyNow(${p.id})">Buy Now</button>`;
+    div.innerHTML=`<b>Plan Rs ${p.invest}</b> | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} <button onclick="buyNow(${p.invest})">Buy Now</button>`;
     list.appendChild(div);
   });
 }
 
-function updateBadge(){
-  const badge = document.getElementById('plansBadge');
-  badge.innerText = plansData.length;
-  badge.style.display = 'inline-block';
+function buyNow(invest){document.getElementById('depositAmount').value=invest; showPage('deposit');}
+
+function updateDepositNumber(){
+  document.getElementById('depositNumber').value = document.getElementById('depositMethod').value==='jazzcash'?'03705519562':'03379827882';
 }
-
-function buyNow(id){document.getElementById('depositAmount').value=plansData.find(p=>p.id===id).invest; showPage('deposit');}
-
-function updateDepositNumber(){document.getElementById('depositNumber').value = document.getElementById('depositMethod').value==='jazzcash'?'03705519562':'03379827882';}
 
 function submitDeposit(){showPopup('Deposit submitted!');}
 function submitWithdraw(){showPopup('Withdrawal requested!');}
@@ -217,7 +202,7 @@ function updateActiveMembers(){document.getElementById('activeMembers').innerTex
 function showPopup(msg){document.getElementById('popupText').innerText=msg; document.getElementById('popup').classList.remove('hidden');}
 function closePopup(){document.getElementById('popup').classList.add('hidden');}
 
-window.onload=()=>{if(currentUser) updateDashboard();}
+window.onload=()=>{if(currentUser) updateDashboard(); else showPage('loginPage');}
 </script>
 </body>
 </html>
