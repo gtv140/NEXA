@@ -74,60 +74,54 @@ button:hover{transform:translateY(-2px);box-shadow:var(--hover-glow);}
       <div class="small">Daily: Rs <span id="dashDaily">0</span></div>
     </div>
   </div>
-
   <div class="alert-box">Active Members: <span id="activeMembers">0</span></div>
+</div>
 
-  <div class="plan-box">
-    <h3>Plans</h3>
-    <div id="plansList"></div>
+<div id="plans" class="page hidden">
+  <h3>Plans</h3>
+  <div id="plansList"></div>
+</div>
+
+<div id="deposit" class="page hidden">
+  <h3>Deposit</h3>
+  <label>Method</label>
+  <select id="depositMethod" onchange="updateDepositNumber()">
+    <option value="jazzcash">JazzCash</option>
+    <option value="easypaisa">EasyPaisa</option>
+  </select>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:10px">
+    <input id="depositNumber" readonly style="flex:1" />
+    <button onclick="copyDepositNumber()">Copy Number</button>
   </div>
+  <label>Amount</label>
+  <input id="depositAmount" placeholder="Enter Amount" />
+  <label>Transaction ID</label>
+  <input type="text" id="depositTxId" placeholder="TX ID" />
+  <label>Upload Proof</label>
+  <input type="file" id="depositProof" />
+  <button onclick="submitDeposit()">Submit Deposit</button>
+</div>
 
-  <div class="plan-box">
-    <h3>Deposit</h3>
-    <label>Method</label>
-    <select id="depositMethod" onchange="updateDepositNumber()">
-      <option value="jazzcash">JazzCash</option>
-      <option value="easypaisa">EasyPaisa</option>
-    </select>
-    <div style="display:flex;gap:8px;align-items:center;margin-top:10px">
-      <input id="depositNumber" readonly style="flex:1" />
-      <button onclick="copyDepositNumber()">Copy Number</button>
-    </div>
-    <label>Amount</label>
-    <input id="depositAmount" placeholder="Enter Amount" />
-    <label>Transaction ID</label>
-    <input type="text" id="depositTxId" placeholder="TX ID" />
-    <label>Upload Proof</label>
-    <input type="file" id="depositProof" />
-    <button onclick="submitDeposit()">Submit Deposit</button>
-  </div>
+<div id="withdrawal" class="page hidden">
+  <h3>Withdrawal</h3>
+  <label>Method</label>
+  <select id="withdrawMethod">
+    <option value="jazzcash">JazzCash</option>
+    <option value="easypaisa">EasyPaisa</option>
+  </select>
+  <input id="withdrawAccount" placeholder="Account Number" />
+  <input id="withdrawAmount" placeholder="Amount" />
+  <button onclick="submitWithdraw()">Request Withdrawal</button>
+</div>
 
-  <div class="plan-box">
-    <h3>Withdrawal</h3>
-    <label>Method</label>
-    <select id="withdrawMethod">
-      <option value="jazzcash">JazzCash</option>
-      <option value="easypaisa">EasyPaisa</option>
-    </select>
-    <input id="withdrawAccount" placeholder="Account Number" />
-    <input id="withdrawAmount" placeholder="Amount" />
-    <button onclick="submitWithdraw()">Request Withdrawal</button>
-  </div>
+<div id="history" class="page hidden">
+  <h3>History</h3>
+  <div id="historyList"></div>
+</div>
 
-  <div class="plan-box">
-    <h3>History</h3>
-    <div id="historyList"></div>
-  </div>
-
-  <div class="referral-box">
-    <div style="display:flex;gap:8px;align-items:center">
-      <input id="refLink" readonly style="flex:1" />
-      <button onclick="copyReferral()">Copy Link</button>
-    </div>
-    <div class="small">Share this link to invite friends. Bonuses apply automatically.</div>
-  </div>
-
-  <button onclick="logout()">Logout</button>
+<div id="about" class="page hidden">
+  <h3>About NEXA</h3>
+  <p>NEXA is a modern, safe platform where you can invest in small to large plans and earn daily profit. We provide a transparent and professional service for all users.</p>
 </div>
 
 <div class="nav hidden">
@@ -142,77 +136,80 @@ button:hover{transform:translateY(-2px);box-shadow:var(--hover-glow);}
 <div id="popup" class="hidden"><span id="popupText"></span><br><button onclick="closePopup()">Close</button></div>
 
 <script>
+// ===== STORAGE =====
 let currentUser = localStorage.getItem('nexa_user') || null;
-let balance = parseFloat(localStorage.getItem('nexa_balance') || '0');
-let dailyProfit = parseFloat(localStorage.getItem('nexa_daily') || '0');
-let history = JSON.parse(localStorage.getItem('nexa_history') || '[]');
-let referralCode = localStorage.getItem('nexa_referral') || '';
+let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
+let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
+let history = JSON.parse(localStorage.getItem('nexa_history')||'[]');
+let referralCode = localStorage.getItem('nexa_referral')||'';
 
+// ===== PLANS =====
 let plansData = [];
-for(let i=25;i<=50;i++){
-  let invest = 200*i, days = 25+i, total = Math.round(invest*2.2), daily = Math.round(total/days);
-  plansData.push({id:i,name:`Plan ${i}`,invest,total,daily,days,special:(i<=30),endTime:(i<=30?Date.now()+24*60*60*1000:0)});
+let planStart = 200;
+let planEnd = 10000;
+let planStep = 200;
+let idCounter = 1;
+
+for(let invest=planStart; invest<=planEnd; invest+=planStep){
+    let days = Math.floor(25 + invest/100);
+    let multiplier = (invest <= 1000) ? 2.4 : 2.2;
+    let total = Math.round(invest * multiplier);
+    let daily = Math.round(total / days);
+    plansData.push({id:idCounter++, name:`Plan ${invest}`, invest, total, daily, days});
 }
 
-function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+// ===== FUNCTIONS =====
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
 function login(){
-  const u = document.getElementById('user').value.trim();
-  if(!u){alert('Enter username');return;}
-  currentUser = u; balance = 0; dailyProfit = 0; referralCode = referralCode || Math.random().toString(36).substring(2,10);
+  const u=document.getElementById('user').value.trim();
+  if(!u){alert('Enter username'); return;}
+  currentUser=u; balance=0; dailyProfit=0;
+  referralCode = referralCode || Math.random().toString(36).substring(2,10);
   localStorage.setItem('nexa_user',currentUser);
   localStorage.setItem('nexa_balance',balance);
   localStorage.setItem('nexa_daily',dailyProfit);
   localStorage.setItem('nexa_referral',referralCode);
-  showPopup('Login successful! Welcome '+currentUser);
-  updateDashboard();
+  updateDashboard(); showPopup('Login successful!');
 }
+
 function logout(){currentUser=null; localStorage.removeItem('nexa_user'); showPage('loginPage');}
+
 function updateDashboard(){
   document.getElementById('dashUser').innerText=currentUser;
   document.getElementById('dashBalance').innerText=balance.toFixed(2);
   document.getElementById('dashDaily').innerText=dailyProfit.toFixed(2);
   document.getElementById('dashSince').innerText=new Date().toLocaleDateString();
-  document.getElementById('refLink').value="https://gtv140.github.io/NEXA/";
-  document.getElementById('loginPage').classList.add('hidden');
-  document.getElementById('dashboard').classList.remove('hidden');
   document.querySelector('.nav').classList.remove('hidden');
-  renderPlans(); renderHistory(); updateActiveMembers(); checkSpecialOffers(); autoDailyProfit();
+  showPage('dashboard');
+  renderPlans(); renderHistory(); updateActiveMembers();
 }
+
 function renderPlans(){
   const list=document.getElementById('plansList'); list.innerHTML='';
   plansData.forEach(p=>{
     const div=document.createElement('div'); div.className='plan-box';
-    let countdownHTML='';
-    if(p.special){countdownHTML=`<div class='small countdown' id='countdown${p.id}'></div>`;startCountdown(p.id,p.endTime);}
-    div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} ${countdownHTML} <button onclick='buyNow(${p.id})'>Buy Now</button>`;
+    div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} <button onclick="buyNow(${p.id})">Buy Now</button>`;
     list.appendChild(div);
   });
 }
-function buyNow(id){let plan = plansData.find(p=>p.id===id); if(!plan) return; document.getElementById('depositAmount').value = plan.invest; document.getElementById('depositMethod').value = 'jazzcash'; updateDepositNumber(); showPage('dashboard');}
-function updateDepositNumber(){document.getElementById('depositNumber').value = (document.getElementById('depositMethod').value==='jazzcash')?'03705519562':'03379827882';}
+
+function buyNow(id){document.getElementById('depositAmount').value=plansData.find(p=>p.id===id).invest; showPage('deposit');}
+
+function updateDepositNumber(){document.getElementById('depositNumber').value = document.getElementById('depositMethod').value==='jazzcash'?'03705519562':'03379827882';}
+
 function submitDeposit(){showPopup('Deposit submitted!');}
 function submitWithdraw(){showPopup('Withdrawal requested!');}
-function copyReferral(){navigator.clipboard.writeText(document.getElementById('refLink').value);showPopup('Referral link copied!');}
-function renderHistory(){const list=document.getElementById('historyList');list.innerHTML='';history.forEach(h=>{const div=document.createElement('div');div.className='plan-box';div.innerHTML=`${h}`;list.appendChild(div);});}
-function updateActiveMembers(){document.getElementById('activeMembers').innerText=Math.floor(Math.random()*500+50);setTimeout(updateActiveMembers,5000);}
-function startCountdown(id,endTime){let interval=setInterval(()=>{const now=Date.now(); const diff=endTime-now; if(diff<=0){document.getElementById('countdown'+id).innerText='Offer ended';clearInterval(interval);return;} const hrs=Math.floor(diff/1000/60/60); const min=Math.floor((diff/1000/60)%60); const sec=Math.floor((diff/1000)%60); document.getElementById('countdown'+id).innerText=`Special Offer ends in: ${hrs}h ${min}m ${sec}s`;},1000);}
-function checkSpecialOffers(){plansData.filter(p=>p.special).forEach(p=>startCountdown(p.id,p.endTime));}
+function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value);showPopup('Number copied!');}
 
-function autoDailyProfit(){
-  setInterval(()=>{
-    let profit=Math.floor(Math.random()*50+10);
-    dailyProfit+=profit; balance+=profit;
-    localStorage.setItem('nexa_balance',balance);
-    localStorage.setItem('nexa_daily',dailyProfit);
-    history.unshift(`Daily profit Rs ${profit} added on ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`);
-    localStorage.setItem('nexa_history',JSON.stringify(history));
-    updateDashboardDisplay();
-    showPopup(`Rs ${profit} daily profit added!`);
-  },20000);
-}
-function updateDashboardDisplay(){document.getElementById('dashBalance').innerText=balance.toFixed(2);document.getElementById('dashDaily').innerText=dailyProfit.toFixed(2);renderHistory();}
-function showPopup(msg){document.getElementById('popupText').innerText=msg;document.getElementById('popup').classList.remove('hidden');}
+function renderHistory(){const list=document.getElementById('historyList'); list.innerHTML='';history.forEach(h=>{const div=document.createElement('div'); div.className='plan-box'; div.innerText=h; list.appendChild(div);});}
+function updateActiveMembers(){document.getElementById('activeMembers').innerText=Math.floor(Math.random()*500+50); setTimeout(updateActiveMembers,5000);}
+function showPopup(msg){document.getElementById('popupText').innerText=msg; document.getElementById('popup').classList.remove('hidden');}
 function closePopup(){document.getElementById('popup').classList.add('hidden');}
+
 window.onload=()=>{if(currentUser) updateDashboard();}
 </script>
 </body>
