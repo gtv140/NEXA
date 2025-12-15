@@ -1,286 +1,219 @@
 <NEXA>
-<html lang="en">
+<html lang="ur">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA Dashboard</title>
 <style>
-:root{
-  --primary:#1e1e2f;
-  --secondary:#ff4081;
-  --bg-dark:#0b0b0b;
-  --bg-light:#1c1c1c;
-}
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
+:root{--neon1:#ff6ec7;--neon2:#1efff3;--dark:#111;}
+*{box-sizing:border-box;}
 body{
-  background:#0b0b0b;
-  color:#fff;
+  margin:0;
+  font-family:Arial,sans-serif;
   overflow-x:hidden;
+  background:#111;
+  color:#fff;
   animation:bgAnim 30s linear infinite;
 }
 @keyframes bgAnim{
-  0%{background:linear-gradient(135deg,#0b0b0b,#1e1e2f);}
-  25%{background:linear-gradient(135deg,#111,#2b2b3f);}
-  50%{background:linear-gradient(135deg,#0d0d0d,#3a1e3f);}
-  75%{background:linear-gradient(135deg,#111,#2b2b3f);}
-  100%{background:linear-gradient(135deg,#0b0b0b,#1e1e2f);}
+  0%{background:linear-gradient(120deg,var(--neon1),var(--neon2));}
+  25%{background:linear-gradient(120deg,#ff9a9e,#00f2fe);}
+  50%{background:linear-gradient(120deg,#fbc2eb,#a18cd1);}
+  75%{background:linear-gradient(120deg,#fad0c4,#ffd1ff);}
+  100%{background:linear-gradient(120deg,var(--neon1),var(--neon2));}
 }
 header{
-  text-align:center;font-size:28px;font-weight:800;padding:20px;
-  color:#fff;text-shadow:0 0 10px var(--secondary),0 0 20px var(--primary);
+  text-align:center;
+  font-size:28px;
+  font-weight:800;
+  padding:20px;
+  color:#fff;
+  text-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2);
 }
-.login-box,.page{
-  max-width:500px;margin:20px auto;
-  background:rgba(255,255,255,0.05);padding:20px;border-radius:12px;
+.page{
+  max-width:480px;
+  margin:20px auto;
+  background:rgba(255,255,255,0.05);
+  padding:20px;
+  border-radius:12px;
   border:1px solid rgba(255,255,255,0.1);
-  box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);
+  box-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2);
 }
-input,button,select{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:none;background:transparent;color:#fff;font-size:14px;outline:none;}
+input,button,select{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:none;background:transparent;color:#fff;outline:none;font-size:14px;}
 input::placeholder{color:rgba(255,255,255,0.7);}
 button{
-  background:linear-gradient(90deg,var(--primary),var(--secondary));
-  color:#000;font-weight:700;cursor:pointer;transition:0.2s all;
-  box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);
+  background:linear-gradient(90deg,var(--neon1),var(--neon2));
+  color:#000;
+  font-weight:700;
+  cursor:pointer;
+  transition:0.2s all;
+  box-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2);
 }
-button:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--primary),0 0 35px var(--secondary);}
+button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 20px var(--neon1),0 0 30px var(--neon2);
+}
 .nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:12px 6px;font-size:14px;background:rgba(255,255,255,0.1);}
 .nav div{text-align:center;cursor:pointer;width:64px;}
 .nav div .ico{font-size:20px;display:block;margin-bottom:4px;}
 .hidden{display:none;}
 .small{font-size:13px;color:rgba(255,255,255,0.7);}
 .user-box,.plan-box,.referral-box,.help-box,.alert-box,.support-icon{border-radius:10px;padding:12px;margin-bottom:12px;}
-.user-box,.plan-box,.referral-box,.help-box{background:rgba(255,255,255,0.05);box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary) inset;}
+.user-box,.plan-box,.referral-box,.help-box{background:rgba(255,255,255,0.05);box-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2) inset;}
 .alert-box{background:rgba(255,0,136,0.12);color:#fff;box-shadow:0 0 10px #ff00ff inset;}
 .support-icon{display:flex;align-items:center;gap:6px;padding:10px;cursor:pointer;width:fit-content;font-weight:700;transition:0.15s all;}
-.support-icon:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--primary),0 0 30px var(--secondary);}
-.countdown{font-weight:700;color:var(--secondary);}
-#popup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--primary),var(--secondary));padding:20px;border-radius:12px;color:#000;font-weight:800;z-index:9999;text-align:center;}
-#popup button{margin-top:10px;padding:8px 12px;border:none;border-radius:8px;background:#000;color:#fff;cursor:pointer;}
-@media(max-width:480px){.login-box,.page{margin:12px;padding:14px}.nav div{width:48px}header{font-size:22px}}
+.support-icon:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--neon1),0 0 30px var(--neon2);}
+.countdown{font-weight:700;color:var(--neon2);}
+@media(max-width:480px){.page{margin:12px;padding:14px}.nav div{width:48px}header{font-size:22px}}
 </style>
 </head>
 <body>
-<header>NEXA Dashboard</header>
-
-<!-- LOGIN -->
-<div id="loginPage" class="login-box">
-  <h2>Login / Signup</h2>
-  <select id="userOption"><option value="login">Login</option><option value="signup">New User</option></select>
-  <input id="user" placeholder="Username" />
-  <input id="pass" placeholder="Password" type="password"/>
-  <button onclick="login()">Submit</button>
-  <p class="small">Use the same device to keep your account saved.</p>
-</div>
+<header>NEXA</header>
 
 <!-- DASHBOARD -->
-<div id="dashboard" class="page hidden">
-  <div class="alert-box">Warning: Only use official NEXA channels. Never share passwords.</div>
-  <div class="user-box" style="display:flex;justify-content:space-between;align-items:center;">
-    <div>
-      <div id="dashUser" style="font-size:16px;font-weight:800">—</div>
-      <div class="small">Member since: <span id="dashSince">—</span></div>
+<div id="dashboard" class="page">
+  <div class="alert-box">خبردار: صرف آفیشل NEXA چینلز استعمال کریں۔ پاسورڈ شیئر نہ کریں۔</div>
+  <div class="user-box">
+    <div style="display:flex;gap:12px;align-items:center">
+      <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(90deg,var(--neon1),var(--neon2));display:flex;align-items:center;justify-content:center;color:#000;font-weight:900">N</div>
+      <div>
+        <div id="dashUser" style="font-size:16px;font-weight:800">—</div>
+        <div class="small">رکن: <span id="dashSince">—</span></div>
+      </div>
     </div>
-    <div>
-      <div class="small">Balance</div>
+    <div style="margin-top:10px">
+      <div class="small">بیلنس</div>
       <div style="font-size:18px;font-weight:900">Rs <span id="dashBalance">0</span></div>
-      <div class="small">Daily: Rs <span id="dashDaily">0</span></div>
+      <div class="badge">ڈیلی: Rs <span id="dashDaily">0</span></div>
     </div>
   </div>
-  <div class="alert-box">Active Members: <span id="activeMembers">0</span></div>
-</div>
 
-<!-- PLANS -->
-<div id="plans" class="page hidden">
-  <h2>Plans</h2>
+  <div class="alert-box">ایکٹو ممبرز: <span id="activeMembers">0</span></div>
   <div id="plansList"></div>
+
+  <div class="referral-box">
+    <div style="display:flex;gap:8px;align-items:center">
+      <input id="refLink" readonly style="flex:1" />
+      <button onclick="copyReferral()">کاپی کریں</button>
+    </div>
+    <div class="small">دوستوں کو مدعو کریں، بونس خودکار طور پر شامل ہو جائے گا۔</div>
+  </div>
+
+  <button onclick="logout()">لاگ آوٹ</button>
 </div>
 
 <!-- DEPOSIT -->
 <div id="deposit" class="page hidden">
-  <h2>Deposit</h2>
-  <label>Method</label>
+  <h2>ڈپازٹ</h2>
+  <label>طریقہ</label>
   <select id="depositMethod" onchange="updateDepositNumber()">
-    <option value="jazzcash">JazzCash</option>
-    <option value="easypaisa">EasyPaisa</option>
+    <option value="jazzcash">جیزکیش</option>
+    <option value="easypaisa">ایزی پیسہ</option>
   </select>
   <div style="display:flex;gap:8px;align-items:center;margin-top:10px">
     <input id="depositNumber" readonly style="flex:1" />
-    <button onclick="copyDepositNumber()">Copy Number</button>
+    <button onclick="copyDepositNumber()">کاپی کریں</button>
   </div>
-  <label>Amount</label>
-  <input id="depositAmount" placeholder="Enter Amount" />
-  <label>Transaction ID</label>
+  <label>رقم</label>
+  <input id="depositAmount" placeholder="رقم ڈالیں" />
+  <label>TX ID</label>
   <input id="depositTxId" placeholder="TX ID" />
-  <label>Upload Proof</label>
+  <label>ثبوت اپ لوڈ کریں</label>
   <input type="file" id="depositProof" />
-  <button onclick="submitDeposit()">Submit Deposit</button>
+  <button onclick="submitDeposit()">جمع کریں</button>
 </div>
 
-<!-- WITHDRAWAL -->
+<!-- WITHDRAW -->
 <div id="withdrawal" class="page hidden">
-  <h2>Withdrawal</h2>
-  <label>Method</label>
+  <h2>رقم نکالیں</h2>
+  <label>طریقہ</label>
   <select id="withdrawMethod">
-    <option value="jazzcash">JazzCash</option>
-    <option value="easypaisa">EasyPaisa</option>
+    <option value="jazzcash">جیزکیش</option>
+    <option value="easypaisa">ایزی پیسہ</option>
   </select>
-  <input id="withdrawAccount" placeholder="Account Number" />
-  <input id="withdrawAmount" placeholder="Amount" />
-  <button onclick="submitWithdraw()">Request Withdrawal</button>
+  <input id="withdrawAccount" placeholder="اکاؤنٹ نمبر" />
+  <input id="withdrawAmount" placeholder="رقم" />
+  <button onclick="submitWithdraw()">ریکویسٹ کریں</button>
 </div>
 
 <!-- HISTORY -->
 <div id="history" class="page hidden">
-  <h2>History</h2>
+  <h2>ہسٹری</h2>
   <div id="historyList"></div>
 </div>
 
-<!-- REFERRAL -->
-<div id="referral" class="page hidden">
-  <h2>Referral</h2>
-  <div class="referral-box">
-    <input id="refLink" readonly />
-    <button onclick="copyReferral()">Copy Link</button>
-    <div class="small">Share this link to invite friends. Bonuses apply automatically.</div>
-  </div>
+<!-- ABOUT -->
+<div id="about" class="page hidden">
+  <h2>ہمارے بارے میں</h2>
+  <p>نیکسہ ایک جدید اور محفوظ پلیٹ فارم ہے جہاں آپ چھوٹے سے بڑے پلانز میں سرمایہ کاری کر کے روزانہ منافع حاصل کر سکتے ہیں۔</p>
+  <div class="support-icon" onclick="openSupport()"><span class="ico">🛠️</span> سپورٹ</div>
 </div>
 
 <!-- NAVIGATION -->
-<div id="bottomNav" class="nav hidden">
-  <div onclick="showPage('dashboard')"><span class="ico">🏠</span>Home</div>
-  <div onclick="showPage('plans')"><span class="ico">📦</span>Plans</div>
-  <div onclick="showPage('deposit')"><span class="ico">💰</span>Deposit</div>
-  <div onclick="showPage('withdrawal')"><span class="ico">💵</span>Withdraw</div>
-  <div onclick="showPage('history')"><span class="ico">📜</span>History</div>
-  <div onclick="showPage('referral')"><span class="ico">🔗</span>Referral</div>
+<div class="nav">
+  <div onclick="showPage('dashboard')"><span class="ico">🏠</span>ہوم</div>
+  <div onclick="showPage('plans')"><span class="ico">📦</span>پلانز</div>
+  <div onclick="showPage('deposit')"><span class="ico">💰</span>ڈپازٹ</div>
+  <div onclick="showPage('withdrawal')"><span class="ico">💵</span>وڈڈراول</div>
+  <div onclick="showPage('history')"><span class="ico">📜</span>ہسٹری</div>
+  <div onclick="showPage('about')"><span class="ico">ℹ️</span>ہمارے بارے میں</div>
 </div>
 
 <script>
 // ===== STORAGE =====
-let currentUser = localStorage.getItem('nexa_user')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
-let userPlans = JSON.parse(localStorage.getItem('nexa_userPlans')||'[]');
-let history = JSON.parse(localStorage.getItem('nexa_history')||'[]');
-let referralCode = localStorage.getItem('nexa_referral')||'https://gtv140.github.io/NEXA/';
-let totalUsers = parseInt(localStorage.getItem('nexa_totalUsers')||'1');
-
-// ===== PLANS =====
+let referralCode = localStorage.getItem('nexa_referral')||'REF123';
 let plansData=[];
+
+// ===== PLANS 200 to 10000 =====
 for(let i=1;i<=50;i++){
   let invest = 200*i;
-  let days = 25 + i;
-  let multiplier = (i<=5)?2.4:2.2;
-  plansData.push({id:i,name:`Plan ${i}`,invest,total:Math.round(invest*multiplier),daily:Math.round((invest*multiplier)/days),days});
+  let days = 25+i;
+  let multiplier = 2.2;
+  plansData.push({id:i,name:`پلان ${i}`,invest,total:Math.round(invest*multiplier),daily:Math.round((invest*multiplier)/days),days});
 }
 
 // ===== FUNCTIONS =====
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-}
-function login(){
-  const option=document.getElementById('userOption').value;
-  const u=document.getElementById('user').value.trim();
-  const p=document.getElementById('pass').value.trim();
-  if(!u||!p){alert('Please enter username & password');return;}
-  currentUser=u; localStorage.setItem('nexa_user',currentUser);
-  referralCode=referralCode||'https://gtv140.github.io/NEXA/';
-  localStorage.setItem('nexa_referral',referralCode);
-  balance=0; dailyProfit=0; userPlans=[]; history=[]; 
-  localStorage.setItem('nexa_balance',balance); 
-  localStorage.setItem('nexa_daily',dailyProfit); 
-  localStorage.setItem('nexa_userPlans',JSON.stringify(userPlans));
-  localStorage.setItem('nexa_history',JSON.stringify(history));
-  totalUsers++; localStorage.setItem('nexa_totalUsers',totalUsers);
-  updateDashboard();
-}
-function logout(){ currentUser=null; localStorage.removeItem('nexa_user'); showPage('loginPage'); }
-function copyReferral(){navigator.clipboard.writeText(referralCode); alert('Referral link copied!');}
-function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value); alert('Deposit number copied!');}
-
-// ===== DASHBOARD =====
-function updateDashboard(){
-  document.getElementById('dashUser').innerText=currentUser;
-  document.getElementById('dashBalance').innerText=balance.toFixed(2);
-  document.getElementById('dashDaily').innerText=dailyProfit.toFixed(2);
-  document.getElementById('dashSince').innerText=new Date().toLocaleDateString();
-  showPage('dashboard');
-  document.getElementById('bottomNav').classList.remove('hidden');
-  updateActiveMembers();
-  renderPlans();
-  renderHistory();
-  document.getElementById('refLink').value=referralCode;
-}
-
-// ===== PLANS =====
-function renderPlans(){
-  const list=document.getElementById('plansList'); list.innerHTML='';
-  plansData.forEach(p=>{
-    const div=document.createElement('div'); div.className='plan-box';
-    div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} 
-    <button onclick='buyNow(${p.id})'>Buy Now</button>`;
-    list.appendChild(div);
-  });
-}
-function buyNow(id){
-  let plan = plansData.find(p=>p.id===id);
-  if(!plan) return;
-  document.getElementById('depositAmount').value=plan.invest;
-  showPage('deposit');
-}
-
-// ===== DEPOSIT =====
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+function copyReferral(){navigator.clipboard.writeText("https://gtv140.github.io/NEXA/"); alert('ریفرل لنک کاپی ہو گیا!');}
 function updateDepositNumber(){
   const method=document.getElementById('depositMethod').value;
   document.getElementById('depositNumber').value=(method==='jazzcash')?'03705519562':'03379827882';
 }
-function submitDeposit(){ 
-  alert('Deposit submitted!'); 
-  let amount = parseFloat(document.getElementById('depositAmount').value)||0;
-  if(amount>0){ balance+=amount; dailyProfit+=Math.round(amount*0.02); 
-    localStorage.setItem('nexa_balance',balance); 
-    localStorage.setItem('nexa_daily',dailyProfit);
-    history.push(`Deposit Rs ${amount}`);
-    localStorage.setItem('nexa_history',JSON.stringify(history));
-    renderHistory(); updateDashboard();
-  }
-}
+function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value); alert('ڈپازٹ نمبر کاپی ہو گیا!');}
+function submitDeposit(){ alert('ڈپازٹ جمع ہو گیا!'); }
+function submitWithdraw(){ alert('وڈڈراول ریکویسٹ ہو گیا!'); }
+function openSupport(){ window.open("https://chat.whatsapp.com/yourlink","_blank"); }
 
-// ===== WITHDRAWAL =====
-function submitWithdraw(){
-  let amount=parseFloat(document.getElementById('withdrawAmount').value)||0;
-  let account=document.getElementById('withdrawAccount').value.trim();
-  if(amount>0 && account){ 
-    if(amount>balance){alert('Insufficient balance'); return;}
-    balance-=amount; localStorage.setItem('nexa_balance',balance);
-    history.push(`Withdraw Rs ${amount} to ${account}`);
-    localStorage.setItem('nexa_history',JSON.stringify(history));
-    alert('Withdrawal request submitted!'); renderHistory(); updateDashboard();
-  }
-}
+// ===== DASHBOARD =====
+document.getElementById('dashUser').innerText='NEXA USER';
+document.getElementById('dashBalance').innerText=balance.toFixed(2);
+document.getElementById('dashDaily').innerText=dailyProfit.toFixed(2);
+document.getElementById('dashSince').innerText=new Date().toLocaleDateString();
 
-// ===== HISTORY =====
-function renderHistory(){
-  const list=document.getElementById('historyList'); list.innerHTML='';
-  history.forEach(h=>{
-    const div=document.createElement('div'); div.className='plan-box';
-    div.innerHTML=`${h}`;
-    list.appendChild(div);
-  });
+// ===== PLANS RENDER =====
+const plansBox=document.getElementById('plansList');
+plansData.forEach(p=>{
+  const div=document.createElement('div'); div.className='plan-box';
+  div.innerHTML=`<b>${p.name}</b> | سرمایہ: Rs ${p.invest} | کل: Rs ${p.total} | روزانہ: Rs ${p.daily} | دن: ${p.days} 
+  <button onclick='buyNow(${p.id})'>اب خریدیں</button>`;
+  plansBox.appendChild(div);
+});
+function buyNow(id){
+  let plan = plansData.find(p=>p.id===id);
+  document.getElementById('depositAmount').value=plan.invest;
+  document.getElementById('depositMethod').value='jazzcash';
+  updateDepositNumber();
+  showPage('deposit');
 }
 
 // ===== ACTIVE MEMBERS =====
 function updateActiveMembers(){
   document.getElementById('activeMembers').innerText=Math.floor(Math.random()*500+50);
-  setTimeout(updateActiveMembers,5000);
 }
-
-window.onload=()=>{ 
-  if(currentUser) updateDashboard(); 
-  else showPage('loginPage'); 
-  updateDepositNumber(); 
-}
+setInterval(updateActiveMembers,5000);
+updateActiveMembers();
 </script>
 </body>
 </html>
