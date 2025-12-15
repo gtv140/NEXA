@@ -5,21 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA Dashboard</title>
 <style>
-:root{--neon1:#ff00ff;--neon2:#00ffff;--dark:#111;}
+:root{--neon1:#ff6ec7;--neon2:#1efff3;--dark:#111;}
 *{box-sizing:border-box;}
 body{
   margin:0;
   font-family:Arial,sans-serif;
   overflow-x:hidden;
-  animation:bgAnim 20s linear infinite;
   background:#111;
   color:#000;
+  animation:bgAnim 25s linear infinite;
 }
 @keyframes bgAnim{
   0%{background:linear-gradient(120deg,var(--neon1),var(--neon2));}
-  25%{background:linear-gradient(120deg,var(--neon2),#ff4081);}
-  50%{background:linear-gradient(120deg,#ff4081,#18ffff);}
-  75%{background:linear-gradient(120deg,#18ffff,var(--neon1));}
+  25%{background:linear-gradient(120deg,#ff9a9e,#00f2fe);}
+  50%{background:linear-gradient(120deg,#fbc2eb,#a18cd1);}
+  75%{background:linear-gradient(120deg,#fad0c4,#ffd1ff);}
   100%{background:linear-gradient(120deg,var(--neon1),var(--neon2));}
 }
 header{
@@ -28,13 +28,13 @@ header{
   font-weight:800;
   padding:20px;
   color:#fff;
-  text-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2),0 0 30px var(--neon1),0 0 40px var(--neon2);
+  text-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2);
 }
 .login-box,.page{
-  max-width:430px;
-  margin:18px auto;
-  background:rgba(255,255,255,0.1);
-  padding:18px;
+  max-width:450px;
+  margin:20px auto;
+  background:rgba(255,255,255,0.08);
+  padding:20px;
   border-radius:12px;
   border:1px solid rgba(255,255,255,0.05);
   box-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2);
@@ -60,7 +60,7 @@ button:hover{
 .small{font-size:13px;color:rgba(255,255,255,0.7);}
 .user-box,.plan-box,.referral-box,.help-box,.alert-box,.support-icon{border-radius:10px;padding:12px;margin-bottom:12px;}
 .user-box,.plan-box,.referral-box,.help-box{background:rgba(255,255,255,0.05);box-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2) inset;}
-.alert-box{background:rgba(255,0,136,0.1);color:#fff;box-shadow:0 0 10px #ff00ff inset;}
+.alert-box{background:rgba(255,0,136,0.12);color:#fff;box-shadow:0 0 10px #ff00ff inset;}
 .support-icon{display:flex;align-items:center;gap:6px;padding:10px;cursor:pointer;width:fit-content;font-weight:700;transition:0.15s all;}
 .support-icon:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--neon1),0 0 30px var(--neon2);}
 .countdown{font-weight:700;color:var(--neon2);}
@@ -130,7 +130,10 @@ button:hover{
     <option value="jazzcash">جیزکیش</option>
     <option value="easypaisa">ایزی پیسہ</option>
   </select>
-  <input id="depositNumber" readonly />
+  <div style="display:flex;gap:8px;align-items:center">
+    <input id="depositNumber" readonly style="flex:1" />
+    <button onclick="copyDepositNumber()">کاپی کریں</button>
+  </div>
   <label>رقم</label>
   <input id="depositAmount" placeholder="رقم ڈالیں" />
   <label>ٹرانزیکشن آئی ڈی</label>
@@ -156,17 +159,14 @@ button:hover{
 <!-- HISTORY -->
 <div id="history" class="page hidden">
   <h2>ہسٹری</h2>
-  <div class="support-icon" onclick="openSupport()">
-    <span class="ico">🛠️</span>
-    <div class="small">سپورٹ</div>
-  </div>
   <div id="historyList"></div>
 </div>
 
 <!-- ABOUT -->
 <div id="about" class="page hidden">
   <h2>ہمارے بارے میں</h2>
-  <p>نیکسہ ایک جدید پلیٹ فارم ہے جہاں آپ چھوٹے سے بڑے پلانز میں سرمایہ کاری کر کے روزانہ منافع حاصل کر سکتے ہیں۔ ہمارا مقصد محفوظ، شفاف اور جدید سروس فراہم کرنا ہے۔</p>
+  <p>نیکسہ ایک جدید اور محفوظ پلیٹ فارم ہے جہاں آپ چھوٹے سے بڑے پلانز میں سرمایہ کاری کر کے روزانہ منافع حاصل کر سکتے ہیں۔ ہمارا مقصد شفاف اور پیشہ ورانہ سروس فراہم کرنا ہے۔</p>
+  <div class="support-icon" onclick="openSupport()"><span class="ico">🛠️</span> سپورٹ</div>
 </div>
 
 <!-- POPUP -->
@@ -200,8 +200,8 @@ let plansData=[];
 for(let i=1;i<=25;i++){
   let invest = 200*i;
   let days = 25 + i*2;
-  let multiplier = 2 + i*0.05;
-  plansData.push({id:i,name:`پلان ${i}`,invest,total:Math.round(invest*multiplier),daily:Math.round((invest*multiplier)/days),days});
+  let multiplier = (i<=5)?2.4:2.2; // special for first 5 plans
+  plansData.push({id:i,name:`پلان ${i}`,invest,total:Math.round(invest*multiplier),daily:Math.round((invest*multiplier)/days),days,special:(i<=5),endTime:(i<=5?Date.now()+24*60*60*1000:0)});
 }
 
 // ===== FUNCTIONS =====
@@ -217,8 +217,9 @@ function login(){
     localStorage.setItem('nexa_balance',balance); localStorage.setItem('nexa_daily',dailyProfit); localStorage.setItem('nexa_userPlans',JSON.stringify(userPlans)); }
   updateDashboard();
 }
-function logout(){ currentUser=null; localStorage.removeItem('nexa_user'); location.reload(); }
+function logout(){ currentUser=null; localStorage.removeItem('nexa_user'); updateDashboard(); }
 function copyReferral(){navigator.clipboard.writeText(document.getElementById('refLink').value); alert('ریفرل لنک کاپی ہو گیا!');}
+function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value); alert('ڈپازٹ نمبر کاپی ہو گیا!');}
 
 // ===== DASHBOARD =====
 function updateDashboard(){
@@ -230,7 +231,7 @@ function updateDashboard(){
   document.getElementById('loginPage').classList.add('hidden');
   document.getElementById('dashboard').classList.remove('hidden');
   document.getElementById('bottomNav').classList.remove('hidden');
-  renderPlans(); renderHistory(); updateActiveMembers();
+  renderPlans(); renderHistory(); updateActiveMembers(); checkSpecialOffers();
 }
 
 // ===== PLANS =====
@@ -238,7 +239,12 @@ function renderPlans(){
   const list=document.getElementById('plansList'); list.innerHTML='';
   plansData.forEach(p=>{
     const div=document.createElement('div'); div.className='plan-box';
-    div.innerHTML=`<b>${p.name}</b> | سرمایہ: Rs ${p.invest} | کل: Rs ${p.total} | روزانہ: Rs ${p.daily} | دن: ${p.days}
+    let countdownHTML = '';
+    if(p.special){
+      countdownHTML=`<div class='small countdown' id='countdown${p.id}'></div>`;
+      startCountdown(p.id,p.endTime);
+    }
+    div.innerHTML=`<b>${p.name}</b> | سرمایہ: Rs ${p.invest} | کل: Rs ${p.total} | روزانہ: Rs ${p.daily} | دن: ${p.days} ${countdownHTML}
     <button onclick='buyNow(${p.id})'>اب خریدیں</button>`;
     list.appendChild(div);
   });
@@ -247,12 +253,18 @@ function buyNow(id){
   let plan = plansData.find(p=>p.id===id);
   if(!plan) return;
   document.getElementById('depositAmount').value=plan.invest;
+  document.getElementById('depositMethod').value='jazzcash';
+  updateDepositNumber();
   showPage('deposit');
 }
 
 // ===== DEPOSIT & WITHDRAW =====
-function submitDeposit(){ alert('Deposit submitted!'); }
-function submitWithdraw(){ alert('Withdrawal requested!'); }
+function updateDepositNumber(){
+  const method=document.getElementById('depositMethod').value;
+  document.getElementById('depositNumber').value=(method==='jazzcash')?'03705519562':'03379827882';
+}
+function submitDeposit(){ alert('ڈپازٹ سبمٹ ہو گیا!'); }
+function submitWithdraw(){ alert('وڈڈراول ریکویسٹ ہو گیا!'); }
 
 // ===== HISTORY =====
 function renderHistory(){
@@ -270,11 +282,27 @@ function openSupport(){ window.open("https://chat.whatsapp.com/yourlink","_blank
 // ===== ACTIVE MEMBERS =====
 function updateActiveMembers(){
   document.getElementById('activeMembers').innerText=Math.floor(Math.random()*500+50);
+  setTimeout(updateActiveMembers,5000);
 }
 
 // ===== POPUP =====
 function closePopup(){ document.getElementById('popup').classList.add('hidden'); }
 
+// ===== SPECIAL OFFERS COUNTDOWN =====
+function startCountdown(id,endTime){
+  let interval = setInterval(()=>{
+    const now=Date.now();
+    const diff=endTime-now;
+    if(diff<=0){ document.getElementById('countdown'+id).innerText='Offer ended'; clearInterval(interval); return;}
+    const hrs=Math.floor(diff/1000/60/60);
+    const min=Math.floor((diff/1000/60)%60);
+    const sec=Math.floor((diff/1000)%60);
+    document.getElementById('countdown'+id).innerText=`Special Offer ختم ہونے میں: ${hrs}h ${min}m ${sec}s`;
+  },1000);
+}
+function checkSpecialOffers(){ plansData.filter(p=>p.special).forEach(p=>startCountdown(p.id,p.endTime)); }
+
+window.onload=()=>{ if(currentUser) updateDashboard(); }
 </script>
 </body>
 </html>
