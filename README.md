@@ -34,9 +34,10 @@ input::placeholder{color:rgba(255,255,255,0.6);}
 button{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#000;font-weight:700;cursor:pointer;transition:0.2s all;box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);}
 button:hover{transform:translateY(-2px);box-shadow:var(--hover-glow);}
 .nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:12px 6px;font-size:14px;background:rgba(255,255,255,0.1);}
-.nav div{text-align:center;cursor:pointer;width:64px;transition:0.2s all;}
+.nav div{text-align:center;cursor:pointer;width:64px;transition:0.2s all;position:relative;}
 .nav div:hover{transform:translateY(-2px);text-shadow:var(--hover-glow);}
 .nav div .ico{font-size:20px;display:block;margin-bottom:4px;}
+.nav div .badge{position:absolute;top:0;right:5px;background:red;color:#fff;font-size:10px;padding:2px 5px;border-radius:50%;display:none;}
 .hidden{display:none;}
 .small{font-size:13px;color:rgba(255,255,255,0.7);}
 .user-box,.plan-box,.referral-box,.alert-box{border-radius:10px;padding:12px;margin-bottom:12px;transition:0.3s all;}
@@ -126,7 +127,7 @@ button:hover{transform:translateY(-2px);box-shadow:var(--hover-glow);}
 
 <div class="nav hidden">
   <div onclick="showPage('dashboard')"><span class="ico">🏠</span>Home</div>
-  <div onclick="showPage('plans')"><span class="ico">📦</span>Plans</div>
+  <div onclick="showPage('plans')"><span class="ico">📦</span>Plans <span class="badge" id="plansBadge"></span></div>
   <div onclick="showPage('deposit')"><span class="ico">💰</span>Deposit</div>
   <div onclick="showPage('withdrawal')"><span class="ico">💵</span>Withdraw</div>
   <div onclick="showPage('history')"><span class="ico">📜</span>History</div>
@@ -185,7 +186,7 @@ function updateDashboard(){
   document.getElementById('dashSince').innerText=new Date().toLocaleDateString();
   document.querySelector('.nav').classList.remove('hidden');
   showPage('dashboard');
-  renderPlans(); renderHistory(); updateActiveMembers();
+  renderPlans(); renderHistory(); updateActiveMembers(); updateBadge();
 }
 
 function renderPlans(){
@@ -195,6 +196,12 @@ function renderPlans(){
     div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} <button onclick="buyNow(${p.id})">Buy Now</button>`;
     list.appendChild(div);
   });
+}
+
+function updateBadge(){
+  const badge = document.getElementById('plansBadge');
+  badge.innerText = plansData.length;
+  badge.style.display = 'inline-block';
 }
 
 function buyNow(id){document.getElementById('depositAmount').value=plansData.find(p=>p.id===id).invest; showPage('deposit');}
