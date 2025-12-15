@@ -116,11 +116,43 @@ button:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--primary),0 0 3
   <button onclick="submitDeposit()">Submit Deposit</button>
 </div>
 
+<!-- WITHDRAWAL -->
+<div id="withdrawal" class="page hidden">
+  <h2>Withdrawal</h2>
+  <label>Method</label>
+  <select id="withdrawMethod">
+    <option value="jazzcash">JazzCash</option>
+    <option value="easypaisa">EasyPaisa</option>
+  </select>
+  <input id="withdrawAccount" placeholder="Account Number" />
+  <input id="withdrawAmount" placeholder="Amount" />
+  <button onclick="submitWithdraw()">Request Withdrawal</button>
+</div>
+
+<!-- HISTORY -->
+<div id="history" class="page hidden">
+  <h2>History</h2>
+  <div id="historyList"></div>
+</div>
+
+<!-- REFERRAL -->
+<div id="referral" class="page hidden">
+  <h2>Referral</h2>
+  <div class="referral-box">
+    <input id="refLink" readonly />
+    <button onclick="copyReferral()">Copy Link</button>
+    <div class="small">Share this link to invite friends. Bonuses apply automatically.</div>
+  </div>
+</div>
+
 <!-- NAVIGATION -->
 <div id="bottomNav" class="nav hidden">
   <div onclick="showPage('dashboard')"><span class="ico">🏠</span>Home</div>
   <div onclick="showPage('plans')"><span class="ico">📦</span>Plans</div>
   <div onclick="showPage('deposit')"><span class="ico">💰</span>Deposit</div>
+  <div onclick="showPage('withdrawal')"><span class="ico">💵</span>Withdraw</div>
+  <div onclick="showPage('history')"><span class="ico">📜</span>History</div>
+  <div onclick="showPage('referral')"><span class="ico">🔗</span>Referral</div>
 </div>
 
 <script>
@@ -129,7 +161,8 @@ let currentUser = localStorage.getItem('nexa_user')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 let userPlans = JSON.parse(localStorage.getItem('nexa_userPlans')||'[]');
-let referralCode = localStorage.getItem('nexa_referral')||'';
+let history = JSON.parse(localStorage.getItem('nexa_history')||'[]');
+let referralCode = localStorage.getItem('nexa_referral')||'https://gtv140.github.io/NEXA/';
 let totalUsers = parseInt(localStorage.getItem('nexa_totalUsers')||'1');
 
 // ===== PLANS =====
@@ -154,9 +187,11 @@ function login(){
   currentUser=u; localStorage.setItem('nexa_user',currentUser);
   referralCode=referralCode||'https://gtv140.github.io/NEXA/';
   localStorage.setItem('nexa_referral',referralCode);
-  balance=0; dailyProfit=0; userPlans=[]; localStorage.setItem('nexa_balance',balance); 
+  balance=0; dailyProfit=0; userPlans=[]; history=[]; 
+  localStorage.setItem('nexa_balance',balance); 
   localStorage.setItem('nexa_daily',dailyProfit); 
   localStorage.setItem('nexa_userPlans',JSON.stringify(userPlans));
+  localStorage.setItem('nexa_history',JSON.stringify(history));
   totalUsers++; localStorage.setItem('nexa_totalUsers',totalUsers);
   updateDashboard();
 }
@@ -174,6 +209,8 @@ function updateDashboard(){
   document.getElementById('bottomNav').classList.remove('hidden');
   updateActiveMembers();
   renderPlans();
+  renderHistory();
+  document.getElementById('refLink').value=referralCode;
 }
 
 // ===== PLANS =====
@@ -198,7 +235,40 @@ function updateDepositNumber(){
   const method=document.getElementById('depositMethod').value;
   document.getElementById('depositNumber').value=(method==='jazzcash')?'03705519562':'03379827882';
 }
-function submitDeposit(){ alert('Deposit submitted!'); }
+function submitDeposit(){ 
+  alert('Deposit submitted!'); 
+  let amount = parseFloat(document.getElementById('depositAmount').value)||0;
+  if(amount>0){ balance+=amount; dailyProfit+=Math.round(amount*0.02); 
+    localStorage.setItem('nexa_balance',balance); 
+    localStorage.setItem('nexa_daily',dailyProfit);
+    history.push(`Deposit Rs ${amount}`);
+    localStorage.setItem('nexa_history',JSON.stringify(history));
+    renderHistory(); updateDashboard();
+  }
+}
+
+// ===== WITHDRAWAL =====
+function submitWithdraw(){
+  let amount=parseFloat(document.getElementById('withdrawAmount').value)||0;
+  let account=document.getElementById('withdrawAccount').value.trim();
+  if(amount>0 && account){ 
+    if(amount>balance){alert('Insufficient balance'); return;}
+    balance-=amount; localStorage.setItem('nexa_balance',balance);
+    history.push(`Withdraw Rs ${amount} to ${account}`);
+    localStorage.setItem('nexa_history',JSON.stringify(history));
+    alert('Withdrawal request submitted!'); renderHistory(); updateDashboard();
+  }
+}
+
+// ===== HISTORY =====
+function renderHistory(){
+  const list=document.getElementById('historyList'); list.innerHTML='';
+  history.forEach(h=>{
+    const div=document.createElement('div'); div.className='plan-box';
+    div.innerHTML=`${h}`;
+    list.appendChild(div);
+  });
+}
 
 // ===== ACTIVE MEMBERS =====
 function updateActiveMembers(){
@@ -206,7 +276,11 @@ function updateActiveMembers(){
   setTimeout(updateActiveMembers,5000);
 }
 
-window.onload=()=>{ if(currentUser) updateDashboard(); else showPage('loginPage'); updateDepositNumber(); }
+window.onload=()=>{ 
+  if(currentUser) updateDashboard(); 
+  else showPage('loginPage'); 
+  updateDepositNumber(); 
+}
 </script>
 </body>
 </html>
