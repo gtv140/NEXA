@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA Dashboard</title>
 <style>
-:root{--primary:#1e90ff;--secondary:#ff4081;--bg-dark:#111;--bg-light:#f2f2f2;}
+:root{
+  --primary:#00f7ff;
+  --secondary:#ff5cff;
+  --bg-dark:#111;
+  --bg-light:#f2f2f2;
+}
 *{box-sizing:border-box;}
 body{
   margin:0;
@@ -13,14 +18,14 @@ body{
   overflow-x:hidden;
   background:#111;
   color:#fff;
-  animation:bgAnim 30s linear infinite;
+  animation:bgAnim 25s linear infinite;
 }
 @keyframes bgAnim{
-  0%{background:linear-gradient(135deg,#1e90ff,#ff4081);}
-  25%{background:linear-gradient(135deg,#00c3ff,#ff8a00);}
-  50%{background:linear-gradient(135deg,#7b2ff7,#f107a3);}
-  75%{background:linear-gradient(135deg,#12c2e9,#c471ed,#f64f59);}
-  100%{background:linear-gradient(135deg,#1e90ff,#ff4081);}
+  0%{background:linear-gradient(135deg,#00f7ff,#ff5cff);}
+  25%{background:linear-gradient(135deg,#ff4081,#1e90ff);}
+  50%{background:linear-gradient(135deg,#7b2ff7,#12c2e9);}
+  75%{background:linear-gradient(135deg,#ff8a00,#f107a3);}
+  100%{background:linear-gradient(135deg,#00f7ff,#ff5cff);}
 }
 header{
   text-align:center;
@@ -28,18 +33,36 @@ header{
   font-weight:800;
   padding:20px;
   color:#fff;
-  text-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);
+  text-shadow:0 0 15px var(--primary),0 0 25px var(--secondary);
+  transition:0.3s all;
+}
+header:hover{
+  text-shadow:0 0 25px var(--primary),0 0 40px var(--secondary);
 }
 .login-box,.page{
-  max-width:480px;
+  max-width:500px;
   margin:20px auto;
   background:rgba(255,255,255,0.05);
   padding:20px;
   border-radius:12px;
   border:1px solid rgba(255,255,255,0.1);
   box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);
+  transition:0.3s all;
 }
-input,button,select{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:none;background:transparent;color:#fff;outline:none;font-size:14px;}
+.login-box:hover,.page:hover{
+  box-shadow:0 0 20px var(--primary),0 0 35px var(--secondary);
+}
+input,button,select{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border-radius:8px;
+  border:none;
+  background:transparent;
+  color:#fff;
+  outline:none;
+  font-size:14px;
+}
 input::placeholder{color:rgba(255,255,255,0.7);}
 button{
   background:linear-gradient(90deg,var(--primary),var(--secondary));
@@ -51,20 +74,33 @@ button{
 }
 button:hover{
   transform:translateY(-2px);
-  box-shadow:0 0 20px var(--primary),0 0 30px var(--secondary);
+  box-shadow:0 0 20px var(--primary),0 0 35px var(--secondary);
 }
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:12px 6px;font-size:14px;background:rgba(255,255,255,0.1);}
+.nav{
+  position:fixed;bottom:0;left:0;right:0;
+  display:flex;justify-content:space-around;padding:12px 6px;font-size:14px;background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(6px);
+}
 .nav div{text-align:center;cursor:pointer;width:64px;}
 .nav div .ico{font-size:20px;display:block;margin-bottom:4px;}
 .hidden{display:none;}
 .small{font-size:13px;color:rgba(255,255,255,0.7);}
-.user-box,.plan-box,.referral-box,.help-box,.alert-box,.support-icon{border-radius:10px;padding:12px;margin-bottom:12px;}
-.user-box,.plan-box,.referral-box,.help-box{background:rgba(255,255,255,0.05);box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary) inset;}
-.alert-box{background:rgba(255,0,136,0.12);color:#fff;box-shadow:0 0 10px #ff00ff inset;}
-.support-icon{display:flex;align-items:center;gap:6px;padding:10px;cursor:pointer;width:fit-content;font-weight:700;transition:0.15s all;}
-.support-icon:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--primary),0 0 30px var(--secondary);}
+.user-box,.plan-box,.referral-box,.help-box,.alert-box,.support-icon{
+  border-radius:12px;padding:14px;margin-bottom:12px;
+}
+.user-box,.plan-box,.referral-box,.help-box{
+  background:rgba(255,255,255,0.05);
+  box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary) inset;
+  transition:0.3s all;
+}
+.user-box:hover,.plan-box:hover{
+  box-shadow:0 0 25px var(--primary),0 0 40px var(--secondary) inset;
+}
+.alert-box{background:rgba(255,0,136,0.12);color:#fff;box-shadow:0 0 15px #ff00ff inset;}
+.support-icon{display:flex;align-items:center;gap:6px;padding:12px;cursor:pointer;width:fit-content;font-weight:700;transition:0.2s all;}
+.support-icon:hover{transform:translateY(-2px);box-shadow:0 0 25px var(--primary),0 0 40px var(--secondary);}
 .countdown{font-weight:700;color:var(--secondary);}
-#popup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--primary),var(--secondary));padding:20px;border-radius:12px;color:#000;font-weight:800;z-index:9999;text-align:center;}
+#popup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--primary),var(--secondary));padding:20px;border-radius:12px;color:#000;font-weight:800;z-index:9999;text-align:center;box-shadow:0 0 25px var(--primary),0 0 40px var(--secondary);}
 #popup button{margin-top:10px;padding:8px 12px;border:none;border-radius:8px;background:#000;color:#fff;cursor:pointer;}
 @media(max-width:480px){.login-box,.page{margin:12px;padding:14px}.nav div{width:48px}header{font-size:22px}}
 </style>
@@ -165,7 +201,7 @@ button:hover{
 <!-- ABOUT -->
 <div id="about" class="page hidden">
   <h2>About NEXA</h2>
-  <p>NEXA is a modern, safe platform where you can invest in small to large plans and earn daily profit. We provide a transparent and professional service for all users.</p>
+  <p>NEXA is a modern, safe, and professional investment platform. Earn daily profit through small to large plans with full transparency and security.</p>
 </div>
 
 <!-- POPUP -->
