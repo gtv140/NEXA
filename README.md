@@ -5,20 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA</title>
 <style>
-:root{--primary:#1e90ff;--secondary:#ff4081;--bg-dark:#111;}
-*{box-sizing:border-box;}
-body{margin:0;font-family:Arial,sans-serif;overflow-x:hidden;background:#111;color:#fff;animation:bgAnim 30s linear infinite;}
-@keyframes bgAnim{
-0%{background:linear-gradient(135deg,#1e90ff,#ff4081);}
-25%{background:linear-gradient(135deg,#00c3ff,#ff8a00);}
-50%{background:linear-gradient(135deg,#7b2ff7,#f107a3);}
-75%{background:linear-gradient(135deg,#12c2e9,#c471ed,#f64f59);}
-100%{background:linear-gradient(135deg,#1e90ff,#ff4081);}
+:root{
+  --primary:#00f7ff;
+  --secondary:#ff5cff;
+  --bg-dark:#0a0a0a;
 }
-header{text-align:center;font-size:28px;font-weight:800;padding:20px;color:#fff;text-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  overflow-x:hidden;
+  background:#0a0a0a;
+  color:#fff;
+  animation:bgAnim 25s linear infinite;
+}
+@keyframes bgAnim{
+0%{background:linear-gradient(135deg,#0a0a0a,#1a1a1a);}
+25%{background:linear-gradient(135deg,#0a0a0a,#0f0f2a);}
+50%{background:linear-gradient(135deg,#0a0a0a,#1a0a2a);}
+75%{background:linear-gradient(135deg,#0a0a0a,#2a0a1a);}
+100%{background:linear-gradient(135deg,#0a0a0a,#1a1a1a);}
+}
+header{text-align:center;font-size:28px;font-weight:800;padding:20px;text-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);}
 .login-box,.page{max-width:480px;margin:20px auto;background:rgba(255,255,255,0.05);padding:20px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);}
 input,button,select{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:none;background:transparent;color:#fff;outline:none;font-size:14px;}
-input::placeholder{color:rgba(255,255,255,0.7);}
+input::placeholder{color:rgba(255,255,255,0.6);}
 button{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#000;font-weight:700;cursor:pointer;transition:0.2s all;box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);}
 button:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--primary),0 0 30px var(--secondary);}
 .nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:12px 6px;font-size:14px;background:rgba(255,255,255,0.1);}
@@ -26,9 +37,13 @@ button:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--primary),0 0 3
 .nav div .ico{font-size:20px;display:block;margin-bottom:4px;}
 .hidden{display:none;}
 .small{font-size:13px;color:rgba(255,255,255,0.7);}
-.user-box,.plan-box,.referral-box,.alert-box{border-radius:10px;padding:12px;margin-bottom:12px;}
+.user-box,.plan-box,.referral-box,.alert-box{border-radius:10px;padding:12px;margin-bottom:12px;transition:0.3s all;}
 .user-box,.plan-box,.referral-box{background:rgba(255,255,255,0.05);box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary) inset;}
+.user-box:hover,.plan-box:hover{box-shadow:0 0 25px var(--primary),0 0 35px var(--secondary) inset;}
 .alert-box{background:rgba(255,0,136,0.12);color:#fff;box-shadow:0 0 10px #ff00ff inset;}
+.countdown{font-weight:700;color:var(--secondary);}
+#popup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--primary),var(--secondary));padding:20px;border-radius:12px;color:#000;font-weight:800;z-index:9999;text-align:center;box-shadow:0 0 25px var(--primary),0 0 40px var(--secondary);}
+#popup button{margin-top:10px;padding:8px 12px;border:none;border-radius:8px;background:#000;color:#fff;cursor:pointer;}
 @media(max-width:480px){.login-box,.page{margin:12px;padding:14px}.nav div{width:48px}header{font-size:22px}}
 </style>
 </head>
@@ -81,7 +96,7 @@ button:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--primary),0 0 3
     <label>Amount</label>
     <input id="depositAmount" placeholder="Enter Amount" />
     <label>Transaction ID</label>
-    <input id="depositTxId" placeholder="TX ID" />
+    <input type="text" id="depositTxId" placeholder="TX ID" />
     <label>Upload Proof</label>
     <input type="file" id="depositProof" />
     <button onclick="submitDeposit()">Submit Deposit</button>
@@ -126,19 +141,41 @@ button:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--primary),0 0 3
 </div>
 
 <script>
-// ===== DATA =====
-let currentUser=null,balance=0,dailyProfit=0;
-let plansData=[];
-for(let i=1;i<=10;i++){
-  let invest=200*i,days=25+i*2,mult=2.2;
-  plansData.push({id:i,name:`Plan ${i}`,invest,total:Math.round(invest*mult),daily:Math.round((invest*mult)/days),days});
+// ===== LOCAL STORAGE =====
+let currentUser = localStorage.getItem('nexa_user') || null;
+let balance = parseFloat(localStorage.getItem('nexa_balance') || '0');
+let dailyProfit = parseFloat(localStorage.getItem('nexa_daily') || '0');
+let history = JSON.parse(localStorage.getItem('nexa_history') || '[]');
+let referralCode = localStorage.getItem('nexa_referral') || '';
+
+// ===== PLANS =====
+let plansData = [];
+for(let i=25;i<=50;i++){
+  let invest = 200*i, days = 25+i, total = Math.round(invest*2.2), daily = Math.round(total/days);
+  plansData.push({id:i,name:`Plan ${i}`,invest,total,daily,days,special:(i<=30),endTime:(i<=30?Date.now()+24*60*60*1000:0)});
 }
 
 // ===== FUNCTIONS =====
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
 function login(){
-  const u=document.getElementById('user').value.trim();
+  const u = document.getElementById('user').value.trim();
   if(!u){alert('Enter username');return;}
-  currentUser=u;balance=0;dailyProfit=0;
+  currentUser = u; balance = 0; dailyProfit = 0; referralCode = referralCode || Math.random().toString(36).substring(2,10);
+  localStorage.setItem('nexa_user',currentUser);
+  localStorage.setItem('nexa_balance',balance);
+  localStorage.setItem('nexa_daily',dailyProfit);
+  localStorage.setItem('nexa_referral',referralCode);
+  updateDashboard();
+}
+
+function logout(){
+  currentUser=null;
+  localStorage.removeItem('nexa_user');
+  document.getElementById('loginPage').classList.remove('hidden');
+  document.getElementById('dashboard').classList.add('hidden');
+}
+
+function updateDashboard(){
   document.getElementById('dashUser').innerText=currentUser;
   document.getElementById('dashBalance').innerText=balance.toFixed(2);
   document.getElementById('dashDaily').innerText=dailyProfit.toFixed(2);
@@ -147,18 +184,80 @@ function login(){
   document.getElementById('loginPage').classList.add('hidden');
   document.getElementById('dashboard').classList.remove('hidden');
   document.querySelector('.nav').classList.remove('hidden');
-  renderPlans();updateActiveMembers();
+  renderPlans();
+  renderHistory();
+  updateActiveMembers();
+  checkSpecialOffers();
+  autoDailyProfit();
 }
-function logout(){currentUser=null;document.getElementById('loginPage').classList.remove('hidden');document.getElementById('dashboard').classList.add('hidden');}
-function renderPlans(){const list=document.getElementById('plansList');list.innerHTML='';plansData.forEach(p=>{const div=document.createElement('div');div.className='plan-box';div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} <button onclick="buyNow(${p.id})">Buy Now</button>`;list.appendChild(div);});}
-function buyNow(id){let plan=plansData.find(p=>p.id===id);if(!plan)return;document.getElementById('depositAmount').value=plan.invest;document.getElementById('depositMethod').value='jazzcash';updateDepositNumber();}
-function updateDepositNumber(){const method=document.getElementById('depositMethod').value;document.getElementById('depositNumber').value=(method==='jazzcash')?'03705519562':'03379827882';}
+
+function renderPlans(){
+  const list=document.getElementById('plansList'); list.innerHTML='';
+  plansData.forEach(p=>{
+    const div=document.createElement('div'); div.className='plan-box';
+    let countdownHTML='';
+    if(p.special){countdownHTML=`<div class='small countdown' id='countdown${p.id}'></div>`;startCountdown(p.id,p.endTime);}
+    div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} ${countdownHTML} <button onclick='buyNow(${p.id})'>Buy Now</button>`;
+    list.appendChild(div);
+  });
+}
+
+function buyNow(id){
+  let plan = plansData.find(p=>p.id===id);
+  if(!plan) return;
+  document.getElementById('depositAmount').value = plan.invest;
+  document.getElementById('depositMethod').value = 'jazzcash';
+  updateDepositNumber();
+  showPage('dashboard');
+}
+
+// ===== DEPOSIT & WITHDRAW =====
+function updateDepositNumber(){document.getElementById('depositNumber').value = (document.getElementById('depositMethod').value==='jazzcash')?'03705519562':'03379827882';}
 function submitDeposit(){alert('Deposit submitted!');}
 function submitWithdraw(){alert('Withdrawal requested!');}
 function copyReferral(){navigator.clipboard.writeText(document.getElementById('refLink').value);alert('Referral link copied!');}
-function updateActiveMembers(){document.getElementById('activeMembers').innerText=Math.floor(Math.random()*500+50);setTimeout(updateActiveMembers,5000);}
-function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
 
+// ===== HISTORY =====
+function renderHistory(){const list=document.getElementById('historyList');list.innerHTML='';history.forEach(h=>{const div=document.createElement('div');div.className='plan-box';div.innerHTML=`${h}`;list.appendChild(div);});}
+
+// ===== ACTIVE MEMBERS =====
+function updateActiveMembers(){document.getElementById('activeMembers').innerText=Math.floor(Math.random()*500+50);setTimeout(updateActiveMembers,5000);}
+
+// ===== SPECIAL OFFERS =====
+function startCountdown(id,endTime){
+  let interval = setInterval(()=>{
+    const now = Date.now();
+    const diff = endTime-now;
+    if(diff<=0){document.getElementById('countdown'+id).innerText='Offer ended'; clearInterval(interval); return;}
+    const hrs=Math.floor(diff/1000/60/60);
+    const min=Math.floor((diff/1000/60)%60);
+    const sec=Math.floor((diff/1000)%60);
+    document.getElementById('countdown'+id).innerText=`Special Offer ends in: ${hrs}h ${min}m ${sec}s`;
+  },1000);
+}
+function checkSpecialOffers(){plansData.filter(p=>p.special).forEach(p=>startCountdown(p.id,p.endTime));}
+
+// ===== AUTO DAILY PROFIT =====
+function autoDailyProfit(){
+  setInterval(()=>{
+    let profit = Math.floor(Math.random()*50+10); // random daily profit
+    dailyProfit += profit;
+    balance += profit;
+    localStorage.setItem('nexa_balance',balance);
+    localStorage.setItem('nexa_daily',dailyProfit);
+    history.unshift(`Daily profit Rs ${profit} added on ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`);
+    localStorage.setItem('nexa_history',JSON.stringify(history));
+    updateDashboardDisplay();
+  },15000); // har 15 second me add hoga (demo purpose)
+}
+
+function updateDashboardDisplay(){
+  document.getElementById('dashBalance').innerText=balance.toFixed(2);
+  document.getElementById('dashDaily').innerText=dailyProfit.toFixed(2);
+  renderHistory();
+}
+
+window.onload=()=>{if(currentUser) updateDashboard();}
 </script>
 </body>
 </html>
