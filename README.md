@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXA EARN</title>
+<title>NEXA Earn</title>
 <style>
 :root{--primary:#ff00ff;--secondary:#00ffff;--accent:#ff9900;--dark:#0b0b0b;--text:#ffffff;}
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
@@ -139,7 +139,17 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
 let balance=parseFloat(localStorage.getItem('balance')||'0');
 let dailyProfit=10;
 let historyData=JSON.parse(localStorage.getItem('historyData')||'[]');
-let userPlans=JSON.parse(localStorage.getItem('userPlans')||'[]');
+let loggedUser=localStorage.getItem('loggedUser')||'';
+
+// ===== LOGIN PERSISTENCE =====
+window.onload=function(){
+  if(loggedUser){
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    document.getElementById('bottomNav').classList.remove('hidden');
+    document.getElementById('dashUser').innerText=loggedUser;
+  }
+};
 
 // ===== ACTIVE MEMBERS =====
 function updateActiveMembers(){
@@ -164,6 +174,7 @@ function login(){
   document.getElementById('dashboard').classList.remove('hidden');
   document.getElementById('bottomNav').classList.remove('hidden');
   document.getElementById('dashUser').innerText=u;
+  localStorage.setItem('loggedUser',u);
   showWelcome(u);
 }
 
@@ -180,15 +191,7 @@ function closeWelcome(){document.getElementById('welcomePopup').style.display='n
 // ===== PLANS =====
 let plansData=[];
 for(let i=1;i<=10;i++){let invest=200*i;let days=5+i;let total=Math.round(invest*2.2);let daily=Math.round(total/days);plansData.push({id:i,name:'Plan '+i,invest,total,daily,days});}
-function renderPlans(){
-  const list=document.getElementById('plansList'); list.innerHTML='';
-  plansData.forEach(p=>{
-    const div=document.createElement('div'); div.className='plan-box'; 
-    div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days}
-    <button onclick="buyPlan(${p.id})">Buy Now</button>`;
-    list.appendChild(div);
-  });
-}
+function renderPlans(){const list=document.getElementById('plansList'); list.innerHTML='';plansData.forEach(p=>{const div=document.createElement('div'); div.className='plan-box'; div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days}<button onclick="buyPlan(${p.id})">Buy Now</button>`; list.appendChild(div);});}
 renderPlans();
 function buyPlan(id){
   let plan=plansData.find(p=>p.id===id); if(!plan) return;
@@ -199,49 +202,29 @@ function buyPlan(id){
 }
 
 // ===== DEPOSIT =====
-function updateDepositNumber(){
-  const method=document.getElementById('depositMethod').value;
-  document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';
-}
+function updateDepositNumber(){const method=document.getElementById('depositMethod').value;document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';}
 function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value);alert('Deposit number copied!');}
 function submitDeposit(){
   let amt=document.getElementById('depositAmount').value;
   let tx=document.getElementById('depositTxId').value;
   historyData.push(`Deposit Rs ${amt} TX:${tx} Approved`);
   localStorage.setItem('historyData',JSON.stringify(historyData));
+  renderHistory();
   alert('Deposit submitted & approved!');
 }
 
 // ===== WITHDRAW =====
-function submitWithdraw(){
-  let amt=document.getElementById('withdrawAmount').value;
-  let acct=document.getElementById('withdrawAccount').value;
-  historyData.push(`Withdrawal Rs ${amt} Account:${acct} Approved`);
-  localStorage.setItem('historyData',JSON.stringify(historyData));
-  renderHistory();
-  alert('Withdrawal submitted & approved!');
-}
+function submitWithdraw(){let amt=document.getElementById('withdrawAmount').value;let acct=document.getElementById('withdrawAccount').value;historyData.push(`Withdrawal Rs ${amt} Account:${acct} Approved`);localStorage.setItem('historyData',JSON.stringify(historyData));renderHistory();alert('Withdrawal submitted & approved!');}
 
 // ===== HISTORY =====
-function renderHistory(){
-  const list=document.getElementById('historyList'); list.innerHTML='';
-  historyData.forEach(h=>{
-    const div=document.createElement('div');
-    div.className='plan-box'; div.innerText=h;
-    list.appendChild(div);
-  });
-}
+function renderHistory(){const list=document.getElementById('historyList'); list.innerHTML='';historyData.forEach(h=>{const div=document.createElement('div');div.className='plan-box'; div.innerText=h; list.appendChild(div);});}
 renderHistory();
 
 // ===== DAILY PROFIT =====
-setInterval(()=>{
-  balance+=dailyProfit;
-  localStorage.setItem('balance',balance);
-  document.getElementById('dashBalance').innerText=balance.toFixed(2);
-},1000*60*60*24);
+setInterval(()=>{balance+=dailyProfit; localStorage.setItem('balance',balance); document.getElementById('dashBalance').innerText=balance.toFixed(2);},1000*60*60*24);
 
 // ===== LOGOUT =====
-function logout(){alert('Logged out!');location.reload();}
+function logout(){localStorage.removeItem('loggedUser');alert('Logged out!');location.reload();}
 </script>
 </body>
 </html>
