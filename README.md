@@ -5,256 +5,282 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA Earn</title>
 <style>
-body{margin:0;font-family:Arial;background:#111;color:#fff;overflow-x:hidden;}
-header{text-align:center;padding:14px;font-size:28px;font-weight:900;background:#000;}
-.box{max-width:430px;margin:12px auto;padding:14px;background:#222;border-radius:12px}
-.hidden{display:none}
-input,select,button{width:100%;padding:10px;margin-top:8px;border-radius:8px;border:1px solid #333;background:#111;color:#fff}
-button{background:#00ffe7;color:#000;font-weight:800;border:none;cursor:pointer}
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#000;padding:8px 0}
-.nav div{font-size:12px;cursor:pointer;text-align:center}
-.nav div .ico{font-size:20px;display:block;margin-bottom:2px}
-.card{border:1px solid #333;padding:10px;border-radius:10px;margin-bottom:8px}
-.plan-box{border:1px solid #333;padding:8px;margin-bottom:8px;border-radius:8px}
-small{opacity:.7}
+:root{
+  --neon1:#ff6ec7;
+  --neon2:#1efff3;
+  --dark:#111;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  overflow-x:hidden;
+  background:#111;
+  color:#fff;
+  animation:bgAnim 30s linear infinite;
+}
+@keyframes bgAnim{
+  0%{background:linear-gradient(120deg,var(--neon1),var(--neon2));}
+  25%{background:linear-gradient(120deg,#ff9a9e,#00f2fe);}
+  50%{background:linear-gradient(120deg,#fbc2eb,#a18cd1);}
+  75%{background:linear-gradient(120deg,#fad0c4,#ffd1ff);}
+  100%{background:linear-gradient(120deg,var(--neon1),var(--neon2));}
+}
+header{
+  text-align:center;
+  font-size:28px;
+  font-weight:800;
+  padding:20px;
+  color:#fff;
+  text-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2);
+}
+.page{
+  max-width:480px;
+  margin:20px auto;
+  background:rgba(255,255,255,0.05);
+  padding:20px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.1);
+  box-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2);
+}
+button,input,select{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border-radius:8px;
+  border:none;
+  background:transparent;
+  color:#fff;
+  outline:none;
+  font-size:14px;
+}
+button{
+  background:linear-gradient(90deg,var(--neon1),var(--neon2));
+  color:#000;
+  font-weight:700;
+  cursor:pointer;
+  transition:0.2s all;
+  box-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2);
+}
+button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 20px var(--neon1),0 0 30px var(--neon2);
+}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:12px 6px;font-size:14px;background:rgba(255,255,255,0.1);}
+.nav div{text-align:center;cursor:pointer;width:64px;}
+.nav div .ico{font-size:20px;display:block;margin-bottom:4px;}
+.hidden{display:none;}
+.small{font-size:13px;color:rgba(255,255,255,0.7);}
+.plan-box,.alert-box,.user-box,.referral-box,.support-icon{
+  border-radius:10px;padding:12px;margin-bottom:12px;
+}
+.plan-box,.user-box,.referral-box,.support-icon{
+  background:rgba(255,255,255,0.05);
+  box-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2) inset;
+}
+.alert-box{background:rgba(255,0,136,0.12);color:#fff;box-shadow:0 0 10px #ff00ff inset;}
+.support-icon{display:flex;align-items:center;gap:6px;padding:10px;cursor:pointer;width:fit-content;font-weight:700;transition:0.15s all;}
+.support-icon:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--neon1),0 0 30px var(--neon2);}
+.countdown{font-weight:700;color:var(--neon2);}
+#popup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--neon1),var(--neon2));padding:20px;border-radius:12px;color:#000;font-weight:800;z-index:9999;text-align:center;}
+#popup button{margin-top:10px;padding:8px 12px;border:none;border-radius:8px;background:#000;color:#fff;cursor:pointer;}
+@media(max-width:480px){.page{margin:12px;padding:14px}.nav div{width:48px}header{font-size:22px}}
 </style>
 </head>
 <body>
 <header>NEXA Earn</header>
 
-<!-- LOGIN -->
-<div id="login" class="box">
-<h2>Login / Signup</h2>
-<input id="username" placeholder="Username">
-<input id="password" type="password" placeholder="Password">
-<select id="loginOption">
-<option value="login">Login</option>
-<option value="signup">New User</option>
-</select>
-<button onclick="loginUser()">Submit</button>
-</div>
-
 <!-- DASHBOARD -->
-<div id="dash" class="box hidden">
-<div class="card">
-<b>User:</b> <span id="du"></span><br>
-<b>Balance:</b> Rs <span id="bal">0</span><br>
-<b>Daily Profit:</b> Rs <span id="dprofit">0</span><br>
-<b>Total Profit:</b> Rs <span id="tprofit">0</span><br>
-<b>Active Users:</b> <span id="active"></span>
+<div id="dashboard" class="page">
+  <div class="alert-box">
+    خبردار: Deposit/Withdrawal میں کوئی مسئلہ ہو تو Administration سے رابطہ کریں۔ Deposit یا Withdrawal کرنے والے users کو notification show ہوگا، اور screenshot Administration کو بھیجا جائے گا۔
+  </div>
+  <div class="user-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-weight:800;font-size:16px;">Welcome User</div>
+        <div class="small">Member since: <span id="dashSince">—</span></div>
+      </div>
+      <div>
+        <div class="small">Balance</div>
+        <div style="font-size:18px;font-weight:900">Rs <span id="dashBalance">0</span></div>
+        <div class="small">Daily Profit: Rs <span id="dashDaily">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert-box">Active Members: <span id="activeMembers">0</span></div>
+
+  <div id="bottomNav" class="nav">
+    <div onclick="showPage('plans')"><span class="ico">📦</span>Plans</div>
+    <div onclick="showPage('deposit')"><span class="ico">💰</span>Deposit</div>
+    <div onclick="showPage('withdrawal')"><span class="ico">💵</span>Withdrawal</div>
+    <div onclick="showPage('history')"><span class="ico">📜</span>History</div>
+    <div onclick="showPage('about')"><span class="ico">ℹ️</span>About</div>
+    <div onclick="showPage('support')"><span class="ico">🛠️</span>Support</div>
+  </div>
 </div>
 
-<div class="card">
-<b>Company Rules:</b><br>
-Deposit/Withdrawal issue ho to <b>Administration</b> se contact karein.  
-Deposit ya withdrawal request ke baad <b>Screenshot admin ko bhejna zaroori</b>.
+<!-- PLANS -->
+<div id="plans" class="page hidden">
+  <h2>Plans</h2>
+  <div id="plansList"></div>
 </div>
 
-<div class="card">
-<b>Plans:</b>
-<div id="plansList"></div>
+<!-- DEPOSIT -->
+<div id="deposit" class="page hidden">
+  <h2>Deposit</h2>
+  <label>Method</label>
+  <select id="depositMethod" onchange="updateDepositNumber()">
+    <option value="jazzcash">JazzCash</option>
+    <option value="easypaisa">EasyPaisa</option>
+  </select>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
+    <input id="depositNumber" readonly style="flex:1" />
+    <button onclick="copyDepositNumber()">Copy</button>
+  </div>
+  <label>Amount</label>
+  <input id="depositAmount" placeholder="Enter Amount" />
+  <label>Transaction ID</label>
+  <input id="depositTxId" placeholder="TX ID" />
+  <label>Upload Proof</label>
+  <input type="file" id="depositProof" />
+  <button onclick="submitDeposit()">Submit Deposit</button>
 </div>
 
-<div class="card">
-<b>Deposit:</b>
-<select id="depositMethod" onchange="updateDepositNumber()">
-<option value="jazzcash">JazzCash</option>
-<option value="easypaisa">EasyPaisa</option>
-</select>
-<div style="display:flex;gap:8px;margin-top:8px">
-<input id="depositNumber" readonly style="flex:1"/>
-<button onclick="copyDepositNumber()">Copy</button>
-</div>
-<input id="depositAmount" placeholder="Amount">
-<input id="depositTxId" placeholder="Transaction ID">
-<input type="file" id="depositProof">
-<button onclick="submitDeposit()">Submit Deposit</button>
+<!-- WITHDRAWAL -->
+<div id="withdrawal" class="page hidden">
+  <h2>Withdrawal</h2>
+  <label>Method</label>
+  <select id="withdrawMethod">
+    <option value="jazzcash">JazzCash</option>
+    <option value="easypaisa">EasyPaisa</option>
+  </select>
+  <input id="withdrawAccount" placeholder="Account Number" />
+  <input id="withdrawAmount" placeholder="Amount" />
+  <button onclick="submitWithdraw()">Request Withdrawal</button>
 </div>
 
-<div class="card">
-<b>Withdrawal:</b>
-<select id="withdrawMethod">
-<option value="jazzcash">JazzCash</option>
-<option value="easypaisa">EasyPaisa</option>
-</select>
-<input id="withdrawAccount" placeholder="Account Number">
-<input id="withdrawAmount" placeholder="Amount">
-<button onclick="submitWithdraw()">Request Withdrawal</button>
+<!-- HISTORY -->
+<div id="history" class="page hidden">
+  <h2>History</h2>
+  <div id="historyList"></div>
 </div>
 
-<div class="card">
-<b>History:</b>
-<div id="historyList"></div>
+<!-- ABOUT -->
+<div id="about" class="page hidden">
+  <h2>About NEXA Earn</h2>
+  <p>Safe and professional investment platform with automatic daily profits.</p>
 </div>
 
-<div class="card">
-<b>Support:</b><br>
-Email: <a href="mailto:rock.earn92@gmail.com">rock.earn92@gmail.com</a><br>
-WhatsApp: <a href="https://chat.whatsapp.com/" target="_blank">Join Group</a>
-</div>
-</div>
-
-<!-- NAVIGATION -->
-<div class="nav" id="nav">
-<div onclick="show('dash')"><span class="ico">🏠</span>Dashboard</div>
-<div onclick="show('plansDiv')"><span class="ico">📦</span>Plans</div>
-<div onclick="show('deposit')"><span class="ico">💰</span>Deposit</div>
-<div onclick="show('withdrawal')"><span class="ico">💵</span>Withdraw</div>
-<div onclick="show('history')"><span class="ico">📜</span>History</div>
-<div onclick="show('support')"><span class="ico">ℹ️</span>Support</div>
+<!-- SUPPORT -->
+<div id="support" class="page hidden">
+  <h2>Support</h2>
+  <div class="support-icon" onclick="window.open('mailto:rock.earn92@gmail.com','_blank')"><span class="ico">📧</span>Email</div>
+  <div class="support-icon" onclick="window.open('https://chat.whatsapp.com/yourlink','_blank')"><span class="ico">💬</span>WhatsApp Group</div>
 </div>
 
 <script>
 // ===== STORAGE =====
-let currentUser = localStorage.getItem('nexa_user')||null;
-let bal = parseFloat(localStorage.getItem('nexa_balance')||'0');
-let daily = parseFloat(localStorage.getItem('nexa_daily')||'10');
-let total = parseFloat(localStorage.getItem('nexa_total')||'0');
-let lastProfit = parseInt(localStorage.getItem('nexa_lastProfit')||Date.now());
-let history = JSON.parse(localStorage.getItem('nexa_history')||'[]');
+let balance = parseFloat(localStorage.getItem('balance')||'0');
+let dailyProfit = parseFloat(localStorage.getItem('dailyProfit')||'10');
+let historyData = JSON.parse(localStorage.getItem('historyData')||'[]');
 
-// ===== PLANS =====
-let plansData=[];
-for(let i=1;i<=25;i++){
-  let invest=200*i;
-  let days=25+i*2;
-  let multiplier=(i<=5)?2.4:2.2;
-  plansData.push({id:i,name:'Plan '+i,invest,total:Math.round(invest*multiplier),daily:Math.round((invest*multiplier)/days),days,endTime:Date.now()+days*24*60*60*1000});
+// ===== ACTIVE MEMBERS =====
+function updateActiveMembers(){
+  document.getElementById('activeMembers').innerText = Math.floor(Math.random()*500+50);
+  setTimeout(updateActiveMembers,5000);
 }
-
-// ===== LOGIN =====
-function loginUser(){
-  const user=document.getElementById('username').value.trim();
-  const pass=document.getElementById('password').value.trim();
-  const option=document.getElementById('loginOption').value;
-  if(!user||!pass){alert("Fill username & password");return;}
-  currentUser=user;
-  if(option==='signup'){bal=0;total=0;daily=10;lastProfit=Date.now(); save();}
-  save(); showDash();
-}
-
-// ===== SAVE =====
-function save(){
-  localStorage.setItem('nexa_user',currentUser);
-  localStorage.setItem('nexa_balance',bal);
-  localStorage.setItem('nexa_daily',daily);
-  localStorage.setItem('nexa_total',total);
-  localStorage.setItem('nexa_lastProfit',lastProfit);
-  localStorage.setItem('nexa_history',JSON.stringify(history));
-}
+updateActiveMembers();
 
 // ===== DASHBOARD =====
-function showDash(){
-  document.getElementById('login').classList.add('hidden');
-  document.getElementById('dash').classList.remove('hidden');
-  document.getElementById('du').innerText=currentUser;
-  tick();
-  renderPlans();
-  renderHistory();
-  updateDepositNumber();
-}
+document.getElementById('dashBalance').innerText = balance.toFixed(2);
+document.getElementById('dashDaily').innerText = dailyProfit.toFixed(2);
+document.getElementById('dashSince').innerText = new Date().toLocaleDateString();
 
-// ===== TICK DAILY PROFIT =====
-function tick(){
-  let now=Date.now();
-  if(now-lastProfit>=86400000){bal+=daily;total+=daily;lastProfit=now; save();}
-  document.getElementById('bal').innerText=bal;
-  document.getElementById('dprofit').innerText=daily;
-  document.getElementById('tprofit').innerText=total;
-  document.getElementById('active').innerText=Math.floor(50+Math.random()*150);
-  setTimeout(tick,5000);
+// ===== NAVIGATION =====
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
 }
 
 // ===== PLANS =====
+let plansData = [];
+for(let i=1;i<=50;i++){
+  let invest = 200*i;
+  let days = 25+i*2;
+  let total = Math.round(invest*2.2);
+  let daily = Math.round(total/days);
+  plansData.push({id:i,name:'Plan '+i,invest,total,daily,days});
+}
 function renderPlans(){
-  const list=document.getElementById('plansList'); list.innerHTML='';
+  const list = document.getElementById('plansList');
+  list.innerHTML='';
   plansData.forEach(p=>{
     const div=document.createElement('div');
     div.className='plan-box';
-    div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} <br>
-    <span id="timer${p.id}"></span><br>
-    <button onclick='buyPlan(${p.id})'>Buy Now</button>`;
+    div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days}
+    <button onclick="buyPlan(${p.id})">Buy Now</button>`;
     list.appendChild(div);
-    startCountdown(p.id,p.endTime);
   });
 }
-
+renderPlans();
 function buyPlan(id){
-  const plan=plansData.find(p=>p.id===id);
+  let plan = plansData.find(p=>p.id===id);
   if(!plan) return;
   document.getElementById('depositAmount').value=plan.invest;
   document.getElementById('depositMethod').value='jazzcash';
   updateDepositNumber();
-  show('deposit');
-}
-
-// ===== COUNTDOWN =====
-function startCountdown(id,endTime){
-  const interval=setInterval(()=>{
-    const now=Date.now();
-    const diff=endTime-now;
-    if(diff<=0){document.getElementById('timer'+id).innerText='Offer ended';clearInterval(interval);return;}
-    const days=Math.floor(diff/1000/60/60/24);
-    const hrs=Math.floor((diff/1000/60/60)%24);
-    const min=Math.floor((diff/1000/60)%60);
-    const sec=Math.floor((diff/1000)%60);
-    document.getElementById('timer'+id).innerText=`Ends in: ${days}d ${hrs}h ${min}m ${sec}s`;
-  },1000);
+  showPage('deposit');
 }
 
 // ===== DEPOSIT =====
 function updateDepositNumber(){
-  const method=document.getElementById('depositMethod').value;
-  document.getElementById('depositNumber').value=(method==='jazzcash')?'03705519562':'03379827882';
+  const method = document.getElementById('depositMethod').value;
+  document.getElementById('depositNumber').value = method==='jazzcash'?'03705519562':'03379827882';
 }
-function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value); alert('Deposit number copied!');}
+function copyDepositNumber(){
+  navigator.clipboard.writeText(document.getElementById('depositNumber').value);
+  alert('Deposit number copied!');
+}
 function submitDeposit(){
-  const amt=document.getElementById('depositAmount').value;
-  if(!amt){alert('Enter amount'); return;}
-  history.push(`Deposit: Rs ${amt} Method: ${document.getElementById('depositMethod').value}`);
-  save(); renderHistory(); alert('Deposit request submitted. Admin ko screenshot bhejein.');
+  let amt = document.getElementById('depositAmount').value;
+  let tx = document.getElementById('depositTxId').value;
+  historyData.push(`Deposit Rs ${amt} TX:${tx} Approved`);
+  localStorage.setItem('historyData',JSON.stringify(historyData));
+  renderHistory();
+  alert('Deposit submitted and approved!');
 }
 
-// ===== WITHDRAW =====
+// ===== WITHDRAWAL =====
 function submitWithdraw(){
-  const amt=document.getElementById('withdrawAmount').value;
-  const acc=document.getElementById('withdrawAccount').value;
-  if(!amt||!acc){alert('Enter details');return;}
-  history.push(`Withdrawal: Rs ${amt} Account: ${acc} Method: ${document.getElementById('withdrawMethod').value} (Pending)`);
-  save(); renderHistory();
-  setTimeout(()=>{
-    history[history.length-1]=`Withdrawal: Rs ${amt} Account: ${acc} Method: ${document.getElementById('withdrawMethod').value} (Approved)`;
-    save(); renderHistory();
-  },15000);
-  alert('Withdrawal request submitted. Admin ko screenshot bhejein.');
+  let amt = document.getElementById('withdrawAmount').value;
+  let acct = document.getElementById('withdrawAccount').value;
+  historyData.push(`Withdrawal Rs ${amt} Account:${acct} Approved`);
+  localStorage.setItem('historyData',JSON.stringify(historyData));
+  renderHistory();
+  alert('Withdrawal request submitted!');
 }
 
 // ===== HISTORY =====
 function renderHistory(){
-  const h=document.getElementById('historyList');
-  h.innerHTML='';
-  history.forEach(entry=>{
+  const list = document.getElementById('historyList');
+  list.innerHTML='';
+  historyData.forEach(h=>{
     const div=document.createElement('div');
     div.className='plan-box';
-    div.innerText=entry;
-    h.appendChild(div);
+    div.innerText=h;
+    list.appendChild(div);
   });
 }
+renderHistory();
 
-// ===== SHOW FUNCTION =====
-function show(id){
-  document.getElementById('dash').classList.add('hidden');
-  document.getElementById('deposit').classList.add('hidden');
-  document.getElementById('plansDiv')?.classList.add('hidden');
-  document.getElementById('withdrawal').classList.add('hidden');
-  document.getElementById('history')?.classList.add('hidden');
-  document.getElementById('support')?.classList.add('hidden');
-  document.getElementById(id).classList.remove('hidden');
-}
-
-window.onload=()=>{
-  if(currentUser){showDash();}
-}
+// ===== DAILY PROFIT =====
+setInterval(()=>{
+  balance += dailyProfit;
+  localStorage.setItem('balance',balance);
+  document.getElementById('dashBalance').innerText = balance.toFixed(2);
+},1000*60*60*24); // every 24hrs
 </script>
 </body>
 </html>
