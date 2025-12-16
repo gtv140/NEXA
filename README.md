@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXA Earn</title>
+<title>NEXA EARN</title>
 <style>
 :root{--primary:#ff00ff;--secondary:#00ffff;--accent:#ff9900;--dark:#0b0b0b;--text:#ffffff;}
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
@@ -71,8 +71,7 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
       </div>
     </div>
   </div>
-  <div id="planTimers" class="alert-box">Plan Countdown: <span id="timerDisplay">No active plans</span></div>
-  <div class="alert-box">Active Members: <span id="activeMembers">0</span></div>
+  <div class="alert-box" style="background:linear-gradient(135deg,#ff00ff,#00ffff);text-align:center;font-weight:900;letter-spacing:1px;">Active Members: <span id="activeMembers">0</span></div>
 </div>
 
 <!-- PLANS PAGE -->
@@ -104,22 +103,52 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
   <button onclick="submitDeposit()">Submit Deposit</button>
 </div>
 
+<!-- WITHDRAWAL PAGE -->
+<div id="withdrawal" class="page hidden">
+  <div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div>
+  <h2>Withdrawal</h2>
+  <label>Method</label>
+  <select id="withdrawMethod">
+    <option value="jazzcash">JazzCash</option>
+    <option value="easypaisa">EasyPaisa</option>
+  </select>
+  <input id="withdrawAccount" placeholder="Account Number"/>
+  <input id="withdrawAmount" placeholder="Amount"/>
+  <button onclick="submitWithdraw()">Request Withdrawal</button>
+</div>
+
+<!-- HISTORY PAGE -->
+<div id="history" class="page hidden">
+  <div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div>
+  <h2>History</h2>
+  <div id="historyList"></div>
+</div>
+
 <!-- NAVIGATION -->
 <div id="bottomNav" class="nav hidden">
   <div id="homeIcon" onclick="setActive(this);showPage('dashboard')"><span class="ico">🏠</span>Home</div>
   <div id="plansIcon" onclick="setActive(this);showPage('plans')"><span class="ico">📦</span>Plans</div>
   <div id="depositIcon" onclick="setActive(this);showPage('deposit')"><span class="ico">💰</span>Deposit</div>
+  <div id="withdrawalIcon" onclick="setActive(this);showPage('withdrawal')"><span class="ico">💵</span>Withdraw</div>
+  <div id="historyIcon" onclick="setActive(this);showPage('history')"><span class="ico">📜</span>History</div>
   <div id="logoutIcon" onclick="logout()"><span class="ico">🚪</span>Logout</div>
 </div>
 
 <script>
 // ===== STORAGE =====
 let balance=parseFloat(localStorage.getItem('balance')||'0');
+let dailyProfit=10;
 let historyData=JSON.parse(localStorage.getItem('historyData')||'[]');
 let userPlans=JSON.parse(localStorage.getItem('userPlans')||'[]');
 
 // ===== ACTIVE MEMBERS =====
-function updateActiveMembers(){document.getElementById('activeMembers').innerText=Math.floor(Math.random()*500+50);setTimeout(updateActiveMembers,5000);}updateActiveMembers();
+function updateActiveMembers(){
+  const container=document.getElementById('activeMembers');
+  container.innerText=Math.floor(Math.random()*500+50);
+  container.style.textShadow="0 0 5px #ff0, 0 0 10px #0ff, 0 0 20px #f0f";
+  setTimeout(updateActiveMembers,4000);
+}
+updateActiveMembers();
 
 // ===== NAVIGATION =====
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
@@ -161,7 +190,6 @@ function renderPlans(){
   });
 }
 renderPlans();
-
 function buyPlan(id){
   let plan=plansData.find(p=>p.id===id); if(!plan) return;
   document.getElementById('depositAmount').value=plan.invest;
@@ -184,9 +212,36 @@ function submitDeposit(){
   alert('Deposit submitted & approved!');
 }
 
+// ===== WITHDRAW =====
+function submitWithdraw(){
+  let amt=document.getElementById('withdrawAmount').value;
+  let acct=document.getElementById('withdrawAccount').value;
+  historyData.push(`Withdrawal Rs ${amt} Account:${acct} Approved`);
+  localStorage.setItem('historyData',JSON.stringify(historyData));
+  renderHistory();
+  alert('Withdrawal submitted & approved!');
+}
+
+// ===== HISTORY =====
+function renderHistory(){
+  const list=document.getElementById('historyList'); list.innerHTML='';
+  historyData.forEach(h=>{
+    const div=document.createElement('div');
+    div.className='plan-box'; div.innerText=h;
+    list.appendChild(div);
+  });
+}
+renderHistory();
+
+// ===== DAILY PROFIT =====
+setInterval(()=>{
+  balance+=dailyProfit;
+  localStorage.setItem('balance',balance);
+  document.getElementById('dashBalance').innerText=balance.toFixed(2);
+},1000*60*60*24);
+
 // ===== LOGOUT =====
 function logout(){alert('Logged out!');location.reload();}
 </script>
-
 </body>
 </html>
