@@ -162,7 +162,7 @@ a:hover{text-decoration:underline;}
 <div id="history" class="page hidden">
   <div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div>
   <h2>History</h2>
-  <div id="historyList"></div>
+  <div id="historyList" style="max-height:400px;overflow-y:auto;"></div>
 </div>
 
 <!-- NAVIGATION -->
@@ -181,19 +181,21 @@ let balance=parseFloat(localStorage.getItem('balance')||'0');
 let historyData=JSON.parse(localStorage.getItem('historyData')||'[]');
 let loggedUser=localStorage.getItem('loggedUser')||'';
 let activePlan=JSON.parse(localStorage.getItem('activePlan')||'null');
-let planEndTime=localStorage.getItem('planEndTime')||'';
+let planEndTime=parseInt(localStorage.getItem('planEndTime')||'0');
+
 window.onload=function(){
-  if(loggedUser){
-    showDashboard();
-  }
+  if(loggedUser){showDashboard();}
 };
+
+// ===== DASHBOARD =====
 function showDashboard(){
   document.getElementById('loginPage').classList.add('hidden');
   document.getElementById('dashboard').classList.remove('hidden');
   document.getElementById('bottomNav').classList.remove('hidden');
   document.getElementById('dashUser').innerText=loggedUser;
+  document.getElementById('dashBalance').innerText=balance.toFixed(2);
   document.getElementById('referralLink').innerText=window.location.href+"?ref="+loggedUser;
-  if(activePlan){startCountdown();document.getElementById('depositAmount').value=activePlan.invest;}
+  if(activePlan && planEndTime>0){startCountdown();}
 }
 
 // ===== ACTIVE MEMBERS =====
@@ -214,9 +216,9 @@ function setActive(elem){document.querySelectorAll('.nav div').forEach(d=>d.clas
 function login(){
   let u=document.getElementById('loginUsername').value.trim();
   let p=document.getElementById('loginPassword').value.trim();
-  if(!u||!p){alert('Enter username and password!'); return;}
+  if(!u||!p){alert('Enter username & password!'); return;}
   loggedUser=u;
-  localStorage.setItem('loggedUser',u);
+  localStorage.setItem('loggedUser',loggedUser);
   showWelcome(u);
 }
 function showWelcome(username){
@@ -227,7 +229,7 @@ function showWelcome(username){
     document.getElementById('welcomePopup').style.display='none';
     document.getElementById('dashboardMsg').style.display='block';
     showDashboard();
-  },3000);
+  },2000);
 }
 function closeWelcome(){document.getElementById('welcomePopup').style.display='none';document.getElementById('dashboardMsg').style.display='block';}
 function copyReferral(){navigator.clipboard.writeText(document.getElementById('referralLink').innerText);alert('Referral link copied!');}
@@ -271,61 +273,86 @@ function buyPlan(id){
 // ===== DEPOSIT =====
 function updateDepositNumber(){const method=document.getElementById('depositMethod').value;document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';}
 function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value);alert('Deposit number copied!');}
-function submitDeposit(){let amt=document.getElementById('depositAmount').value;let tx=document.getElementById('depositTxId').value;historyData.push(`Deposit Rs ${amt} TX:${tx} Approved`);localStorage.setItem('historyData',JSON.stringify(historyData));renderHistory();alert('Deposit submitted & approved!');}
+function submitDeposit(){
+  let amt=document.getElementById('depositAmount').value;
+  let tx=document.getElementById('depositTxId').value;
+  if(!amt||!tx){alert('Enter amount & TX ID!'); return;}
+  balance += parseFloat(amt);
+  localStorage.setItem('balance',balance);
+  document.getElementById('dashBalance').innerText=balance.toFixed(2);
 
-// ===== WITHDRAW =====
-function submitWithdraw(){let amt=document.getElementById('withdrawAmount').value;let acct=document.getElementById('withdrawAccount').value;historyData.push(`Withdrawal Rs ${amt} Account:${acct} Approved`);localStorage.setItem('historyData',JSON.stringify(historyData));renderHistory();alert('Withdrawal submitted & approved!');}
+  // Add to history
+  historyData.push({type:'Deposit',amount:parseFloat(amt),txId:tx,date:new Date().toLocaleString()});
+  localStorage.setItem('historyData',JSON.stringify(historyData));
+  updateHistory();
+
+  alert('Deposit submitted successfully!');
+  document.getElementById('depositAmount').value='';
+  document.getElementById('depositTxId').value='';
+  document.getElementById('depositProof').value='';
+  showPage('dashboard');
+}
+
+// ===== WITHDRAWAL =====
+function submitWithdraw(){
+  let amt=parseFloat(document.getElementById('withdrawAmount').value);
+  let account=document.getElementById('withdrawAccount').value.trim();
+  let method=document.getElementById('withdrawMethod').value;
+  if(!amt||!account){alert('Enter amount & account!'); return;}
+  if(amt>balance){alert('Insufficient balance!'); return;}
+  balance -= amt;
+  localStorage.setItem('balance',balance);
+  document.getElementById('dashBalance').innerText=balance.toFixed(2);
+
+  historyData.push({type:'Withdrawal',amount:amt,account:account,method:method,date:new Date().toLocaleString()});
+  localStorage.setItem('historyData',JSON.stringify(historyData));
+  updateHistory();
+
+  alert('Withdrawal requested successfully!');
+  document.getElementById('withdrawAmount').value='';
+  document.getElementById('withdrawAccount').value='';
+  showPage('dashboard');
+}
 
 // ===== HISTORY =====
-function renderHistory(){const list=document.getElementById('historyList'); list.innerHTML='';historyData.forlist.innerHTML='';
-  if(historyData.length===0){list.innerHTML='<p>No history yet.</p>'; return;}
-  historyData.forEach(item=>{
+function updateHistory(){
+  const container=document.getElementById('historyList');
+  container.innerHTML='';
+  if(historyData.length===0){container.innerHTML='<p>No transactions yet.</p>'; return;}
+  historyData.slice().reverse().forEach(item=>{
     const div=document.createElement('div');
     div.className='dashboard-box';
-    div.style.fontSize='14px';
-    div.innerText=item;
-    list.appendChild(div);
+    div.innerHTML=`<b>${item.type}</b> | Amount: Rs ${item.amount} | ${item.txId? 'TX: '+item.txId : 'Acc: '+item.account} | Date: ${item.date}`;
+    container.appendChild(div);
   });
 }
-renderHistory();
+updateHistory();
 
 // ===== PLAN COUNTDOWN =====
 function startCountdown(){
-  if(!activePlan || !planEndTime) return;
-  const countdown=document.getElementById('planCountdown');
+  if(!activePlan || planEndTime<=0) return;
   function updateTimer(){
     let now=Date.now();
     let diff=planEndTime-now;
-    if(diff<=0){countdown.innerText='Plan Ended'; clearInterval(timer); return;}
-    let hrs=Math.floor(diff/1000/60/60);
-    let mins=Math.floor((diff/1000/60)%60);
-    let secs=Math.floor((diff/1000)%60);
-    countdown.innerText=`${hrs}h ${mins}m ${secs}s`;
+    if(diff<=0){document.getElementById('planCountdown').innerText='Plan Completed';clearInterval(timerInterval); return;}
+    let hrs=Math.floor(diff/3600000);
+    let mins=Math.floor((diff%3600000)/60000);
+    let secs=Math.floor((diff%60000)/1000);
+    document.getElementById('planCountdown').innerText=`${hrs}h ${mins}m ${secs}s`;
   }
   updateTimer();
-  let timer=setInterval(updateTimer,1000);
+  let timerInterval=setInterval(updateTimer,1000);
 }
-if(activePlan && planEndTime) startCountdown();
 
 // ===== LOGOUT =====
 function logout(){
-  // localStorage.removeItem('loggedUser'); // comment this to prevent auto logout on refresh
-  loggedUser=''; 
-  showPage('loginPage'); 
-  document.getElementById('bottomNav').classList.add('hidden');
+  if(confirm('Are you sure to logout?')){
+    loggedUser='';
+    localStorage.setItem('loggedUser','');
+    showPage('loginPage');
+    document.getElementById('bottomNav').classList.add('hidden');
+  }
 }
-
-// ===== PREVENT LOGOUT ON REFRESH =====
-// page state saved in localStorage
-window.addEventListener('beforeunload',()=>{
-  localStorage.setItem('activePlan',JSON.stringify(activePlan));
-  localStorage.setItem('planEndTime',planEndTime);
-  localStorage.setItem('historyData',JSON.stringify(historyData));
-  localStorage.setItem('balance',balance);
-});
-
-// ===== UTILITY =====
-function copyText(text){navigator.clipboard.writeText(text); alert('Copied!');}
 </script>
 </body>
 </html>
