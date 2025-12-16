@@ -11,6 +11,8 @@
   --accent:#ff0000;
   --dark:#0b0b0b;
   --text:#ffffff;
+  --support:#ff69b4;
+  --whatsapp:#25d366;
 }
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
 body{
@@ -53,6 +55,8 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
 .nav div:hover{transform:translateY(-5px);box-shadow:0 4px 12px var(--accent);}
 .nav div.active{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#000;box-shadow:0 4px 12px var(--primary),0 0 15px var(--secondary);}
 .nav div .ico{font-size:24px;display:block;margin-bottom:4px;}
+a{color:var(--text);}
+a:hover{text-decoration:underline;}
 @media(max-width:480px){.page{margin:12px;padding:14px}.nav div{width:50px;height:50px}header{font-size:22px}}
 </style>
 </head>
@@ -101,10 +105,10 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
     </div>
     <div class="dashboard-box" style="flex:1;min-width:100%;">
       <div class="small">Support / About</div>
-      <div style="font-weight:900;font-size:14px;color:#0ff;word-break:break-word;">
-        About: NEXA EARN is a professional platform offering daily automated profits and safe investment plans.<br>
-        Email: <a href="mailto:rock.earn92@gmail.com" style="color:#0ff;">rock.earn92@gmail.com</a><br>
-        WhatsApp: <a href="https://whatsapp.com/channel/0029Vb7jo3eFnSz6S7mxgF29" target="_blank" style="color:#0ff;">Click to Open Channel</a>
+      <div style="font-weight:900;font-size:14px;word-break:break-word;">
+        About: NEXA EARN is a trusted platform providing daily automated profits and secure investment plans.<br>
+        Email: <a href="mailto:rock.earn92@gmail.com" style="color:var(--support);font-weight:bold;">rock.earn92@gmail.com</a><br>
+        WhatsApp: <a href="https://whatsapp.com/channel/0029Vb7jo3eFnSz6S7mxgF29" target="_blank" style="color:var(--whatsapp);font-weight:bold;">Open WhatsApp Channel</a>
       </div>
     </div>
   </div>
@@ -172,6 +176,7 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
 </div>
 
 <script>
+// ===== STORAGE & INIT =====
 let balance=parseFloat(localStorage.getItem('balance')||'0');
 let historyData=JSON.parse(localStorage.getItem('historyData')||'[]');
 let loggedUser=localStorage.getItem('loggedUser')||'';
@@ -179,14 +184,19 @@ let activePlan=JSON.parse(localStorage.getItem('activePlan')||'null');
 let planEndTime=localStorage.getItem('planEndTime')||'';
 window.onload=function(){
   if(loggedUser){
-    document.getElementById('loginPage').classList.add('hidden');
-    document.getElementById('dashboard').classList.remove('hidden');
-    document.getElementById('bottomNav').classList.remove('hidden');
-    document.getElementById('dashUser').innerText=loggedUser;
-    document.getElementById('referralLink').innerText=window.location.href+"?ref="+loggedUser;
-    if(activePlan){startCountdown();document.getElementById('depositAmount').value=activePlan.invest;}
+    showDashboard();
   }
 };
+function showDashboard(){
+  document.getElementById('loginPage').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  document.getElementById('bottomNav').classList.remove('hidden');
+  document.getElementById('dashUser').innerText=loggedUser;
+  document.getElementById('referralLink').innerText=window.location.href+"?ref="+loggedUser;
+  if(activePlan){startCountdown();document.getElementById('depositAmount').value=activePlan.invest;}
+}
+
+// ===== ACTIVE MEMBERS =====
 function updateActiveMembers(){
   const container=document.getElementById('activeMembers');
   container.innerText=Math.floor(Math.random()*500+50);
@@ -194,27 +204,30 @@ function updateActiveMembers(){
   setTimeout(updateActiveMembers,4000);
 }
 updateActiveMembers();
+
+// ===== NAVIGATION =====
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
 function goHome(){showPage('dashboard');}
 function setActive(elem){document.querySelectorAll('.nav div').forEach(d=>d.classList.remove('active'));elem.classList.add('active');}
+
+// ===== LOGIN =====
 function login(){
   let u=document.getElementById('loginUsername').value.trim();
   let p=document.getElementById('loginPassword').value.trim();
   if(!u||!p){alert('Enter username and password!'); return;}
-  document.getElementById('loginPage').classList.add('hidden');
-  document.getElementById('dashboard').classList.remove('hidden');
-  document.getElementById('bottomNav').classList.remove('hidden');
-  document.getElementById('dashUser').innerText=u;
+  loggedUser=u;
   localStorage.setItem('loggedUser',u);
-  document.getElementById('referralLink').innerText=window.location.href+"?ref="+u;
   showWelcome(u);
 }
 function showWelcome(username){
-  const popup=document.getElementById('welcomePopup');
   document.getElementById('welcomeUser').innerText=username;
-  popup.style.display='block';
+  document.getElementById('welcomePopup').style.display='block';
   document.getElementById('dashboardMsg').style.display='none';
-  setTimeout(()=>{popup.style.display='none';document.getElementById('dashboardMsg').style.display='block';},4000);
+  setTimeout(()=>{
+    document.getElementById('welcomePopup').style.display='none';
+    document.getElementById('dashboardMsg').style.display='block';
+    showDashboard();
+  },3000);
 }
 function closeWelcome(){document.getElementById('welcomePopup').style.display='none';document.getElementById('dashboardMsg').style.display='block';}
 function copyReferral(){navigator.clipboard.writeText(document.getElementById('referralLink').innerText);alert('Referral link copied!');}
@@ -261,66 +274,58 @@ function copyDepositNumber(){navigator.clipboard.writeText(document.getElementBy
 function submitDeposit(){let amt=document.getElementById('depositAmount').value;let tx=document.getElementById('depositTxId').value;historyData.push(`Deposit Rs ${amt} TX:${tx} Approved`);localStorage.setItem('historyData',JSON.stringify(historyData));renderHistory();alert('Deposit submitted & approved!');}
 
 // ===== WITHDRAW =====
-function submitWithdraw(){
-  let method=document.getElementById('withdrawMethod').value;
-  let acc=document.getElementById('withdrawAccount').value;
-  let amt=document.getElementById('withdrawAmount').value;
-  if(!acc || !amt){alert('Enter all fields!'); return;}
-  historyData.push(`Withdraw Rs ${amt} via ${method} Account:${acc} Approved`);
-  localStorage.setItem('historyData',JSON.stringify(historyData));
-  renderHistory();
-  alert('Withdrawal requested & approved!');
-}
+function submitWithdraw(){let amt=document.getElementById('withdrawAmount').value;let acct=document.getElementById('withdrawAccount').value;historyData.push(`Withdrawal Rs ${amt} Account:${acct} Approved`);localStorage.setItem('historyData',JSON.stringify(historyData));renderHistory();alert('Withdrawal submitted & approved!');}
 
 // ===== HISTORY =====
-function renderHistory(){
-  const list=document.getElementById('historyList');
-  if(historyData.length===0){list.innerHTML='No history yet.'; return;}
-  list.innerHTML='';
-  historyData.slice().reverse().forEach(h=>{
+function renderHistory(){const list=document.getElementById('historyList'); list.innerHTML='';historyData.forlist.innerHTML='';
+  if(historyData.length===0){list.innerHTML='<p>No history yet.</p>'; return;}
+  historyData.forEach(item=>{
     const div=document.createElement('div');
     div.className='dashboard-box';
-    div.innerText=h;
+    div.style.fontSize='14px';
+    div.innerText=item;
     list.appendChild(div);
   });
 }
 renderHistory();
 
-// ===== LOGOUT =====
-function logout(){
-  if(confirm('Are you sure you want to logout?')){
-    localStorage.removeItem('loggedUser');
-    document.getElementById('dashboard').classList.add('hidden');
-    document.getElementById('bottomNav').classList.add('hidden');
-    document.getElementById('loginPage').classList.remove('hidden');
-  }
-}
-
-// ===== REFERRAL =====
-function copyReferral(){
-  const link=document.getElementById('referralLink').innerText;
-  navigator.clipboard.writeText(link);
-  alert('Referral link copied!');
-}
-
-// ===== COUNTDOWN =====
+// ===== PLAN COUNTDOWN =====
 function startCountdown(){
-  if(!planEndTime) return;
+  if(!activePlan || !planEndTime) return;
   const countdown=document.getElementById('planCountdown');
-  setInterval(()=>{
+  function updateTimer(){
     let now=Date.now();
     let diff=planEndTime-now;
-    if(diff<=0){countdown.innerText='Plan ended'; return;}
-    let hrs=Math.floor(diff/3600000);
-    let mins=Math.floor((diff%3600000)/60000);
-    let secs=Math.floor((diff%60000)/1000);
-    countdown.innerText=hrs+'h '+mins+'m '+secs+'s';
-    // Update daily profit
-    let daily=activePlan?activePlan.daily:0;
-    document.getElementById('dashDaily').innerText=daily;
-    document.getElementById('dashBalance').innerText=(balance+daily);
-  },1000);
+    if(diff<=0){countdown.innerText='Plan Ended'; clearInterval(timer); return;}
+    let hrs=Math.floor(diff/1000/60/60);
+    let mins=Math.floor((diff/1000/60)%60);
+    let secs=Math.floor((diff/1000)%60);
+    countdown.innerText=`${hrs}h ${mins}m ${secs}s`;
+  }
+  updateTimer();
+  let timer=setInterval(updateTimer,1000);
 }
+if(activePlan && planEndTime) startCountdown();
+
+// ===== LOGOUT =====
+function logout(){
+  // localStorage.removeItem('loggedUser'); // comment this to prevent auto logout on refresh
+  loggedUser=''; 
+  showPage('loginPage'); 
+  document.getElementById('bottomNav').classList.add('hidden');
+}
+
+// ===== PREVENT LOGOUT ON REFRESH =====
+// page state saved in localStorage
+window.addEventListener('beforeunload',()=>{
+  localStorage.setItem('activePlan',JSON.stringify(activePlan));
+  localStorage.setItem('planEndTime',planEndTime);
+  localStorage.setItem('historyData',JSON.stringify(historyData));
+  localStorage.setItem('balance',balance);
+});
+
+// ===== UTILITY =====
+function copyText(text){navigator.clipboard.writeText(text); alert('Copied!');}
 </script>
 </body>
 </html>
