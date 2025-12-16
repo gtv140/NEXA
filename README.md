@@ -41,12 +41,8 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
 .support-icon{display:flex;align-items:center;gap:8px;padding:12px;cursor:pointer;width:fit-content;font-weight:700;}
 .support-icon:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--accent),0 0 30px var(--secondary);}
 .countdown{font-weight:700;color:var(--secondary);}
-.more-menu{display:none;position:absolute;bottom:60px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.9);border-radius:12px;padding:10px;min-width:140px;z-index:999;}
-.more-menu div{padding:10px;border-radius:8px;cursor:pointer;}
-.more-menu div:hover{background:rgba(255,255,255,0.1);}
 #welcomePopup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#ff00ff,#00ffff);padding:20px;border-radius:15px;color:#000;font-weight:800;z-index:9999;text-align:center;display:none;}
 #welcomePopup button{margin-top:10px;padding:10px;border:none;border-radius:10px;background:#000;color:#fff;cursor:pointer;}
-/* ===== MOBILE APP STYLE NAV ===== */
 .nav{
   position:fixed;bottom:10px;left:50%;transform:translateX(-50%);
   display:flex;justify-content:space-around;
@@ -67,15 +63,13 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
 <body>
 <header>NEXA Earn</header>
 
-<!-- WELCOME POPUP -->
 <div id="welcomePopup">
   Welcome, <span id="welcomeUser">User</span>! To NEXA Earn 🚀
   <button onclick="closeWelcome()">Close</button>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard" class="page">
-  <div class="alert-box">Deposit/Withdrawal issues? Contact Admin.</div>
+  <div id="dashboardMsg" class="alert-box">Welcome to NEXA Earn! 🚀 Start growing your earnings today with safe and automatic daily profits.</div>
   <div class="user-box">
     <div style="display:flex;justify-content:space-between;align-items:center;">
       <div>
@@ -96,17 +90,13 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
     <div id="plansIcon" onclick="setActive(this);showPage('plans')"><span class="ico">📦</span>Plans</div>
     <div id="depositIcon" onclick="setActive(this);showPage('deposit')"><span class="ico">💰</span>Deposit</div>
     <div id="withdrawalIcon" onclick="setActive(this);showPage('withdrawal')"><span class="ico">💵</span>Withdrawal</div>
-    <div id="moreIcon"><span class="ico">⋯</span>More
-      <div id="moreMenu" class="more-menu">
-        <div onclick="setActive(this);showPage('history')">📜 History</div>
-        <div onclick="setActive(this);showPage('about')">ℹ️ About</div>
-        <div onclick="logout()">🚪 Logout</div>
-      </div>
-    </div>
+    <div id="historyIcon" onclick="setActive(this);showPage('history')"><span class="ico">📜</span>History</div>
+    <div id="aboutIcon" onclick="setActive(this);showPage('about')"><span class="ico">ℹ️</span>About</div>
+    <div id="logoutIcon" onclick="logout()"><span class="ico">🚪</span>Logout</div>
   </div>
 </div>
 
-<!-- PAGES (PLANS, DEPOSIT, WITHDRAWAL, HISTORY, ABOUT) -->
+<!-- PAGES -->
 <div id="plans" class="page hidden"><div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div><h2>Plans</h2><div id="plansList"></div></div>
 <div id="deposit" class="page hidden"><div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div><h2>Deposit</h2>
 <label>Method</label><select id="depositMethod" onchange="updateDepositNumber()"><option value="jazzcash">JazzCash</option><option value="easypaisa">EasyPaisa</option></select>
@@ -128,8 +118,10 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
 <script>
 // ===== STORAGE =====
 let balance=parseFloat(localStorage.getItem('balance')||'0');
-let dailyProfit=parseFloat(localStorage.getItem('dailyProfit')||'10');
+let dailyProfit=parseFloat(localStorage.getItem('dailyProfit')||'0');
 let historyData=JSON.parse(localStorage.getItem('historyData')||'[]');
+// User plans stored as array of {id, daily, remainingDays, lastCollected}
+let userPlans=JSON.parse(localStorage.getItem('userPlans')||'[]');
 
 // ===== ACTIVE MEMBERS =====
 function updateActiveMembers(){document.getElementById('activeMembers').innerText=Math.floor(Math.random()*500+50);setTimeout(updateActiveMembers,5000);}updateActiveMembers();
@@ -142,43 +134,66 @@ document.getElementById('dashSince').innerText=new Date().toLocaleDateString();
 // ===== NAVIGATION =====
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
 function goHome(){showPage('dashboard');}
-
-// ===== ACTIVE ICON =====
 function setActive(elem){document.querySelectorAll('.nav div').forEach(d=>d.classList.remove('active'));elem.classList.add('active');}
-
-// ===== MORE MENU =====
-function toggleMoreMenu(){const menu=document.getElementById('moreMenu');menu.style.display=menu.style.display==='block'?'none':'block';}
-document.getElementById('moreIcon').addEventListener('click',toggleMoreMenu);
-document.addEventListener('click',function(e){const more=document.getElementById('moreIcon');if(!more.contains(e.target)){document.getElementById('moreMenu').style.display='none';}});
 
 // ===== PLANS =====
 let plansData=[];for(let i=1;i<=50;i++){let invest=200*i;let days=25+i*2;let total=Math.round(invest*2.2);let daily=Math.round(total/days);plansData.push({id:i,name:'Plan '+i,invest,total,daily,days});}
 function renderPlans(){const list=document.getElementById('plansList');list.innerHTML='';plansData.forEach(p=>{const div=document.createElement('div');div.className='plan-box';div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} <button onclick="buyPlan(${p.id})">Buy Now</button>`;list.appendChild(div);});}renderPlans();
-function buyPlan(id){let plan=plansData.find(p=>p.id===id);if(!plan) return;document.getElementById('depositAmount').value=plan.invest;document.getElementById('depositMethod').value='jazzcash';updateDepositNumber();showPage('deposit');}
+function buyPlan(id){
+  let plan=plansData.find(p=>p.id===id);
+  if(!plan) return;
+  // Add plan to userPlans
+  let now=Date.now();
+  userPlans.push({id:plan.id,daily:plan.daily,remainingDays:plan.days,lastCollected:now});
+  localStorage.setItem('userPlans',JSON.stringify(userPlans));
+  alert(`Plan ${plan.name} bought! Daily Rs ${plan.daily} will be added every 24h.`);
+  renderUserPlans();
+  goHome();
+}
 
-// ===== DEPOSIT =====
+// ===== DEPOSIT / WITHDRAW / HISTORY =====
 function updateDepositNumber(){const method=document.getElementById('depositMethod').value;document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';}
 function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value);alert('Deposit number copied!');}
 function submitDeposit(){let amt=document.getElementById('depositAmount').value;let tx=document.getElementById('depositTxId').value;historyData.push(`Deposit Rs ${amt} TX:${tx} Approved`);localStorage.setItem('historyData',JSON.stringify(historyData));renderHistory();alert('Deposit submitted & approved!');}
-
-// ===== WITHDRAWAL =====
 function submitWithdraw(){let amt=document.getElementById('withdrawAmount').value;let acct=document.getElementById('withdrawAccount').value;historyData.push(`Withdrawal Rs ${amt} Account:${acct} Approved`);localStorage.setItem('historyData',JSON.stringify(historyData));renderHistory();alert('Withdrawal submitted & approved!');}
-
-// ===== HISTORY =====
 function renderHistory(){const list=document.getElementById('historyList');list.innerHTML='';historyData.forEach(h=>{const div=document.createElement('div');div.className='plan-box';div.innerText=h;list.appendChild(div);});}renderHistory();
 
-// ===== DAILY PROFIT =====
-setInterval(()=>{balance+=dailyProfit;localStorage.setItem('balance',balance);document.getElementById('dashBalance').innerText=balance.toFixed(2);},1000*60*60*24);
-
-// ===== LOGOUT =====
-function logout(){alert('Logged out!');location.reload();}
+// ===== DAILY PROFIT TIMER =====
+function addDailyProfits(){
+  let now=Date.now();
+  let updated=false;
+  userPlans.forEach((plan,i)=>{
+    if(plan.remainingDays>0 && now - plan.lastCollected >= 24*60*60*1000){
+      balance += plan.daily;
+      plan.remainingDays -=1;
+      plan.lastCollected = now;
+      updated=true;
+    }
+  });
+  if(updated){
+    localStorage.setItem('balance',balance);
+    localStorage.setItem('userPlans',JSON.stringify(userPlans));
+    document.getElementById('dashBalance').innerText=balance.toFixed(2);
+  }
+}
+// Run every minute to check 24h profit
+setInterval(addDailyProfits,60*1000);
 
 // ===== WELCOME POPUP =====
-function showWelcome(username){const popup=document.getElementById('welcomePopup');document.getElementById('welcomeUser').innerText=username;popup.style.display='block';setTimeout(()=>{popup.style.display='none';},4000);}
-function closeWelcome(){document.getElementById('welcomePopup').style.display='none';}
+function showWelcome(username){
+  const popup=document.getElementById('welcomePopup');
+  document.getElementById('welcomeUser').innerText=username;
+  popup.style.display='block';
+  document.getElementById('dashboardMsg').style.display='none';
+  setTimeout(()=>{popup.style.display='none';document.getElementById('dashboardMsg').style.display='block';},4000);
+}
+function closeWelcome(){document.getElementById('welcomePopup').style.display='none';document.getElementById('dashboardMsg').style.display='block');}
 
-// ===== EXAMPLE LOGIN/ SIGNUP =====
-let username=prompt("Enter your username");if(username) showWelcome(username);
+// ===== LOGIN / SIGNUP SIMULATION =====
+let username=prompt("Enter your username (leave blank for guest)"); 
+if(username) showWelcome(username);
+
+function logout(){alert('Logged out!');location.reload();}
 </script>
 </body>
 </html>
