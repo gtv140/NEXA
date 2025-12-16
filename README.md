@@ -178,13 +178,16 @@ a:hover{text-decoration:underline;}
 <script>
 // ===== STORAGE & INIT =====
 let balance=parseFloat(localStorage.getItem('balance')||'0');
+let dailyProfit=parseFloat(localStorage.getItem('dailyProfit')||'0');
 let historyData=JSON.parse(localStorage.getItem('historyData')||'[]');
 let loggedUser=localStorage.getItem('loggedUser')||'';
 let activePlan=JSON.parse(localStorage.getItem('activePlan')||'null');
 let planEndTime=parseInt(localStorage.getItem('planEndTime')||'0');
+let lastProfitTime=parseInt(localStorage.getItem('lastProfitTime')||'0');
 
 window.onload=function(){
   if(loggedUser){showDashboard();}
+  autoDailyProfit();
 };
 
 // ===== DASHBOARD =====
@@ -192,8 +195,8 @@ function showDashboard(){
   document.getElementById('loginPage').classList.add('hidden');
   document.getElementById('dashboard').classList.remove('hidden');
   document.getElementById('bottomNav').classList.remove('hidden');
-  document.getElementById('dashUser').innerText=loggedUser;
   document.getElementById('dashBalance').innerText=balance.toFixed(2);
+  document.getElementById('dashDaily').innerText=dailyProfit.toFixed(2);
   document.getElementById('referralLink').innerText=window.location.href+"?ref="+loggedUser;
   if(activePlan && planEndTime>0){startCountdown();}
 }
@@ -261,8 +264,12 @@ function buyPlan(id){
   let plan=plansData.find(p=>p.id===id); if(!plan) return;
   activePlan=plan;
   localStorage.setItem('activePlan',JSON.stringify(plan));
-  planEndTime=Date.now()+24*60*60*1000;
+  planEndTime=Date.now()+plan.days*24*60*60*1000;
   localStorage.setItem('planEndTime',planEndTime);
+  lastProfitTime=Date.now();
+  localStorage.setItem('lastProfitTime',lastProfitTime);
+  dailyProfit=plan.daily;
+  localStorage.setItem('dailyProfit',dailyProfit);
   document.getElementById('depositAmount').value=plan.invest;
   document.getElementById('depositMethod').value='jazzcash';
   updateDepositNumber();
@@ -274,84 +281,89 @@ function buyPlan(id){
 function updateDepositNumber(){const method=document.getElementById('depositMethod').value;document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';}
 function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value);alert('Deposit number copied!');}
 function submitDeposit(){
-  let amt=document.getElementById('depositAmount').value;
-  let tx=document.getElementById('depositTxId').value;
+  let amt=parseFloat(document.getElementById('depositAmount').value);
+  let tx=document.getElementById('depositTxId').value.trim();
   if(!amt||!tx){alert('Enter amount & TX ID!'); return;}
-  balance += parseFloat(amt);
-  localStorage.setItem('balance',balance);
-  document.getElementById('dashBalance').innerText=balance.toFixed(2);
-
-  // Add to history
-  historyData.push({type:'Deposit',amount:parseFloat(amt),txId:tx,date:new Date().toLocaleString()});
-  localStorage.setItem('historyData',JSON.stringify(historyData));
-  updateHistory();
-
-  alert('Deposit submitted successfully!');
+  balance += amt;
+  localStorage.setItem('balance', balance);
+  historyData.push({type:'Deposit',amount:amt,tx:tx,date:new Date().toLocaleString()});
+  localStorage.setItem('historyData', JSON.stringify(historyData));
+  alert('Deposit successful!');
   document.getElementById('depositAmount').value='';
   document.getElementById('depositTxId').value='';
-  document.getElementById('depositProof').value='';
-  showPage('dashboard');
+  showDashboard();
 }
 
-// ===== WITHDRAWAL =====
+// ===== WITHDRAW =====
 function submitWithdraw(){
   let amt=parseFloat(document.getElementById('withdrawAmount').value);
   let account=document.getElementById('withdrawAccount').value.trim();
-  let method=document.getElementById('withdrawMethod').value;
-  if(!amt||!account){alert('Enter amount & account!'); return;}
+  if(!amt||!account){alert('Enter account & amount!'); return;}
   if(amt>balance){alert('Insufficient balance!'); return;}
   balance -= amt;
-  localStorage.setItem('balance',balance);
-  document.getElementById('dashBalance').innerText=balance.toFixed(2);
-
-  historyData.push({type:'Withdrawal',amount:amt,account:account,method:method,date:new Date().toLocaleString()});
-  localStorage.setItem('historyData',JSON.stringify(historyData));
-  updateHistory();
-
-  alert('Withdrawal requested successfully!');
+  localStorage.setItem('balance', balance);
+  historyData.push({type:'Withdrawal',amount:amt,account:account,date:new Date().toLocaleString()});
+  localStorage.setItem('historyData', JSON.stringify(historyData));
+  alert('Withdrawal requested!');
   document.getElementById('withdrawAmount').value='';
   document.getElementById('withdrawAccount').value='';
-  showPage('dashboard');
+  showDashboard();
 }
 
 // ===== HISTORY =====
-function updateHistory(){
-  const container=document.getElementById('historyList');
-  container.innerHTML='';
-  if(historyData.length===0){container.innerHTML='<p>No transactions yet.</p>'; return;}
-  historyData.slice().reverse().forEach(item=>{
+function renderHistory(){
+  const container=document.getElementById('historyList'); container.innerHTML='';
+  if(historyData.length===0){container.innerHTML='<p>No history yet.</p>'; return;}
+  historyData.slice().reverse().forEach(h=>{
     const div=document.createElement('div');
     div.className='dashboard-box';
-    div.innerHTML=`<b>${item.type}</b> | Amount: Rs ${item.amount} | ${item.txId? 'TX: '+item.txId : 'Acc: '+item.account} | Date: ${item.date}`;
+    div.innerHTML=`<b>${h.type}</b> | Rs ${h.amount} | ${h.tx||h.account||''} | ${h.date}`;
     container.appendChild(div);
   });
 }
-updateHistory();
-
-// ===== PLAN COUNTDOWN =====
-function startCountdown(){
-  if(!activePlan || planEndTime<=0) return;
-  function updateTimer(){
-    let now=Date.now();
-    let diff=planEndTime-now;
-    if(diff<=0){document.getElementById('planCountdown').innerText='Plan Completed';clearInterval(timerInterval); return;}
-    let hrs=Math.floor(diff/3600000);
-    let mins=Math.floor((diff%3600000)/60000);
-    let secs=Math.floor((diff%60000)/1000);
-    document.getElementById('planCountdown').innerText=`${hrs}h ${mins}m ${secs}s`;
-  }
-  updateTimer();
-  let timerInterval=setInterval(updateTimer,1000);
-}
+setInterval(renderHistory,3000);
 
 // ===== LOGOUT =====
 function logout(){
-  if(confirm('Are you sure to logout?')){
-    loggedUser='';
-    localStorage.setItem('loggedUser','');
-    showPage('loginPage');
-    document.getElementById('bottomNav').classList.add('hidden');
-  }
+  loggedUser='';
+  localStorage.setItem('loggedUser','');
+  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+  document.getElementById('loginPage').classList.remove('hidden');
+  document.getElementById('bottomNav').classList.add('hidden');
+}
+
+// ===== PLAN TIMER =====
+function startCountdown(){
+  if(!activePlan || !planEndTime) return;
+  const countdownEl=document.getElementById('planCountdown');
+  setInterval(()=>{
+    const now=Date.now();
+    if(now>=planEndTime){countdownEl.innerText='Plan Ended';return;}
+    const remaining=planEndTime-now;
+    const days=Math.floor(remaining/(1000*60*60*24));
+    const hours=Math.floor((remaining%(1000*60*60*24))/(1000*60*60));
+    const minutes=Math.floor((remaining%(1000*60*60))/(1000*60));
+    const seconds=Math.floor((remaining%(1000*60))/1000);
+    countdownEl.innerText=`${days}d ${hours}h ${minutes}m ${seconds}s`;
+  },1000);
+}
+
+// ===== AUTO DAILY PROFIT =====
+function autoDailyProfit(){
+  if(!activePlan) return;
+  setInterval(()=>{
+    const now=Date.now();
+    if(now - lastProfitTime >= 24*60*60*1000){
+      balance += dailyProfit;
+      lastProfitTime = now;
+      localStorage.setItem('balance', balance);
+      localStorage.setItem('lastProfitTime', lastProfitTime);
+      document.getElementById('dashBalance').innerText=balance.toFixed(2);
+      document.getElementById('dashDaily').innerText=dailyProfit.toFixed(2);
+      historyData.push({type:'Daily Profit',amount:dailyProfit,date:new Date().toLocaleString()});
+      localStorage.setItem('historyData', JSON.stringify(historyData));
+    }
+  }, 60000); // check every 1 min
 }
 </script>
 </body>
