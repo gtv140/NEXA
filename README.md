@@ -126,11 +126,26 @@ button:hover{
 }
 .more-menu div{padding:8px;cursor:pointer;}
 .more-menu div:hover{background:rgba(255,255,255,0.1);}
+#welcomePopup{
+  position:fixed;top:20%;left:50%;transform:translateX(-50%);
+  background:linear-gradient(90deg,#ff00ff,#00ffff);
+  padding:20px;border-radius:15px;color:#000;font-weight:800;
+  z-index:9999;text-align:center;display:none;
+}
+#welcomePopup button{
+  margin-top:10px;padding:10px;border:none;border-radius:10px;background:#000;color:#fff;cursor:pointer;
+}
 @media(max-width:480px){.page{margin:12px;padding:14px}.nav div{width:48px}header{font-size:22px}}
 </style>
 </head>
 <body>
 <header>NEXA Earn</header>
+
+<!-- WELCOME POPUP -->
+<div id="welcomePopup">
+  Welcome, <span id="welcomeUser">User</span>! To NEXA Earn 🚀
+  <button onclick="closeWelcome()">Close</button>
+</div>
 
 <!-- DASHBOARD -->
 <div id="dashboard" class="page">
@@ -361,6 +376,43 @@ function logout(){
   alert('Logged out!');
   location.reload();
 }
+
+// ===== WELCOME POPUP =====
+function showWelcome(username){
+  const popup = document.getElementById('welcomePopup');
+  document.getElementById('welcomeUser').innerText = username;
+  popup.style.display = 'block';
+  setTimeout(()=>{popup.style.display='none';},4000);
+}
+function closeWelcome(){
+  document.getElementById('welcomePopup').style.display='none';
+}
+
+// ===== DYNAMIC MORE MENU =====
+function adjustNav(){
+  const nav = document.getElementById('bottomNav');
+  const items = Array.from(nav.children).filter(d=>d.id!=='moreIcon');
+  const more = document.getElementById('moreMenu');
+  const moreIcon = document.getElementById('moreIcon');
+  more.innerHTML=''; // Reset
+
+  let navWidth = nav.clientWidth;
+  let usedWidth = 0;
+  items.forEach(item=>{item.style.display='flex'; usedWidth+=item.offsetWidth;});
+
+  items.forEach(item=>{
+    if(usedWidth > navWidth - moreIcon.offsetWidth){
+      more.appendChild(item);
+      usedWidth -= item.offsetWidth;
+    }
+  });
+}
+window.addEventListener('resize', adjustNav);
+window.addEventListener('load', adjustNav);
+
+// ===== EXAMPLE LOGIN/ SIGNUP =====
+let username = prompt("Enter your username"); // Replace with real login username
+if(username) showWelcome(username);
 </script>
 </body>
 </html>
