@@ -92,11 +92,19 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
       <div class="small">Active Members</div>
       <div style="font-weight:900;font-size:18px"> <span id="activeMembers">0</span></div>
     </div>
-    <div class="dashboard-box" style="flex:1;min-width:45%;">
+    <div class="dashboard-box referral-box" style="flex:1;min-width:45%;">
       <div class="small">Referral Link</div>
       <div style="font-weight:900;font-size:14px;color:#0ff;word-break:break-all;">
         <span id="referralLink">—</span>
         <button onclick="copyReferral()">Copy</button>
+      </div>
+    </div>
+    <div class="dashboard-box" style="flex:1;min-width:100%;">
+      <div class="small">Support / About</div>
+      <div style="font-weight:900;font-size:14px;color:#0ff;word-break:break-word;">
+        About: NEXA EARN is a professional platform offering daily automated profits and safe investment plans.<br>
+        Email: <a href="mailto:rock.earn92@gmail.com" style="color:#0ff;">rock.earn92@gmail.com</a><br>
+        WhatsApp: <a href="https://whatsapp.com/channel/0029Vb7jo3eFnSz6S7mxgF29" target="_blank" style="color:#0ff;">Click to Open Channel</a>
       </div>
     </div>
   </div>
@@ -227,7 +235,7 @@ function renderPlans(){
   const list=document.getElementById('plansList');list.innerHTML='';
   plansData.forEach(p=>{
     const div=document.createElement('div');
-    div.className='plan-box';
+    div.className='dashboard-box';
     div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days}
     <button onclick="buyPlan(${p.id})">Buy Now</button>`;
     list.appendChild(div);
@@ -253,45 +261,65 @@ function copyDepositNumber(){navigator.clipboard.writeText(document.getElementBy
 function submitDeposit(){let amt=document.getElementById('depositAmount').value;let tx=document.getElementById('depositTxId').value;historyData.push(`Deposit Rs ${amt} TX:${tx} Approved`);localStorage.setItem('historyData',JSON.stringify(historyData));renderHistory();alert('Deposit submitted & approved!');}
 
 // ===== WITHDRAW =====
-function submitWithdraw(){let amt=document.getElementById('withdrawAmount').value;let acct=document.getElementById('withdrawAccount').value;historyData.push(`Withdrawal Rs ${amt} Account:${acct} Approved`);localStorage.setItem('historyData',JSON.stringify(historyData));renderHistory();alert('Withdrawal submitted & approved!');}
+function submitWithdraw(){
+  let method=document.getElementById('withdrawMethod').value;
+  let acc=document.getElementById('withdrawAccount').value;
+  let amt=document.getElementById('withdrawAmount').value;
+  if(!acc || !amt){alert('Enter all fields!'); return;}
+  historyData.push(`Withdraw Rs ${amt} via ${method} Account:${acc} Approved`);
+  localStorage.setItem('historyData',JSON.stringify(historyData));
+  renderHistory();
+  alert('Withdrawal requested & approved!');
+}
 
 // ===== HISTORY =====
-function renderHistory(){const list=document.getElementById('historyList'); list.innerHTML='';historyData.forEach(h=>{const div=document.createElement('div');div.className='plan-box'; div.innerText=h; list.appendChild(div);});}
-renderHistory();
-
-// ===== COUNTDOWN & DAILY PROFIT =====
-function startCountdown(){
-  if(!activePlan || !planEndTime) return;
-  const countdownEl=document.getElementById('planCountdown');
-  function updateTimer(){
-    let now=Date.now();
-    let diff=planEndTime-now;
-    if(diff<=0){
-      balance+=activePlan.daily;
-      localStorage.setItem('balance',balance);
-      document.getElementById('dashBalance').innerText=balance.toFixed(2);
-      planEndTime=Date.now()+24*60*60*1000;
-      localStorage.setItem('planEndTime',planEndTime);
-      diff=24*60*60*1000;
-    }
-    let d=Math.floor(diff/(1000*60*60*24));
-    let h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-    let m=Math.floor((diff%(1000*60*60))/(1000*60));
-    let s=Math.floor((diff%(1000*60))/1000);
-    countdownEl.innerText=`${d}d ${h}h ${m}m ${s}s`;
-    document.getElementById('dashDaily').innerText=activePlan.daily.toFixed(2);
-    setTimeout(updateTimer,1000);
-  }
-  updateTimer();
+function renderHistory(){
+  const list=document.getElementById('historyList');
+  if(historyData.length===0){list.innerHTML='No history yet.'; return;}
+  list.innerHTML='';
+  historyData.slice().reverse().forEach(h=>{
+    const div=document.createElement('div');
+    div.className='dashboard-box';
+    div.innerText=h;
+    list.appendChild(div);
+  });
 }
+renderHistory();
 
 // ===== LOGOUT =====
 function logout(){
-  localStorage.removeItem('loggedUser');
-  document.getElementById('dashboard').classList.add('hidden');
-  document.getElementById('bottomNav').classList.add('hidden');
-  document.getElementById('loginPage').classList.remove('hidden');
-  alert('Logged out successfully!');
+  if(confirm('Are you sure you want to logout?')){
+    localStorage.removeItem('loggedUser');
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('bottomNav').classList.add('hidden');
+    document.getElementById('loginPage').classList.remove('hidden');
+  }
+}
+
+// ===== REFERRAL =====
+function copyReferral(){
+  const link=document.getElementById('referralLink').innerText;
+  navigator.clipboard.writeText(link);
+  alert('Referral link copied!');
+}
+
+// ===== COUNTDOWN =====
+function startCountdown(){
+  if(!planEndTime) return;
+  const countdown=document.getElementById('planCountdown');
+  setInterval(()=>{
+    let now=Date.now();
+    let diff=planEndTime-now;
+    if(diff<=0){countdown.innerText='Plan ended'; return;}
+    let hrs=Math.floor(diff/3600000);
+    let mins=Math.floor((diff%3600000)/60000);
+    let secs=Math.floor((diff%60000)/1000);
+    countdown.innerText=hrs+'h '+mins+'m '+secs+'s';
+    // Update daily profit
+    let daily=activePlan?activePlan.daily:0;
+    document.getElementById('dashDaily').innerText=daily;
+    document.getElementById('dashBalance').innerText=(balance+daily);
+  },1000);
 }
 </script>
 </body>
