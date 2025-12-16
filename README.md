@@ -6,25 +6,26 @@
 <title>NEXA Earn</title>
 <style>
 :root{
-  --neon1:#ff6ec7;
-  --neon2:#1efff3;
-  --dark:#111;
+  --neon1:#ff4d6d;
+  --neon2:#1fd1f9;
+  --neon3:#ffb347;
+  --dark:#0d0d0d;
 }
 *{box-sizing:border-box;}
 body{
   margin:0;
   font-family:Arial,sans-serif;
   overflow-x:hidden;
-  background:#111;
+  background:#0d0d0d;
   color:#fff;
-  animation:bgAnim 30s linear infinite;
+  animation:bgAnim 40s ease-in-out infinite;
 }
 @keyframes bgAnim{
-  0%{background:linear-gradient(120deg,var(--neon1),var(--neon2));}
-  25%{background:linear-gradient(120deg,#ff9a9e,#00f2fe);}
-  50%{background:linear-gradient(120deg,#fbc2eb,#a18cd1);}
-  75%{background:linear-gradient(120deg,#fad0c4,#ffd1ff);}
-  100%{background:linear-gradient(120deg,var(--neon1),var(--neon2));}
+  0%{background:linear-gradient(0deg,var(--neon1),var(--neon2));}
+  25%{background:linear-gradient(45deg,var(--neon2),var(--neon3));}
+  50%{background:linear-gradient(90deg,var(--neon3),var(--neon1));}
+  75%{background:linear-gradient(135deg,var(--neon1),var(--neon2));}
+  100%{background:linear-gradient(180deg,var(--neon2),var(--neon3));}
 }
 header{
   text-align:center;
@@ -32,7 +33,7 @@ header{
   font-weight:800;
   padding:20px;
   color:#fff;
-  text-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2);
+  text-shadow:0 0 15px var(--neon1),0 0 25px var(--neon2);
 }
 .page{
   max-width:480px;
@@ -41,7 +42,7 @@ header{
   padding:20px;
   border-radius:12px;
   border:1px solid rgba(255,255,255,0.1);
-  box-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2);
+  box-shadow:0 0 15px var(--neon1),0 0 25px var(--neon2);
 }
 button,input,select{
   width:100%;
@@ -93,7 +94,7 @@ button:hover{
 <!-- DASHBOARD -->
 <div id="dashboard" class="page">
   <div class="alert-box">
-    خبردار: Deposit/Withdrawal میں کوئی مسئلہ ہو تو Administration سے رابطہ کریں۔ Deposit یا Withdrawal کرنے والے users کو notification show ہوگا، اور screenshot Administration کو بھیجا جائے گا۔
+    Deposit/Withdrawal issues? Contact Administration. Users will receive notification & screenshot sent to Admin.
   </div>
   <div class="user-box">
     <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -280,7 +281,7 @@ setInterval(()=>{
   balance += dailyProfit;
   localStorage.setItem('balance',balance);
   document.getElementById('dashBalance').innerText = balance.toFixed(2);
-},1000*60*60*24); // every 24hrs
+},1000*60*60*24);
 </script>
 </body>
 </html>
