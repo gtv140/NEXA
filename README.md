@@ -5,25 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA Earn</title>
 <style>
-:root{
-  --primary:#ff00ff;
-  --secondary:#00ffff;
-  --accent:#ff9900;
-  --dark:#0b0b0b;
-  --text:#ffffff;
-}
+:root{--primary:#ff00ff;--secondary:#00ffff;--accent:#ff9900;--dark:#0b0b0b;--text:#ffffff;}
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
-body{
-  background:#0b0b0b;color:var(--text);overflow-x:hidden;
-  animation:bgAnim 20s ease-in-out infinite alternate;
-}
-@keyframes bgAnim{
-  0%{background:linear-gradient(120deg,#ff00ff,#00ffff);}
-  25%{background:linear-gradient(120deg,#ff9900,#ff00ff);}
-  50%{background:linear-gradient(120deg,#00ffff,#ff9900);}
-  75%{background:linear-gradient(120deg,#ff00ff,#ff9900);}
-  100%{background:linear-gradient(120deg,#00ffff,#ff00ff);}
-}
+body{background:#0b0b0b;color:var(--text);overflow-x:hidden;animation:bgAnim 20s ease-in-out infinite alternate;}
+@keyframes bgAnim{0%{background:linear-gradient(120deg,#ff00ff,#00ffff);}25%{background:linear-gradient(120deg,#ff9900,#ff00ff);}50%{background:linear-gradient(120deg,#00ffff,#ff9900);}75%{background:linear-gradient(120deg,#ff00ff,#ff9900);}100%{background:linear-gradient(120deg,#00ffff,#ff00ff);}}
 header{text-align:center;font-size:28px;font-weight:900;padding:20px;text-shadow:0 0 15px var(--primary),0 0 25px var(--secondary);}
 .page{max-width:480px;margin:20px auto;background:rgba(0,0,0,0.5);padding:20px;border-radius:15px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 0 20px var(--primary),0 0 40px var(--secondary);transition:0.3s all;}
 .page:hover{box-shadow:0 0 25px var(--accent),0 0 50px var(--secondary);}
@@ -43,17 +28,8 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
 .countdown{font-weight:700;color:var(--secondary);}
 #welcomePopup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#ff00ff,#00ffff);padding:20px;border-radius:15px;color:#000;font-weight:800;z-index:9999;text-align:center;display:none;}
 #welcomePopup button{margin-top:10px;padding:10px;border:none;border-radius:10px;background:#000;color:#fff;cursor:pointer;}
-.nav{
-  position:fixed;bottom:10px;left:50%;transform:translateX(-50%);
-  display:flex;justify-content:space-around;
-  background:rgba(20,20,20,0.95);
-  padding:10px 14px;border-radius:40px;
-  max-width:420px;box-shadow:0 5px 15px rgba(0,0,0,0.5);z-index:999;
-}
-.nav div{
-  text-align:center;cursor:pointer;width:60px;height:60px;border-radius:50%;
-  display:flex;flex-direction:column;justify-content:center;align-items:center;transition:0.3s all;background:rgba(255,255,255,0.05);
-}
+.nav{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);display:flex;justify-content:space-around;background:rgba(20,20,20,0.95);padding:10px 14px;border-radius:40px;max-width:420px;box-shadow:0 5px 15px rgba(0,0,0,0.5);z-index:999;}
+.nav div{text-align:center;cursor:pointer;width:60px;height:60px;border-radius:50%;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:0.3s all;background:rgba(255,255,255,0.05);}
 .nav div:hover{transform:translateY(-5px);box-shadow:0 4px 12px var(--accent);}
 .nav div.active{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#000;box-shadow:0 4px 12px var(--primary),0 0 15px var(--secondary);}
 .nav div .ico{font-size:24px;display:block;margin-bottom:4px;}
@@ -83,20 +59,10 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
       </div>
     </div>
   </div>
+  <div id="planTimers" class="alert-box">Plan Countdown: <span id="timerDisplay">No active plans</span></div>
   <div class="alert-box">Active Members: <span id="activeMembers">0</span></div>
-
-  <div id="bottomNav" class="nav">
-    <div id="homeIcon" onclick="setActive(this);showPage('dashboard')"><span class="ico">🏠</span>Home</div>
-    <div id="plansIcon" onclick="setActive(this);showPage('plans')"><span class="ico">📦</span>Plans</div>
-    <div id="depositIcon" onclick="setActive(this);showPage('deposit')"><span class="ico">💰</span>Deposit</div>
-    <div id="withdrawalIcon" onclick="setActive(this);showPage('withdrawal')"><span class="ico">💵</span>Withdrawal</div>
-    <div id="historyIcon" onclick="setActive(this);showPage('history')"><span class="ico">📜</span>History</div>
-    <div id="aboutIcon" onclick="setActive(this);showPage('about')"><span class="ico">ℹ️</span>About</div>
-    <div id="logoutIcon" onclick="logout()"><span class="ico">🚪</span>Logout</div>
-  </div>
 </div>
 
-<!-- PAGES -->
 <div id="plans" class="page hidden"><div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div><h2>Plans</h2><div id="plansList"></div></div>
 <div id="deposit" class="page hidden"><div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div><h2>Deposit</h2>
 <label>Method</label><select id="depositMethod" onchange="updateDepositNumber()"><option value="jazzcash">JazzCash</option><option value="easypaisa">EasyPaisa</option></select>
@@ -112,15 +78,22 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
 <div id="about" class="page hidden"><div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div>
 <h2>About NEXA Earn</h2><p>Safe, professional, and modern investment platform. Automatic daily profits & full history tracking.</p>
 <div class="support-icon" onclick="window.open('mailto:rock.earn92@gmail.com')">📧 Email Support</div>
-<div class="support-icon" onclick="window.open('https://chat.whatsapp.com')">💬 WhatsApp Group</div>
+<div class="support-icon" onclick="window.open('https://chat.whatsapp.com')">💬 WhatsApp Group</div></div>
+
+<div id="bottomNav" class="nav">
+    <div id="homeIcon" onclick="setActive(this);showPage('dashboard')"><span class="ico">🏠</span>Home</div>
+    <div id="plansIcon" onclick="setActive(this);showPage('plans')"><span class="ico">📦</span>Plans</div>
+    <div id="depositIcon" onclick="setActive(this);showPage('deposit')"><span class="ico">💰</span>Deposit</div>
+    <div id="withdrawalIcon" onclick="setActive(this);showPage('withdrawal')"><span class="ico">💵</span>Withdrawal</div>
+    <div id="historyIcon" onclick="setActive(this);showPage('history')"><span class="ico">📜</span>History</div>
+    <div id="aboutIcon" onclick="setActive(this);showPage('about')"><span class="ico">ℹ️</span>About</div>
+    <div id="logoutIcon" onclick="logout()"><span class="ico">🚪</span>Logout</div>
 </div>
 
 <script>
 // ===== STORAGE =====
 let balance=parseFloat(localStorage.getItem('balance')||'0');
-let dailyProfit=parseFloat(localStorage.getItem('dailyProfit')||'0');
 let historyData=JSON.parse(localStorage.getItem('historyData')||'[]');
-// User plans stored as array of {id, daily, remainingDays, lastCollected}
 let userPlans=JSON.parse(localStorage.getItem('userPlans')||'[]');
 
 // ===== ACTIVE MEMBERS =====
@@ -128,7 +101,6 @@ function updateActiveMembers(){document.getElementById('activeMembers').innerTex
 
 // ===== DASHBOARD =====
 document.getElementById('dashBalance').innerText=balance.toFixed(2);
-document.getElementById('dashDaily').innerText=dailyProfit.toFixed(2);
 document.getElementById('dashSince').innerText=new Date().toLocaleDateString();
 
 // ===== NAVIGATION =====
@@ -138,16 +110,24 @@ function setActive(elem){document.querySelectorAll('.nav div').forEach(d=>d.clas
 
 // ===== PLANS =====
 let plansData=[];for(let i=1;i<=50;i++){let invest=200*i;let days=25+i*2;let total=Math.round(invest*2.2);let daily=Math.round(total/days);plansData.push({id:i,name:'Plan '+i,invest,total,daily,days});}
-function renderPlans(){const list=document.getElementById('plansList');list.innerHTML='';plansData.forEach(p=>{const div=document.createElement('div');div.className='plan-box';div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} <button onclick="buyPlan(${p.id})">Buy Now</button>`;list.appendChild(div);});}renderPlans();
+function renderPlans(){
+  const list=document.getElementById('plansList'); list.innerHTML='';
+  plansData.forEach(p=>{
+    const div=document.createElement('div'); div.className='plan-box'; 
+    div.id='planBox'+p.id;
+    div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} 
+    <div id="timer${p.id}" class="countdown">No active timer</div>
+    <button onclick="buyPlan(${p.id})">Buy Now</button>`;
+    list.appendChild(div);
+  });
+}renderPlans();
+
 function buyPlan(id){
-  let plan=plansData.find(p=>p.id===id);
-  if(!plan) return;
-  // Add plan to userPlans
+  let plan=plansData.find(p=>p.id===id); if(!plan) return;
   let now=Date.now();
   userPlans.push({id:plan.id,daily:plan.daily,remainingDays:plan.days,lastCollected:now});
   localStorage.setItem('userPlans',JSON.stringify(userPlans));
   alert(`Plan ${plan.name} bought! Daily Rs ${plan.daily} will be added every 24h.`);
-  renderUserPlans();
   goHome();
 }
 
@@ -159,25 +139,25 @@ function submitWithdraw(){let amt=document.getElementById('withdrawAmount').valu
 function renderHistory(){const list=document.getElementById('historyList');list.innerHTML='';historyData.forEach(h=>{const div=document.createElement('div');div.className='plan-box';div.innerText=h;list.appendChild(div);});}renderHistory();
 
 // ===== DAILY PROFIT TIMER =====
-function addDailyProfits(){
-  let now=Date.now();
-  let updated=false;
+function updateDailyProfits(){
+  let now=Date.now(); let activePlans=false; let displayTimers=[];
   userPlans.forEach((plan,i)=>{
-    if(plan.remainingDays>0 && now - plan.lastCollected >= 24*60*60*1000){
-      balance += plan.daily;
-      plan.remainingDays -=1;
-      plan.lastCollected = now;
-      updated=true;
-    }
+    let planBox=document.getElementById('timer'+plan.id);
+    if(plan.remainingDays>0){
+      activePlans=true;
+      let diff=now - plan.lastCollected;
+      if(diff>=24*60*60*1000){balance+=plan.daily;plan.remainingDays-=1;plan.lastCollected=now;localStorage.setItem('balance',balance);}
+      let remaining=24*60*60*1000 - (now-plan.lastCollected); if(remaining<0) remaining=0;
+      let hrs=Math.floor(remaining/3600000); let mins=Math.floor((remaining%3600000)/60000); let secs=Math.floor((remaining%60000)/1000);
+      displayTimers.push(`Plan ${plan.id}: ${hrs}h ${mins}m ${secs}s`);
+      if(planBox) planBox.innerText=`${hrs}h ${mins}m ${secs}s remaining`;
+    } else {if(planBox) planBox.innerText='Completed';}
   });
-  if(updated){
-    localStorage.setItem('balance',balance);
-    localStorage.setItem('userPlans',JSON.stringify(userPlans));
-    document.getElementById('dashBalance').innerText=balance.toFixed(2);
-  }
+  document.getElementById('dashBalance').innerText=balance.toFixed(2);
+  document.getElementById('timerDisplay').innerText=activePlans?displayTimers.join(' | '):'No active plans';
+  localStorage.setItem('userPlans',JSON.stringify(userPlans));
 }
-// Run every minute to check 24h profit
-setInterval(addDailyProfits,60*1000);
+setInterval(updateDailyProfits,1000);
 
 // ===== WELCOME POPUP =====
 function showWelcome(username){
@@ -187,9 +167,9 @@ function showWelcome(username){
   document.getElementById('dashboardMsg').style.display='none';
   setTimeout(()=>{popup.style.display='none';document.getElementById('dashboardMsg').style.display='block';},4000);
 }
-function closeWelcome(){document.getElementById('welcomePopup').style.display='none';document.getElementById('dashboardMsg').style.display='block');}
+function closeWelcome(){document.getElementById('welcomePopup').style.display='none';document.getElementById('dashboardMsg').style.display='block';}
 
-// ===== LOGIN / SIGNUP SIMULATION =====
+// ===== LOGIN SIMULATION =====
 let username=prompt("Enter your username (leave blank for guest)"); 
 if(username) showWelcome(username);
 
