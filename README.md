@@ -193,14 +193,34 @@ function closeWelcome(){document.getElementById('welcomePopup').style.display='n
 
 // ===== PLANS =====
 let plansData=[];
-for(let i=1;i<=10;i++){let invest=200*i;let days=5+i;let total=Math.round(invest*2.3);let daily=Math.round(total/days);plansData.push({id:i,name:'Plan '+i,invest,total,daily,days});}
-function renderPlans(){const list=document.getElementById('plansList'); list.innerHTML='';plansData.forEach(p=>{const div=document.createElement('div'); div.className='plan-box'; div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} <button onclick="buyPlan(${p.id})">Buy Now</button>`; list.appendChild(div);});}
+for(let i=1;i<=50;i++){
+  let invest = 200*i;
+  let days = 25+i;
+  let multiplier = 2.2;
+  if(days >= 26 && days <= 35) multiplier = 2.4;
+  if(days >= 65) multiplier = 2.8;
+  let total = Math.round(invest * multiplier);
+  let daily = Math.round(total / days);
+  plansData.push({id:i, name:'Plan '+i, invest, total, daily, days, multiplier});
+}
+function renderPlans(){
+  const list=document.getElementById('plansList');
+  list.innerHTML='';
+  plansData.forEach(p=>{
+    const div=document.createElement('div');
+    div.className='plan-box';
+    div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days}
+      <button onclick="buyPlan(${p.id})">Buy Now</button>`;
+    list.appendChild(div);
+  });
+}
 renderPlans();
+
 function buyPlan(id){
   let plan=plansData.find(p=>p.id===id); if(!plan) return;
   activePlan=plan;
   localStorage.setItem('activePlan',JSON.stringify(plan));
-  planEndTime=Date.now()+plan.days*24*60*60*1000;
+  planEndTime=Date.now()+24*60*60*1000; // first daily profit 24h timer
   localStorage.setItem('planEndTime',planEndTime);
   document.getElementById('depositAmount').value=plan.invest;
   document.getElementById('depositMethod').value='jazzcash';
@@ -232,7 +252,7 @@ function startCountdown(){
       balance+=activePlan.daily;
       localStorage.setItem('balance',balance);
       document.getElementById('dashBalance').innerText=balance.toFixed(2);
-      planEndTime=Date.now()+24*60*60*1000; // reset for next day
+      planEndTime=Date.now()+24*60*60*1000; // next day 24h
       localStorage.setItem('planEndTime',planEndTime);
       diff=24*60*60*1000;
     }
@@ -244,23 +264,30 @@ function startCountdown(){
   }
   updateTimer();
   setInterval(updateTimer,1000);
+  document.getElementById('dashBalance').innerText=balance.toFixed(2);
+  document.getElementById('dashDaily').innerText=activePlan.daily;
 }
 
 // ===== LOGOUT =====
-function logout(){localStorage.removeItem('loggedUser');localStorage.removeItem('activePlan');localStorage.removeItem('planEndTime');localStorage.removeItem('balance');document.getElementById('loginPage').classList.remove('hidden');document.getElementById('dashboard').classList.add('hidden');document.getElementById('bottomNav').classList.add('hidden');alert('Logged out successfully!');}
-
-// ===== INITIALIZE DASHBOARD =====
-document.getElementById('dashBalance').innerText=balance.toFixed(2);
-if(activePlan){
-  startCountdown();
-  document.getElementById('depositAmount').value=activePlan.invest;
+function logout(){
+  if(confirm('Are you sure you want to logout?')){
+    localStorage.removeItem('loggedUser');
+    document.getElementById('loginPage').classList.remove('hidden');
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('bottomNav').classList.add('hidden');
+  }
 }
 
-// ===== ACTIVE MEMBERS RANDOMIZER =====
-setInterval(()=>{document.getElementById('activeMembers').innerText=Math.floor(Math.random()*500+50);},5000);
-
-// ===== INIT NAV ACTIVE =====
-setActive(document.getElementById('homeIcon'));
+// ===== INITIALIZE =====
+document.addEventListener('DOMContentLoaded',()=>{
+  if(loggedUser){
+    document.getElementById('dashBalance').innerText=balance.toFixed(2);
+    if(activePlan){
+      document.getElementById('dashDaily').innerText=activePlan.daily;
+      startCountdown();
+    }
+  }
+});
 </script>
 </body>
 </html>
