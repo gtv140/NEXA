@@ -126,8 +126,6 @@ button:hover{
 }
 .more-menu div{padding:8px;cursor:pointer;}
 .more-menu div:hover{background:rgba(255,255,255,0.1);}
-#popup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--primary),var(--secondary));padding:20px;border-radius:15px;color:#000;font-weight:800;z-index:9999;text-align:center;}
-#popup button{margin-top:10px;padding:10px;border:none;border-radius:10px;background:#000;color:#fff;cursor:pointer;}
 @media(max-width:480px){.page{margin:12px;padding:14px}.nav div{width:48px}header{font-size:22px}}
 </style>
 </head>
@@ -136,9 +134,6 @@ button:hover{
 
 <!-- DASHBOARD -->
 <div id="dashboard" class="page">
-  <div class="top-bar">
-    <button class="back-button" onclick="goBack()">← Back</button>
-  </div>
   <div class="alert-box">
     Deposit/Withdrawal issues? Contact Administration. Notification & screenshot sent to Admin automatically.
   </div>
@@ -162,14 +157,11 @@ button:hover{
     <div onclick="showPage('plans')"><span class="ico">📦</span>Plans</div>
     <div onclick="showPage('deposit')"><span class="ico">💰</span>Deposit</div>
     <div onclick="showPage('withdrawal')"><span class="ico">💵</span>Withdrawal</div>
-    <div onclick="showPage('history')"><span class="ico">📜</span>History</div>
-    <div onclick="showPage('about')"><span class="ico">ℹ️</span>About</div>
-    <div onclick="logout()"><span class="ico">🚪</span>Logout</div>
-    <div id="moreIcon" onclick="toggleMoreMenu()"><span class="ico">⋯</span>More
+    <div id="moreIcon"><span class="ico">⋯</span>More
       <div id="moreMenu" class="more-menu">
-        <div onclick="alert('Extra 1')">Extra 1</div>
-        <div onclick="alert('Extra 2')">Extra 2</div>
-        <div onclick="alert('Extra 3')">Extra 3</div>
+        <div onclick="showPage('history')">📜 History</div>
+        <div onclick="showPage('about')">ℹ️ About</div>
+        <div onclick="logout()">🚪 Logout</div>
       </div>
     </div>
   </div>
@@ -178,7 +170,7 @@ button:hover{
 <!-- PLANS -->
 <div id="plans" class="page hidden">
   <div class="top-bar">
-    <button class="back-button" onclick="goBack()">← Back</button>
+    <button class="back-button" onclick="goHome()">← Back</button>
   </div>
   <h2>Plans</h2>
   <div id="plansList"></div>
@@ -187,7 +179,7 @@ button:hover{
 <!-- DEPOSIT -->
 <div id="deposit" class="page hidden">
   <div class="top-bar">
-    <button class="back-button" onclick="goBack()">← Back</button>
+    <button class="back-button" onclick="goHome()">← Back</button>
   </div>
   <h2>Deposit</h2>
   <label>Method</label>
@@ -211,7 +203,7 @@ button:hover{
 <!-- WITHDRAWAL -->
 <div id="withdrawal" class="page hidden">
   <div class="top-bar">
-    <button class="back-button" onclick="goBack()">← Back</button>
+    <button class="back-button" onclick="goHome()">← Back</button>
   </div>
   <h2>Withdrawal</h2>
   <label>Method</label>
@@ -227,7 +219,7 @@ button:hover{
 <!-- HISTORY -->
 <div id="history" class="page hidden">
   <div class="top-bar">
-    <button class="back-button" onclick="goBack()">← Back</button>
+    <button class="back-button" onclick="goHome()">← Back</button>
   </div>
   <h2>History</h2>
   <div id="historyList"></div>
@@ -236,7 +228,7 @@ button:hover{
 <!-- ABOUT -->
 <div id="about" class="page hidden">
   <div class="top-bar">
-    <button class="back-button" onclick="goBack()">← Back</button>
+    <button class="back-button" onclick="goHome()">← Back</button>
   </div>
   <h2>About NEXA Earn</h2>
   <p>Safe, professional, and modern investment platform. Automatic daily profits & full history tracking.</p>
@@ -269,9 +261,8 @@ function showPage(id){
 }
 
 // ===== BACK BUTTON =====
-function goBack(){
-  if(document.referrer){window.history.back();}
-  else{showPage('dashboard');}
+function goHome(){
+  showPage('dashboard');
 }
 
 // ===== MORE MENU =====
@@ -279,9 +270,12 @@ function toggleMoreMenu(){
   const menu = document.getElementById('moreMenu');
   menu.style.display = menu.style.display==='block'?'none':'block';
 }
-document.addEventListener('click',function(e){
+document.getElementById('moreIcon').addEventListener('click', toggleMoreMenu);
+document.addEventListener('click', function(e){
   const more = document.getElementById('moreIcon');
-  if(!more.contains(e.target)){document.getElementById('moreMenu').style.display='none';}
+  if(!more.contains(e.target)){
+    document.getElementById('moreMenu').style.display='none';
+  }
 });
 
 // ===== PLANS =====
