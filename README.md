@@ -242,7 +242,7 @@ let plansData=[];
 for(let i=1;i<=50;i++){
   let invest=200*i;
   let days=25+i;
-  let multiplier=2.2;
+  let multiplier=2.4;
   if(days>=26 && days<=35) multiplier=2.4;
   if(days>=36 && days<=50) multiplier=2.8;
   let total=Math.round(invest*multiplier);
