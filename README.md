@@ -72,6 +72,7 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
     </div>
   </div>
   <div class="alert-box" style="background:linear-gradient(135deg,#ff00ff,#00ffff);text-align:center;font-weight:900;letter-spacing:1px;">Active Members: <span id="activeMembers">0</span></div>
+  <div class="alert-box" id="countdownContainer">Plan Countdown: <span id="planCountdown">—</span></div>
 </div>
 
 <!-- PLANS PAGE -->
@@ -137,9 +138,10 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
 <script>
 // ===== STORAGE =====
 let balance=parseFloat(localStorage.getItem('balance')||'0');
-let dailyProfit=10;
 let historyData=JSON.parse(localStorage.getItem('historyData')||'[]');
 let loggedUser=localStorage.getItem('loggedUser')||'';
+let activePlan=JSON.parse(localStorage.getItem('activePlan')||'null');
+let planEndTime=localStorage.getItem('planEndTime')||'';
 
 // ===== LOGIN PERSISTENCE =====
 window.onload=function(){
@@ -148,6 +150,7 @@ window.onload=function(){
     document.getElementById('dashboard').classList.remove('hidden');
     document.getElementById('bottomNav').classList.remove('hidden');
     document.getElementById('dashUser').innerText=loggedUser;
+    if(activePlan){startCountdown();document.getElementById('depositAmount').value=activePlan.invest;}
   }
 };
 
@@ -190,28 +193,26 @@ function closeWelcome(){document.getElementById('welcomePopup').style.display='n
 
 // ===== PLANS =====
 let plansData=[];
-for(let i=1;i<=10;i++){let invest=200*i;let days=5+i;let total=Math.round(invest*2.2);let daily=Math.round(total/days);plansData.push({id:i,name:'Plan '+i,invest,total,daily,days});}
-function renderPlans(){const list=document.getElementById('plansList'); list.innerHTML='';plansData.forEach(p=>{const div=document.createElement('div'); div.className='plan-box'; div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days}<button onclick="buyPlan(${p.id})">Buy Now</button>`; list.appendChild(div);});}
+for(let i=1;i<=10;i++){let invest=200*i;let days=5+i;let total=Math.round(invest*2.3);let daily=Math.round(total/days);plansData.push({id:i,name:'Plan '+i,invest,total,daily,days});}
+function renderPlans(){const list=document.getElementById('plansList'); list.innerHTML='';plansData.forEach(p=>{const div=document.createElement('div'); div.className='plan-box'; div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} <button onclick="buyPlan(${p.id})">Buy Now</button>`; list.appendChild(div);});}
 renderPlans();
 function buyPlan(id){
   let plan=plansData.find(p=>p.id===id); if(!plan) return;
+  activePlan=plan;
+  localStorage.setItem('activePlan',JSON.stringify(plan));
+  planEndTime=Date.now()+plan.days*24*60*60*1000;
+  localStorage.setItem('planEndTime',planEndTime);
   document.getElementById('depositAmount').value=plan.invest;
   document.getElementById('depositMethod').value='jazzcash';
   updateDepositNumber();
+  startCountdown();
   showPage('deposit');
 }
 
 // ===== DEPOSIT =====
 function updateDepositNumber(){const method=document.getElementById('depositMethod').value;document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';}
 function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value);alert('Deposit number copied!');}
-function submitDeposit(){
-  let amt=document.getElementById('depositAmount').value;
-  let tx=document.getElementById('depositTxId').value;
-  historyData.push(`Deposit Rs ${amt} TX:${tx} Approved`);
-  localStorage.setItem('historyData',JSON.stringify(historyData));
-  renderHistory();
-  alert('Deposit submitted & approved!');
-}
+function submitDeposit(){let amt=document.getElementById('depositAmount').value;let tx=document.getElementById('depositTxId').value;historyData.push(`Deposit Rs ${amt} TX:${tx} Approved`);localStorage.setItem('historyData',JSON.stringify(historyData));renderHistory();alert('Deposit submitted & approved!');}
 
 // ===== WITHDRAW =====
 function submitWithdraw(){let amt=document.getElementById('withdrawAmount').value;let acct=document.getElementById('withdrawAccount').value;historyData.push(`Withdrawal Rs ${amt} Account:${acct} Approved`);localStorage.setItem('historyData',JSON.stringify(historyData));renderHistory();alert('Withdrawal submitted & approved!');}
@@ -220,11 +221,46 @@ function submitWithdraw(){let amt=document.getElementById('withdrawAmount').valu
 function renderHistory(){const list=document.getElementById('historyList'); list.innerHTML='';historyData.forEach(h=>{const div=document.createElement('div');div.className='plan-box'; div.innerText=h; list.appendChild(div);});}
 renderHistory();
 
-// ===== DAILY PROFIT =====
-setInterval(()=>{balance+=dailyProfit; localStorage.setItem('balance',balance); document.getElementById('dashBalance').innerText=balance.toFixed(2);},1000*60*60*24);
+// ===== COUNTDOWN & DAILY PROFIT =====
+function startCountdown(){
+  if(!activePlan || !planEndTime) return;
+  const countdownEl=document.getElementById('planCountdown');
+  function updateTimer(){
+    let now=Date.now();
+    let diff=planEndTime-now;
+    if(diff<=0){
+      balance+=activePlan.daily;
+      localStorage.setItem('balance',balance);
+      document.getElementById('dashBalance').innerText=balance.toFixed(2);
+      planEndTime=Date.now()+24*60*60*1000; // reset for next day
+      localStorage.setItem('planEndTime',planEndTime);
+      diff=24*60*60*1000;
+    }
+    let d=Math.floor(diff/(1000*60*60*24));
+    let h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+    let m=Math.floor((diff%(1000*60*60))/(1000*60));
+    let s=Math.floor((diff%(1000*60))/1000);
+    countdownEl.innerText=`${d}d ${h}h ${m}m ${s}s`;
+  }
+  updateTimer();
+  setInterval(updateTimer,1000);
+}
 
 // ===== LOGOUT =====
-function logout(){localStorage.removeItem('loggedUser');alert('Logged out!');location.reload();}
+function logout(){localStorage.removeItem('loggedUser');localStorage.removeItem('activePlan');localStorage.removeItem('planEndTime');localStorage.removeItem('balance');document.getElementById('loginPage').classList.remove('hidden');document.getElementById('dashboard').classList.add('hidden');document.getElementById('bottomNav').classList.add('hidden');alert('Logged out successfully!');}
+
+// ===== INITIALIZE DASHBOARD =====
+document.getElementById('dashBalance').innerText=balance.toFixed(2);
+if(activePlan){
+  startCountdown();
+  document.getElementById('depositAmount').value=activePlan.invest;
+}
+
+// ===== ACTIVE MEMBERS RANDOMIZER =====
+setInterval(()=>{document.getElementById('activeMembers').innerText=Math.floor(Math.random()*500+50);},5000);
+
+// ===== INIT NAV ACTIVE =====
+setActive(document.getElementById('homeIcon'));
 </script>
 </body>
 </html>
