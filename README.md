@@ -6,43 +6,47 @@
 <title>NEXA Earn</title>
 <style>
 :root{
-  --neon1:#ff4d6d;
-  --neon2:#1fd1f9;
-  --neon3:#ffb347;
-  --dark:#0d0d0d;
+  --primary:#ff00ff;
+  --secondary:#00ffff;
+  --accent:#ff9900;
+  --dark:#0b0b0b;
+  --text:#ffffff;
 }
 *{box-sizing:border-box;}
 body{
   margin:0;
   font-family:Arial,sans-serif;
   overflow-x:hidden;
-  background:#0d0d0d;
-  color:#fff;
-  animation:bgAnim 40s ease-in-out infinite;
+  background:#0b0b0b;
+  color:var(--text);
+  animation:bgAnim 20s ease-in-out infinite alternate;
 }
 @keyframes bgAnim{
-  0%{background:linear-gradient(0deg,var(--neon1),var(--neon2));}
-  25%{background:linear-gradient(45deg,var(--neon2),var(--neon3));}
-  50%{background:linear-gradient(90deg,var(--neon3),var(--neon1));}
-  75%{background:linear-gradient(135deg,var(--neon1),var(--neon2));}
-  100%{background:linear-gradient(180deg,var(--neon2),var(--neon3));}
+  0%{background:linear-gradient(120deg,#ff00ff,#00ffff);}
+  25%{background:linear-gradient(120deg,#ff9900,#ff00ff);}
+  50%{background:linear-gradient(120deg,#00ffff,#ff9900);}
+  75%{background:linear-gradient(120deg,#ff00ff,#ff9900);}
+  100%{background:linear-gradient(120deg,#00ffff,#ff00ff);}
 }
 header{
   text-align:center;
   font-size:28px;
-  font-weight:800;
+  font-weight:900;
   padding:20px;
-  color:#fff;
-  text-shadow:0 0 15px var(--neon1),0 0 25px var(--neon2);
+  text-shadow:0 0 15px var(--primary),0 0 25px var(--secondary);
 }
 .page{
   max-width:480px;
   margin:20px auto;
-  background:rgba(255,255,255,0.05);
+  background:rgba(0,0,0,0.5);
   padding:20px;
-  border-radius:12px;
+  border-radius:15px;
   border:1px solid rgba(255,255,255,0.1);
-  box-shadow:0 0 15px var(--neon1),0 0 25px var(--neon2);
+  box-shadow:0 0 20px var(--primary),0 0 40px var(--secondary);
+  transition:0.3s all;
+}
+.page:hover{
+  box-shadow:0 0 25px var(--accent),0 0 50px var(--secondary);
 }
 button,input,select{
   width:100%;
@@ -56,35 +60,41 @@ button,input,select{
   font-size:14px;
 }
 button{
-  background:linear-gradient(90deg,var(--neon1),var(--neon2));
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
   color:#000;
   font-weight:700;
   cursor:pointer;
-  transition:0.2s all;
-  box-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2);
+  transition:0.3s all;
+  box-shadow:0 0 10px var(--primary),0 0 20px var(--secondary);
 }
 button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 0 20px var(--neon1),0 0 30px var(--neon2);
+  transform:translateY(-3px);
+  box-shadow:0 0 25px var(--accent),0 0 40px var(--secondary);
 }
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:12px 6px;font-size:14px;background:rgba(255,255,255,0.1);}
-.nav div{text-align:center;cursor:pointer;width:64px;}
-.nav div .ico{font-size:20px;display:block;margin-bottom:4px;}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:12px 6px;font-size:14px;background:rgba(0,0,0,0.5);}
+.nav div{text-align:center;cursor:pointer;width:64px;transition:0.2s all;}
+.nav div:hover{color:var(--accent);}
+.nav div .ico{font-size:22px;display:block;margin-bottom:4px;}
 .hidden{display:none;}
 .small{font-size:13px;color:rgba(255,255,255,0.7);}
 .plan-box,.alert-box,.user-box,.referral-box,.support-icon{
-  border-radius:10px;padding:12px;margin-bottom:12px;
+  border-radius:12px;padding:14px;margin-bottom:12px;
+  transition:0.3s all;
 }
 .plan-box,.user-box,.referral-box,.support-icon{
   background:rgba(255,255,255,0.05);
-  box-shadow:0 0 10px var(--neon1),0 0 20px var(--neon2) inset;
+  box-shadow:0 0 15px var(--primary),0 0 30px var(--secondary) inset;
 }
-.alert-box{background:rgba(255,0,136,0.12);color:#fff;box-shadow:0 0 10px #ff00ff inset;}
-.support-icon{display:flex;align-items:center;gap:6px;padding:10px;cursor:pointer;width:fit-content;font-weight:700;transition:0.15s all;}
-.support-icon:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--neon1),0 0 30px var(--neon2);}
-.countdown{font-weight:700;color:var(--neon2);}
-#popup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--neon1),var(--neon2));padding:20px;border-radius:12px;color:#000;font-weight:800;z-index:9999;text-align:center;}
-#popup button{margin-top:10px;padding:8px 12px;border:none;border-radius:8px;background:#000;color:#fff;cursor:pointer;}
+.plan-box:hover{
+  transform:translateY(-3px);
+  box-shadow:0 0 25px var(--accent),0 0 40px var(--secondary) inset;
+}
+.alert-box{background:rgba(255,0,136,0.15);color:#fff;box-shadow:0 0 15px #ff00ff inset;}
+.support-icon{display:flex;align-items:center;gap:8px;padding:12px;cursor:pointer;width:fit-content;font-weight:700;}
+.support-icon:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--accent),0 0 30px var(--secondary);}
+.countdown{font-weight:700;color:var(--secondary);}
+#popup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--primary),var(--secondary));padding:20px;border-radius:15px;color:#000;font-weight:800;z-index:9999;text-align:center;}
+#popup button{margin-top:10px;padding:10px;border:none;border-radius:10px;background:#000;color:#fff;cursor:pointer;}
 @media(max-width:480px){.page{margin:12px;padding:14px}.nav div{width:48px}header{font-size:22px}}
 </style>
 </head>
@@ -94,12 +104,12 @@ button:hover{
 <!-- DASHBOARD -->
 <div id="dashboard" class="page">
   <div class="alert-box">
-    Deposit/Withdrawal issues? Contact Administration. Users will receive notification & screenshot sent to Admin.
+    Deposit/Withdrawal issues? Contact Administration. Notification & screenshot sent to Admin automatically.
   </div>
   <div class="user-box">
     <div style="display:flex;justify-content:space-between;align-items:center;">
       <div>
-        <div style="font-weight:800;font-size:16px;">Welcome User</div>
+        <div style="font-weight:900;font-size:16px;">Welcome User</div>
         <div class="small">Member since: <span id="dashSince">—</span></div>
       </div>
       <div>
@@ -109,16 +119,16 @@ button:hover{
       </div>
     </div>
   </div>
-
   <div class="alert-box">Active Members: <span id="activeMembers">0</span></div>
 
   <div id="bottomNav" class="nav">
+    <div onclick="showPage('dashboard')"><span class="ico">🏠</span>Home</div>
     <div onclick="showPage('plans')"><span class="ico">📦</span>Plans</div>
     <div onclick="showPage('deposit')"><span class="ico">💰</span>Deposit</div>
     <div onclick="showPage('withdrawal')"><span class="ico">💵</span>Withdrawal</div>
     <div onclick="showPage('history')"><span class="ico">📜</span>History</div>
     <div onclick="showPage('about')"><span class="ico">ℹ️</span>About</div>
-    <div onclick="showPage('support')"><span class="ico">🛠️</span>Support</div>
+    <div onclick="logout()"><span class="ico">🚪</span>Logout</div>
   </div>
 </div>
 
@@ -171,14 +181,9 @@ button:hover{
 <!-- ABOUT -->
 <div id="about" class="page hidden">
   <h2>About NEXA Earn</h2>
-  <p>Safe and professional investment platform with automatic daily profits.</p>
-</div>
-
-<!-- SUPPORT -->
-<div id="support" class="page hidden">
-  <h2>Support</h2>
-  <div class="support-icon" onclick="window.open('mailto:rock.earn92@gmail.com','_blank')"><span class="ico">📧</span>Email</div>
-  <div class="support-icon" onclick="window.open('https://chat.whatsapp.com/yourlink','_blank')"><span class="ico">💬</span>WhatsApp Group</div>
+  <p>Safe, professional, and modern investment platform. Automatic daily profits & full history tracking.</p>
+  <div class="support-icon" onclick="window.open('mailto:rock.earn92@gmail.com')">📧 Email Support</div>
+  <div class="support-icon" onclick="window.open('https://chat.whatsapp.com')">💬 WhatsApp Group</div>
 </div>
 
 <script>
@@ -250,7 +255,7 @@ function submitDeposit(){
   historyData.push(`Deposit Rs ${amt} TX:${tx} Approved`);
   localStorage.setItem('historyData',JSON.stringify(historyData));
   renderHistory();
-  alert('Deposit submitted and approved!');
+  alert('Deposit submitted & approved!');
 }
 
 // ===== WITHDRAWAL =====
@@ -260,7 +265,7 @@ function submitWithdraw(){
   historyData.push(`Withdrawal Rs ${amt} Account:${acct} Approved`);
   localStorage.setItem('historyData',JSON.stringify(historyData));
   renderHistory();
-  alert('Withdrawal request submitted!');
+  alert('Withdrawal submitted & approved!');
 }
 
 // ===== HISTORY =====
@@ -282,6 +287,12 @@ setInterval(()=>{
   localStorage.setItem('balance',balance);
   document.getElementById('dashBalance').innerText = balance.toFixed(2);
 },1000*60*60*24);
+
+// ===== LOGOUT =====
+function logout(){
+  alert('Logged out!');
+  location.reload();
+}
 </script>
 </body>
 </html>
