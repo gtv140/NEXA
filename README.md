@@ -71,8 +71,27 @@ button:hover{
   transform:translateY(-3px);
   box-shadow:0 0 25px var(--accent),0 0 40px var(--secondary);
 }
+.top-bar{
+  display:flex;
+  align-items:center;
+  padding:10px 16px;
+  background:rgba(0,0,0,0.5);
+  border-radius:12px;
+  max-width:480px;
+  margin:20px auto 10px auto;
+}
+.back-button{
+  background:#ff4d4d;
+  color:#fff;
+  border:none;
+  padding:8px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:16px;
+}
 .nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:12px 6px;font-size:14px;background:rgba(0,0,0,0.5);}
-.nav div{text-align:center;cursor:pointer;width:64px;transition:0.2s all;}
+.nav div{text-align:center;cursor:pointer;width:64px;transition:0.2s all;position:relative;}
 .nav div:hover{color:var(--accent);}
 .nav div .ico{font-size:22px;display:block;margin-bottom:4px;}
 .hidden{display:none;}
@@ -93,6 +112,20 @@ button:hover{
 .support-icon{display:flex;align-items:center;gap:8px;padding:12px;cursor:pointer;width:fit-content;font-weight:700;}
 .support-icon:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--accent),0 0 30px var(--secondary);}
 .countdown{font-weight:700;color:var(--secondary);}
+.more-menu{
+  display:none;
+  position:absolute;
+  bottom:48px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,0.8);
+  border-radius:10px;
+  padding:10px;
+  min-width:120px;
+  z-index:999;
+}
+.more-menu div{padding:8px;cursor:pointer;}
+.more-menu div:hover{background:rgba(255,255,255,0.1);}
 #popup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--primary),var(--secondary));padding:20px;border-radius:15px;color:#000;font-weight:800;z-index:9999;text-align:center;}
 #popup button{margin-top:10px;padding:10px;border:none;border-radius:10px;background:#000;color:#fff;cursor:pointer;}
 @media(max-width:480px){.page{margin:12px;padding:14px}.nav div{width:48px}header{font-size:22px}}
@@ -103,6 +136,9 @@ button:hover{
 
 <!-- DASHBOARD -->
 <div id="dashboard" class="page">
+  <div class="top-bar">
+    <button class="back-button" onclick="goBack()">← Back</button>
+  </div>
   <div class="alert-box">
     Deposit/Withdrawal issues? Contact Administration. Notification & screenshot sent to Admin automatically.
   </div>
@@ -129,17 +165,30 @@ button:hover{
     <div onclick="showPage('history')"><span class="ico">📜</span>History</div>
     <div onclick="showPage('about')"><span class="ico">ℹ️</span>About</div>
     <div onclick="logout()"><span class="ico">🚪</span>Logout</div>
+    <div id="moreIcon" onclick="toggleMoreMenu()"><span class="ico">⋯</span>More
+      <div id="moreMenu" class="more-menu">
+        <div onclick="alert('Extra 1')">Extra 1</div>
+        <div onclick="alert('Extra 2')">Extra 2</div>
+        <div onclick="alert('Extra 3')">Extra 3</div>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- PLANS -->
 <div id="plans" class="page hidden">
+  <div class="top-bar">
+    <button class="back-button" onclick="goBack()">← Back</button>
+  </div>
   <h2>Plans</h2>
   <div id="plansList"></div>
 </div>
 
 <!-- DEPOSIT -->
 <div id="deposit" class="page hidden">
+  <div class="top-bar">
+    <button class="back-button" onclick="goBack()">← Back</button>
+  </div>
   <h2>Deposit</h2>
   <label>Method</label>
   <select id="depositMethod" onchange="updateDepositNumber()">
@@ -161,6 +210,9 @@ button:hover{
 
 <!-- WITHDRAWAL -->
 <div id="withdrawal" class="page hidden">
+  <div class="top-bar">
+    <button class="back-button" onclick="goBack()">← Back</button>
+  </div>
   <h2>Withdrawal</h2>
   <label>Method</label>
   <select id="withdrawMethod">
@@ -174,12 +226,18 @@ button:hover{
 
 <!-- HISTORY -->
 <div id="history" class="page hidden">
+  <div class="top-bar">
+    <button class="back-button" onclick="goBack()">← Back</button>
+  </div>
   <h2>History</h2>
   <div id="historyList"></div>
 </div>
 
 <!-- ABOUT -->
 <div id="about" class="page hidden">
+  <div class="top-bar">
+    <button class="back-button" onclick="goBack()">← Back</button>
+  </div>
   <h2>About NEXA Earn</h2>
   <p>Safe, professional, and modern investment platform. Automatic daily profits & full history tracking.</p>
   <div class="support-icon" onclick="window.open('mailto:rock.earn92@gmail.com')">📧 Email Support</div>
@@ -209,6 +267,22 @@ function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
 }
+
+// ===== BACK BUTTON =====
+function goBack(){
+  if(document.referrer){window.history.back();}
+  else{showPage('dashboard');}
+}
+
+// ===== MORE MENU =====
+function toggleMoreMenu(){
+  const menu = document.getElementById('moreMenu');
+  menu.style.display = menu.style.display==='block'?'none':'block';
+}
+document.addEventListener('click',function(e){
+  const more = document.getElementById('moreIcon');
+  if(!more.contains(e.target)){document.getElementById('moreMenu').style.display='none';}
+});
 
 // ===== PLANS =====
 let plansData = [];
