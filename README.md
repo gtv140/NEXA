@@ -108,7 +108,7 @@ a:hover{text-decoration:underline;}
       <div style="font-weight:900;font-size:14px;word-break:break-word;">
         About: NEXA EARN is a trusted platform providing daily automated profits and secure investment plans.<br>
         Email: <a href="mailto:rock.earn92@gmail.com" style="color:var(--support);font-weight:bold;">rock.earn92@gmail.com</a><br>
-        WhatsApp: <a href="https://whatsapp.com/channel/0029Vb7jo3eFnSz6S7mxgF29" target="_blank" style="color:var(--whatsapp);font-weight:bold;">Open WhatsApp Channel</a>
+        WhatsApp: <a href="https://whatsapp.com/channel/0029VbCFINF60eBlxFer9V0u" target="_blank" style="color:var(--whatsapp);font-weight:bold;">Open WhatsApp Channel</a>
       </div>
     </div>
   </div>
