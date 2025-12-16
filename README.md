@@ -39,17 +39,29 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
 <body>
 <header>NEXA Earn</header>
 
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="page">
+  <h2>Login to NEXA Earn</h2>
+  <label>Username</label>
+  <input type="text" id="loginUsername" placeholder="Enter Username"/>
+  <label>Password</label>
+  <input type="password" id="loginPassword" placeholder="Enter Password"/>
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- WELCOME POPUP -->
 <div id="welcomePopup">
   Welcome, <span id="welcomeUser">User</span>! To NEXA Earn 🚀
   <button onclick="closeWelcome()">Close</button>
 </div>
 
-<div id="dashboard" class="page">
+<!-- DASHBOARD -->
+<div id="dashboard" class="page hidden">
   <div id="dashboardMsg" class="alert-box">Welcome to NEXA Earn! 🚀 Start growing your earnings today with safe and automatic daily profits.</div>
   <div class="user-box">
     <div style="display:flex;justify-content:space-between;align-items:center;">
       <div>
-        <div style="font-weight:900;font-size:16px;">Welcome User</div>
+        <div style="font-weight:900;font-size:16px;">Welcome <span id="dashUser">User</span></div>
         <div class="small">Member since: <span id="dashSince">—</span></div>
       </div>
       <div>
@@ -63,31 +75,41 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
   <div class="alert-box">Active Members: <span id="activeMembers">0</span></div>
 </div>
 
-<div id="plans" class="page hidden"><div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div><h2>Plans</h2><div id="plansList"></div></div>
-<div id="deposit" class="page hidden"><div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div><h2>Deposit</h2>
-<label>Method</label><select id="depositMethod" onchange="updateDepositNumber()"><option value="jazzcash">JazzCash</option><option value="easypaisa">EasyPaisa</option></select>
-<div style="display:flex;gap:8px;align-items:center;margin-top:10px;"><input id="depositNumber" readonly style="flex:1"/><button onclick="copyDepositNumber()">Copy</button></div>
-<label>Amount</label><input id="depositAmount" placeholder="Enter Amount"/><label>TX ID</label><input id="depositTxId" placeholder="TX ID"/>
-<label>Upload Proof</label><input type="file" id="depositProof"/><button onclick="submitDeposit()">Submit Deposit</button></div>
-<div id="withdrawal" class="page hidden"><div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div><h2>Withdrawal</h2>
-<label>Method</label><select id="withdrawMethod"><option value="jazzcash">JazzCash</option><option value="easypaisa">EasyPaisa</option></select>
-<input id="withdrawAccount" placeholder="Account Number"/>
-<input id="withdrawAmount" placeholder="Amount"/>
-<button onclick="submitWithdraw()">Request Withdrawal</button></div>
-<div id="history" class="page hidden"><div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div><h2>History</h2><div id="historyList"></div></div>
-<div id="about" class="page hidden"><div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div>
-<h2>About NEXA Earn</h2><p>Safe, professional, and modern investment platform. Automatic daily profits & full history tracking.</p>
-<div class="support-icon" onclick="window.open('mailto:rock.earn92@gmail.com')">📧 Email Support</div>
-<div class="support-icon" onclick="window.open('https://chat.whatsapp.com')">💬 WhatsApp Group</div></div>
+<!-- PLANS PAGE -->
+<div id="plans" class="page hidden">
+  <div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div>
+  <h2>Plans</h2>
+  <div id="plansList"></div>
+</div>
 
-<div id="bottomNav" class="nav">
-    <div id="homeIcon" onclick="setActive(this);showPage('dashboard')"><span class="ico">🏠</span>Home</div>
-    <div id="plansIcon" onclick="setActive(this);showPage('plans')"><span class="ico">📦</span>Plans</div>
-    <div id="depositIcon" onclick="setActive(this);showPage('deposit')"><span class="ico">💰</span>Deposit</div>
-    <div id="withdrawalIcon" onclick="setActive(this);showPage('withdrawal')"><span class="ico">💵</span>Withdrawal</div>
-    <div id="historyIcon" onclick="setActive(this);showPage('history')"><span class="ico">📜</span>History</div>
-    <div id="aboutIcon" onclick="setActive(this);showPage('about')"><span class="ico">ℹ️</span>About</div>
-    <div id="logoutIcon" onclick="logout()"><span class="ico">🚪</span>Logout</div>
+<!-- DEPOSIT PAGE -->
+<div id="deposit" class="page hidden">
+  <div class="top-bar"><button class="back-button" onclick="goHome()">← Back</button></div>
+  <h2>Deposit</h2>
+  <label>Method</label>
+  <select id="depositMethod" onchange="updateDepositNumber()">
+    <option value="jazzcash">JazzCash</option>
+    <option value="easypaisa">EasyPaisa</option>
+  </select>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
+    <input id="depositNumber" readonly style="flex:1"/>
+    <button onclick="copyDepositNumber()">Copy</button>
+  </div>
+  <label>Amount</label>
+  <input id="depositAmount" placeholder="Enter Amount"/>
+  <label>Transaction ID</label>
+  <input id="depositTxId" placeholder="TX ID"/>
+  <label>Upload Proof</label>
+  <input type="file" id="depositProof"/>
+  <button onclick="submitDeposit()">Submit Deposit</button>
+</div>
+
+<!-- NAVIGATION -->
+<div id="bottomNav" class="nav hidden">
+  <div id="homeIcon" onclick="setActive(this);showPage('dashboard')"><span class="ico">🏠</span>Home</div>
+  <div id="plansIcon" onclick="setActive(this);showPage('plans')"><span class="ico">📦</span>Plans</div>
+  <div id="depositIcon" onclick="setActive(this);showPage('deposit')"><span class="ico">💰</span>Deposit</div>
+  <div id="logoutIcon" onclick="logout()"><span class="ico">🚪</span>Logout</div>
 </div>
 
 <script>
@@ -99,65 +121,22 @@ let userPlans=JSON.parse(localStorage.getItem('userPlans')||'[]');
 // ===== ACTIVE MEMBERS =====
 function updateActiveMembers(){document.getElementById('activeMembers').innerText=Math.floor(Math.random()*500+50);setTimeout(updateActiveMembers,5000);}updateActiveMembers();
 
-// ===== DASHBOARD =====
-document.getElementById('dashBalance').innerText=balance.toFixed(2);
-document.getElementById('dashSince').innerText=new Date().toLocaleDateString();
-
 // ===== NAVIGATION =====
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
 function goHome(){showPage('dashboard');}
 function setActive(elem){document.querySelectorAll('.nav div').forEach(d=>d.classList.remove('active'));elem.classList.add('active');}
 
-// ===== PLANS =====
-let plansData=[];for(let i=1;i<=50;i++){let invest=200*i;let days=25+i*2;let total=Math.round(invest*2.2);let daily=Math.round(total/days);plansData.push({id:i,name:'Plan '+i,invest,total,daily,days});}
-function renderPlans(){
-  const list=document.getElementById('plansList'); list.innerHTML='';
-  plansData.forEach(p=>{
-    const div=document.createElement('div'); div.className='plan-box'; 
-    div.id='planBox'+p.id;
-    div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days} 
-    <div id="timer${p.id}" class="countdown">No active timer</div>
-    <button onclick="buyPlan(${p.id})">Buy Now</button>`;
-    list.appendChild(div);
-  });
-}renderPlans();
-
-function buyPlan(id){
-  let plan=plansData.find(p=>p.id===id); if(!plan) return;
-  let now=Date.now();
-  userPlans.push({id:plan.id,daily:plan.daily,remainingDays:plan.days,lastCollected:now});
-  localStorage.setItem('userPlans',JSON.stringify(userPlans));
-  alert(`Plan ${plan.name} bought! Daily Rs ${plan.daily} will be added every 24h.`);
-  goHome();
+// ===== LOGIN =====
+function login(){
+  let u=document.getElementById('loginUsername').value.trim();
+  let p=document.getElementById('loginPassword').value.trim();
+  if(!u||!p){alert('Enter username and password!'); return;}
+  document.getElementById('loginPage').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  document.getElementById('bottomNav').classList.remove('hidden');
+  document.getElementById('dashUser').innerText=u;
+  showWelcome(u);
 }
-
-// ===== DEPOSIT / WITHDRAW / HISTORY =====
-function updateDepositNumber(){const method=document.getElementById('depositMethod').value;document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';}
-function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value);alert('Deposit number copied!');}
-function submitDeposit(){let amt=document.getElementById('depositAmount').value;let tx=document.getElementById('depositTxId').value;historyData.push(`Deposit Rs ${amt} TX:${tx} Approved`);localStorage.setItem('historyData',JSON.stringify(historyData));renderHistory();alert('Deposit submitted & approved!');}
-function submitWithdraw(){let amt=document.getElementById('withdrawAmount').value;let acct=document.getElementById('withdrawAccount').value;historyData.push(`Withdrawal Rs ${amt} Account:${acct} Approved`);localStorage.setItem('historyData',JSON.stringify(historyData));renderHistory();alert('Withdrawal submitted & approved!');}
-function renderHistory(){const list=document.getElementById('historyList');list.innerHTML='';historyData.forEach(h=>{const div=document.createElement('div');div.className='plan-box';div.innerText=h;list.appendChild(div);});}renderHistory();
-
-// ===== DAILY PROFIT TIMER =====
-function updateDailyProfits(){
-  let now=Date.now(); let activePlans=false; let displayTimers=[];
-  userPlans.forEach((plan,i)=>{
-    let planBox=document.getElementById('timer'+plan.id);
-    if(plan.remainingDays>0){
-      activePlans=true;
-      let diff=now - plan.lastCollected;
-      if(diff>=24*60*60*1000){balance+=plan.daily;plan.remainingDays-=1;plan.lastCollected=now;localStorage.setItem('balance',balance);}
-      let remaining=24*60*60*1000 - (now-plan.lastCollected); if(remaining<0) remaining=0;
-      let hrs=Math.floor(remaining/3600000); let mins=Math.floor((remaining%3600000)/60000); let secs=Math.floor((remaining%60000)/1000);
-      displayTimers.push(`Plan ${plan.id}: ${hrs}h ${mins}m ${secs}s`);
-      if(planBox) planBox.innerText=`${hrs}h ${mins}m ${secs}s remaining`;
-    } else {if(planBox) planBox.innerText='Completed';}
-  });
-  document.getElementById('dashBalance').innerText=balance.toFixed(2);
-  document.getElementById('timerDisplay').innerText=activePlans?displayTimers.join(' | '):'No active plans';
-  localStorage.setItem('userPlans',JSON.stringify(userPlans));
-}
-setInterval(updateDailyProfits,1000);
 
 // ===== WELCOME POPUP =====
 function showWelcome(username){
@@ -169,11 +148,45 @@ function showWelcome(username){
 }
 function closeWelcome(){document.getElementById('welcomePopup').style.display='none';document.getElementById('dashboardMsg').style.display='block';}
 
-// ===== LOGIN SIMULATION =====
-let username=prompt("Enter your username (leave blank for guest)"); 
-if(username) showWelcome(username);
+// ===== PLANS =====
+let plansData=[];
+for(let i=1;i<=10;i++){let invest=200*i;let days=5+i;let total=Math.round(invest*2.2);let daily=Math.round(total/days);plansData.push({id:i,name:'Plan '+i,invest,total,daily,days});}
+function renderPlans(){
+  const list=document.getElementById('plansList'); list.innerHTML='';
+  plansData.forEach(p=>{
+    const div=document.createElement('div'); div.className='plan-box'; 
+    div.innerHTML=`<b>${p.name}</b> | Invest: Rs ${p.invest} | Total: Rs ${p.total} | Daily: Rs ${p.daily} | Days: ${p.days}
+    <button onclick="buyPlan(${p.id})">Buy Now</button>`;
+    list.appendChild(div);
+  });
+}
+renderPlans();
 
+function buyPlan(id){
+  let plan=plansData.find(p=>p.id===id); if(!plan) return;
+  document.getElementById('depositAmount').value=plan.invest;
+  document.getElementById('depositMethod').value='jazzcash';
+  updateDepositNumber();
+  showPage('deposit');
+}
+
+// ===== DEPOSIT =====
+function updateDepositNumber(){
+  const method=document.getElementById('depositMethod').value;
+  document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';
+}
+function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value);alert('Deposit number copied!');}
+function submitDeposit(){
+  let amt=document.getElementById('depositAmount').value;
+  let tx=document.getElementById('depositTxId').value;
+  historyData.push(`Deposit Rs ${amt} TX:${tx} Approved`);
+  localStorage.setItem('historyData',JSON.stringify(historyData));
+  alert('Deposit submitted & approved!');
+}
+
+// ===== LOGOUT =====
 function logout(){alert('Logged out!');location.reload();}
 </script>
+
 </body>
 </html>
