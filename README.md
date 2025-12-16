@@ -15,7 +15,7 @@
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
 body{
   background:#0b0b0b;color:var(--text);overflow-x:hidden;
-  animation:bgAnim 20s ease-in-out infinite alternate;
+  animation:bgAnim 25s ease-in-out infinite alternate;
 }
 @keyframes bgAnim{
   0%{background:linear-gradient(120deg,#00ffff,#ff00ff);}
@@ -25,8 +25,9 @@ body{
   100%{background:linear-gradient(120deg,#ff00ff,#00ffff);}
 }
 header{
-  text-align:center;font-size:28px;font-weight:900;padding:20px;
-  text-shadow:0 0 10px #00ffff,0 0 20px #ff00ff,0 0 30px #ff0000;
+  text-align:center;font-size:30px;font-weight:900;padding:20px;
+  text-shadow:0 0 15px #00ffff,0 0 25px #ff00ff,0 0 35px #ff0000;
+  letter-spacing:2px;
 }
 .page{
   max-width:480px;margin:20px auto;background:rgba(0,0,0,0.7);
@@ -41,14 +42,11 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
 .back-button{background:#ff4d4d;color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:16px;}
 .hidden{display:none;}
 .small{font-size:13px;color:rgba(255,255,255,0.7);}
-.plan-box,.alert-box,.user-box,.referral-box,.support-icon{border-radius:12px;padding:14px;margin-bottom:12px;transition:0.3s all;}
-.plan-box,.user-box,.referral-box,.support-icon{background:rgba(255,255,255,0.05);box-shadow:0 0 15px var(--primary),0 0 30px var(--secondary) inset;}
-.plan-box:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40px var(--secondary) inset;}
-.alert-box{background:rgba(255,0,136,0.15);color:#fff;box-shadow:0 0 15px #ff00ff inset;}
-.support-icon{display:flex;align-items:center;gap:8px;padding:12px;cursor:pointer;width:fit-content;font-weight:700;}
-.support-icon:hover{transform:translateY(-2px);box-shadow:0 0 20px var(--accent),0 0 30px var(--secondary);}
-.countdown{font-weight:700;color:var(--secondary);}
-#welcomePopup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#00ffff,#ff00ff);padding:20px;border-radius:15px;color:#000;font-weight:800;z-index:9999;text-align:center;display:none;}
+.dashboard-box{border-radius:12px;padding:14px;margin-bottom:12px;text-align:center;transition:0.3s all; background:rgba(0,0,0,0.3); box-shadow:0 0 15px var(--primary),0 0 30px var(--secondary) inset;}
+.dashboard-box:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40px var(--secondary) inset;}
+#dashboardMsg{font-weight:900;font-size:16px;text-align:center;padding:15px;border-radius:12px;background:linear-gradient(135deg,#00ffff,#ff00ff);color:#000;margin-bottom:15px;box-shadow:0 0 20px #00ffff,0 0 30px #ff00ff;}
+.referral-box span{cursor:pointer;text-decoration:underline;}
+#welcomePopup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#00ffff,#ff00ff);padding:20px;border-radius:15px;color:#000;font-weight:800;z-index:9999;text-align:center;display:none;box-shadow:0 0 25px #00ffff,0 0 40px #ff00ff;}
 #welcomePopup button{margin-top:10px;padding:10px;border:none;border-radius:10px;background:#000;color:#fff;cursor:pointer;}
 .nav{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);display:flex;justify-content:space-around;background:rgba(20,20,20,0.95);padding:10px 14px;border-radius:40px;max-width:420px;box-shadow:0 5px 15px rgba(0,0,0,0.5);z-index:999;}
 .nav div{text-align:center;cursor:pointer;width:60px;height:60px;border-radius:50%;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:0.3s all;background:rgba(255,255,255,0.05);}
@@ -79,23 +77,30 @@ button:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent),0 0 40
 
 <!-- DASHBOARD -->
 <div id="dashboard" class="page hidden">
-  <div id="dashboardMsg" class="alert-box">Welcome to NEXA Earn! 🚀 Start growing your earnings today with safe and automatic daily profits.</div>
-  <div class="user-box">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <div>
-        <div style="font-weight:900;font-size:16px;">Welcome <span id="dashUser">User</span></div>
-        <div class="small">Member since: <span id="dashSince">—</span></div>
-      </div>
-      <div>
-        <div class="small">Balance</div>
-        <div style="font-size:18px;font-weight:900">Rs <span id="dashBalance">0</span></div>
-        <div class="small">Daily Profit: Rs <span id="dashDaily">0</span></div>
+  <div id="dashboardMsg">Welcome to <span style="color:#00ffff;text-shadow:0 0 10px #00ffff,0 0 20px #ff00ff,0 0 30px #ff0000;">NEXA EARN</span>! 🚀 Start growing your earnings today.</div>
+  
+  <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;">
+    <div class="dashboard-box" style="flex:1;min-width:45%;">
+      <div class="small">Balance</div>
+      <div style="font-weight:900;font-size:20px">Rs <span id="dashBalance">0</span></div>
+    </div>
+    <div class="dashboard-box" style="flex:1;min-width:45%;">
+      <div class="small">Daily Profit</div>
+      <div style="font-weight:900;font-size:20px">Rs <span id="dashDaily">0</span></div>
+    </div>
+    <div class="dashboard-box" style="flex:1;min-width:45%;">
+      <div class="small">Active Members</div>
+      <div style="font-weight:900;font-size:18px"> <span id="activeMembers">0</span></div>
+    </div>
+    <div class="dashboard-box" style="flex:1;min-width:45%;">
+      <div class="small">Referral Link</div>
+      <div style="font-weight:900;font-size:14px;color:#0ff;word-break:break-all;">
+        <span id="referralLink">—</span>
+        <button onclick="copyReferral()">Copy</button>
       </div>
     </div>
   </div>
-  <div class="alert-box" style="background:linear-gradient(135deg,#00ffff,#ff00ff);text-align:center;font-weight:900;letter-spacing:1px;">Active Members: <span id="activeMembers">0</span></div>
-  <div class="alert-box referral-box">Your Referral Link: <span id="referralLink">—</span></div>
-  <div class="alert-box" id="countdownContainer">Plan Countdown: <span id="planCountdown">—</span></div>
+  <div class="dashboard-box" id="countdownContainer">Plan Countdown: <span id="planCountdown">—</span></div>
 </div>
 
 <!-- PLANS PAGE -->
@@ -204,6 +209,7 @@ function showWelcome(username){
   setTimeout(()=>{popup.style.display='none';document.getElementById('dashboardMsg').style.display='block';},4000);
 }
 function closeWelcome(){document.getElementById('welcomePopup').style.display='none';document.getElementById('dashboardMsg').style.display='block';}
+function copyReferral(){navigator.clipboard.writeText(document.getElementById('referralLink').innerText);alert('Referral link copied!');}
 
 // ===== PLANS =====
 let plansData=[];
@@ -273,7 +279,7 @@ function startCountdown(){
     let m=Math.floor((diff%(1000*60*60))/(1000*60));
     let s=Math.floor((diff%(1000*60))/1000);
     countdownEl.innerText=`${d}d ${h}h ${m}m ${s}s`;
-    document.getElementById('dashDaily').innerText=activePlan.daily;
+    document.getElementById('dashDaily').innerText=activePlan.daily.toFixed(2);
     setTimeout(updateTimer,1000);
   }
   updateTimer();
@@ -281,16 +287,12 @@ function startCountdown(){
 
 // ===== LOGOUT =====
 function logout(){
-  if(confirm('Are you sure you want to logout?')){
-    localStorage.removeItem('loggedUser');
-    document.getElementById('loginPage').classList.remove('hidden');
-    document.getElementById('dashboard').classList.add('hidden');
-    document.getElementById('bottomNav').classList.add('hidden');
-  }
+  localStorage.removeItem('loggedUser');
+  document.getElementById('dashboard').classList.add('hidden');
+  document.getElementById('bottomNav').classList.add('hidden');
+  document.getElementById('loginPage').classList.remove('hidden');
+  alert('Logged out successfully!');
 }
-
-// Initialize dashboard balance
-document.getElementById('dashBalance').innerText=balance.toFixed(2);
 </script>
 </body>
 </html>
