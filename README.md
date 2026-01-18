@@ -7,14 +7,14 @@
 <style>
 :root{
   --primary:#FFD700;
-  --secondary:#1a1a1a;
+  --secondary:#1e1e1e;
   --accent:#FF69B4;
   --text:#fff;
 }
 body{
   margin:0;
   font-family:'Segoe UI',sans-serif;
-  background:#1a1a1a;
+  background:var(--secondary);
   color:var(--text);
   overflow-x:hidden;
 }
@@ -27,25 +27,19 @@ header{
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-.page{max-width:480px;margin:20px auto;padding:20px;background: rgba(255,255,255,0.02);border-radius:12px; border:1px solid rgba(255,191,0,0.2);}
+.page{max-width:480px;margin:20px auto;padding:20px;background: rgba(255,255,255,0.05);border-radius:12px; border:1px solid rgba(255,191,0,0.2);}
 input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:1px solid rgba(255,191,0,0.2);background:transparent;color:#fff;}
 button{background:linear-gradient(90deg,var(--primary),var(--accent));font-weight:700;cursor:pointer;transition:0.3s;}
 button:hover{opacity:0.85;}
 .nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px 0;background:rgba(0,0,0,0.85);}
 .nav div{text-align:center;cursor:pointer;}
 .nav div .ico{font-size:20px;display:block;margin-bottom:4px;}
-.card{background:rgba(255,255,255,0.05);border-radius:12px;padding:15px;margin:10px 0;transition:0.3s;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,0.3);}
-.card:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,0.4);}
-.progress{height:6px;background:rgba(255,255,255,0.2);border-radius:3px;margin-top:10px;}
-.progress-inner{height:6px;background:var(--primary);border-radius:3px;width:0%;}
-.info-box{display:flex;justify-content:space-between;padding:10px;margin:10px 0;background:rgba(255,255,255,0.05);border-radius:12px;box-shadow:0 4px 8px rgba(0,0,0,0.2);}
-.support-icon{display:flex;align-items:center;gap:6px;padding:10px;background:rgba(255,191,0,0.2);border-radius:10px;cursor:pointer;}
-.support-icon:hover{box-shadow:0 6px 20px rgba(255,191,0,0.4);transform:translateY(-2px);}
+.box{background:rgba(255,255,255,0.05);padding:15px;margin:10px 0;border-radius:12px;box-shadow:0 4px 8px rgba(0,0,0,0.3);transition:0.3s;}
+.box:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,0.4);}
 img.dashboard-img{width:100%;border-radius:12px;margin:10px 0;transition:0.5s;}
 img.dashboard-img:hover{transform:scale(1.05);}
+.back-btn{margin-top:10px;background:#ff4c4c;color:#fff;}
 .timer{margin-top:10px;font-weight:700;}
-.logout-btn{margin-top:10px;background:#ff4c4c;color:#fff;}
-.ad-task-btn{margin-top:10px;background:#1E90FF;color:#fff;}
 </style>
 </head>
 <body>
@@ -62,25 +56,24 @@ img.dashboard-img:hover{transform:scale(1.05);}
 
 <!-- DASHBOARD -->
 <div id="dashboard" class="page hidden">
-  <div class="info-box">
-    <div>Username: <span id="dashUser"></span></div>
-    <div>Balance: Rs <span id="dashBalance">0</span></div>
+  <div class="box">
+    <strong>Username:</strong> <span id="dashUser"></span><br>
+    <strong>Balance:</strong> Rs <span id="dashBalance">0</span>
   </div>
-  <div class="info-box">
-    <div>Daily Profit: Rs <span id="dashDaily">0</span></div>
-    <div>Active Users: <span id="dashActive">0</span></div>
+  <div class="box">
+    <strong>Daily Profit:</strong> Rs <span id="dashDaily">0</span><br>
+    <strong>Active Users:</strong> <span id="dashActive">0</span>
   </div>
-  <div id="companyDetails">
+  <div class="box" id="companyDetails">
     <h3>About NEXA EARN</h3>
-    <p>Operating since 2022, NEXA EARN provides safe digital investment opportunities. Earn by plans or watching ads daily.</p>
+    <p>Since 2022, NEXA EARN offers safe digital investments. Earn by plans or watching ads daily.</p>
     <img class="dashboard-img" src="https://picsum.photos/400/150?random=1"/>
     <img class="dashboard-img" src="https://picsum.photos/400/150?random=2"/>
     <img class="dashboard-img" src="https://picsum.photos/400/150?random=3"/>
-    <img class="dashboard-img" src="https://picsum.photos/400/150?random=4"/>
   </div>
   <div id="plansList"></div>
   <div id="adsList"></div>
-  <button class="logout-btn" onclick="logout()">Logout</button>
+  <button class="back-btn" onclick="logout()">Logout</button>
 </div>
 
 <!-- DEPOSIT -->
@@ -98,6 +91,7 @@ img.dashboard-img:hover{transform:scale(1.05);}
   <input id="depositTxId" placeholder="Transaction ID"/>
   <input type="file" id="depositProof"/>
   <button onclick="submitDeposit()">Submit Deposit</button>
+  <button class="back-btn" onclick="showPage('dashboard')">Back</button>
 </div>
 
 <!-- WITHDRAWAL -->
@@ -110,12 +104,14 @@ img.dashboard-img:hover{transform:scale(1.05);}
   <input id="withdrawAccount" placeholder="Account Number"/>
   <input id="withdrawAmount" placeholder="Amount"/>
   <button onclick="submitWithdraw()">Request Withdrawal</button>
+  <button class="back-btn" onclick="showPage('dashboard')">Back</button>
 </div>
 
 <!-- SUPPORT -->
 <div id="support" class="page hidden">
   <h2>Support</h2>
-  <div class="support-icon" onclick="openSupport()"><span class="ico">🛠️</span> WhatsApp Support</div>
+  <div class="box" onclick="openSupport()">🛠️ WhatsApp Support</div>
+  <button class="back-btn" onclick="showPage('dashboard')">Back</button>
 </div>
 
 <!-- NAV -->
@@ -202,13 +198,12 @@ function renderPlans(){
   const container=document.getElementById('plansList');container.innerHTML='';
   plansData.forEach((p,i)=>{
     const card=document.createElement('div');
-    card.className='card';
+    card.className='box';
     card.innerHTML=`<h3>${p.name} ${p.offer?'🔥Special Offer':''}</h3>
     <p>Invest: Rs ${p.invest}</p>
     <p>Days: ${p.days}</p>
     <p>Total: Rs ${Math.round(p.invest*p.multiplier)}</p>
     ${p.offer?`<div class="timer" id="planTimer${i}"></div>`:''}
-    <div class="progress"><div class="progress-inner" style="width:${Math.floor(Math.random()*100)}%"></div></div>
     <button onclick="buyPlan(${p.id})">Buy Now</button>`;
     container.appendChild(card);
   });
@@ -219,7 +214,7 @@ function renderAds(){
   const container=document.getElementById('adsList');container.innerHTML='';
   adsData.forEach(a=>{
     const card=document.createElement('div');
-    card.className='card';
+    card.className='box';
     card.innerHTML=`<h3>${a.name}</h3>
     <p>Invest: Rs ${a.invest}</p>
     <p>Days: ${a.days} | Daily Ads: ${a.dailyAds}</p>
@@ -234,10 +229,10 @@ function renderAdsTask(){
   if(balance===0){container.innerHTML='<p>Deposit first to unlock Ads plans.</p>'; return;}
   adsData.forEach(a=>{
     const card=document.createElement('div');
-    card.className='card';
+    card.className='box';
     card.innerHTML=`<h3>${a.name} Task</h3>
     <p>Watch ${a.dailyAds} Ads daily to earn Rs ${a.profit} per day</p>
-    <button class="ad-task-btn" onclick="watchAd(${a.id})">Watch Ad</button>`;
+    <button onclick="watchAd(${a.id})" class="ad-task-btn">Watch Ad</button>`;
     container.appendChild(card);
   });
 }
