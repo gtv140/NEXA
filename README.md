@@ -209,12 +209,14 @@ img.random-img:hover{
 
 <script>
 let currentUser = localStorage.getItem('nexa_user')||null;
+let currentPass = localStorage.getItem('nexa_pass')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 let totalProfit = parseFloat(localStorage.getItem('nexa_total')||'0');
 
 function loadData(){
 currentUser = localStorage.getItem('nexa_user')||currentUser;
+currentPass = localStorage.getItem('nexa_pass')||currentPass;
 balance = parseFloat(localStorage.getItem('nexa_balance')||balance);
 dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||dailyProfit);
 totalProfit = parseFloat(localStorage.getItem('nexa_total')||totalProfit);
@@ -224,8 +226,11 @@ function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.
 
 function login(){
 const u=document.getElementById('user').value.trim();
-if(!u){alert('Enter username');return;}
-currentUser=u; localStorage.setItem('nexa_user',currentUser);
+const p=document.getElementById('pass').value.trim();
+if(!u||!p){alert('Enter username and password');return;}
+currentUser=u; currentPass=p;
+localStorage.setItem('nexa_user',currentUser);
+localStorage.setItem('nexa_pass',currentPass);
 if(!localStorage.getItem('nexa_balance')){
 balance=0; dailyProfit=0; totalProfit=0;
 localStorage.setItem('nexa_balance',balance);
@@ -235,7 +240,7 @@ localStorage.setItem('nexa_total',totalProfit);
 updateDashboard();
 }
 
-function logout(){currentUser=null; localStorage.removeItem('nexa_user');showPage('loginPage');}
+function logout(){currentUser=null; currentPass=null; localStorage.removeItem('nexa_user'); localStorage.removeItem('nexa_pass'); showPage('loginPage');}
 
 function updateDashboard(){
 loadData();
@@ -244,7 +249,6 @@ document.getElementById('dashBalance').innerText=balance;
 document.getElementById('dashDaily').innerText=dailyProfit;
 document.getElementById('dashTotal').innerText=totalProfit;
 document.getElementById('activeMembers').innerText=Math.floor(Math.random()*5000+100);
-
 document.getElementById('bottomNav').classList.remove('hidden');
 showPage('dashboard');
 updateRandomPhotos();
