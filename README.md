@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA EARN</title>
 <style>
-:root{
-  --gold:#FFD700;--black:#111;--red:#FF3C38;--blue:#00BFFF;--white:#fff;
-}
+:root{--gold:#FFD700;--black:#111;--red:#FF3C38;--blue:#00BFFF;--white:#fff;}
 body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(120deg,#111,#222);color:var(--white);}
 header{padding:20px;text-align:center;font-size:28px;background:linear-gradient(90deg,var(--gold),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .page{max-width:450px;margin:20px auto;padding:20px;border-radius:12px;background:rgba(255,255,255,0.02);}
@@ -17,9 +15,10 @@ button{cursor:pointer;background:linear-gradient(90deg,var(--gold),var(--red));f
 .nav div{text-align:center;cursor:pointer;}
 .nav div .ico{font-size:20px;display:block;margin-bottom:4px;}
 .hidden{display:none;}
-.box{padding:10px;margin:10px 0;border-radius:10px;background:rgba(255,255,255,0.05);}
+.box{padding:12px;margin:10px 0;border-radius:12px;background:rgba(255,255,255,0.05);}
 .support-icon{display:flex;align-items:center;gap:6px;padding:10px;background:rgba(255,215,0,0.1);border-radius:10px;cursor:pointer;}
 .support-icon:hover{box-shadow:0 6px 20px rgba(255,215,0,0.3);transform:translateY(-2px);}
+img.random-img{width:100%;border-radius:10px;margin:4px 0;}
 </style>
 </head>
 <body>
@@ -43,7 +42,7 @@ button{cursor:pointer;background:linear-gradient(90deg,var(--gold),var(--red));f
 
 <div class="box" id="randomPhotos"></div>
 
-<div class="box">Welcome to NEXA EARN! Started 2022, Fast, Reliable Investment Platform. Earn daily profit & watch ads for bonus.</div>
+<div class="box">Welcome to NEXA EARN! Operating since 2022. Secure investment platform providing daily profit, special offers & ads-based earnings!</div>
 
 <button onclick="showPage('plans')">View Plans</button>
 <button onclick="showPage('ads')">Watch Ads</button>
@@ -99,7 +98,7 @@ button{cursor:pointer;background:linear-gradient(90deg,var(--gold),var(--red));f
 <!-- About / Support -->
 <div id="about" class="page hidden">
 <h2>About NEXA EARN</h2>
-<p>NEXA EARN is a premium digital platform since 2022. Earn daily profits, watch ads & enjoy secure investment.</p>
+<p>Since 2022, NEXA EARN offers fast, reliable investment & ads-earning platform. Daily profits & special offers included.</p>
 <div class="support-icon" onclick="openSupport()">
 <span class="ico">🛠️</span>Support
 </div>
@@ -186,7 +185,7 @@ function submitWithdraw(){alert('Withdrawal requested!');}
 function updateRandomPhotos(){
 let container=document.getElementById('randomPhotos'); container.innerHTML='';
 for(let i=0;i<4;i++){
-let img=document.createElement('img'); img.src='https://picsum.photos/100/80?random='+Math.floor(Math.random()*1000); img.style.margin='4px'; img.style.borderRadius='8px';
+let img=document.createElement('img'); img.src='https://picsum.photos/100/80?random='+Math.floor(Math.random()*1000); img.className='random-img';
 container.appendChild(img);
 }
 }
@@ -196,7 +195,6 @@ let plansData=[];
 for(let i=1;i<=50;i++){
 plansData.push({name:'Plan '+i,price:200*i,dailyProfit:200*i*0.02,totalProfit:200*i*0.22,days:25+Math.floor(i/2),special:i%5===0});
 }
-
 function updatePlans(){
 let container=document.getElementById('plansList'); container.innerHTML='';
 plansData.forEach((p,index)=>{
@@ -205,12 +203,7 @@ div.innerHTML=`<b>${p.name}</b> <br>Price: Rs ${p.price}<br>Daily: Rs ${p.dailyP
 container.appendChild(div);
 });
 });
-
-function buyPlan(index){
-let plan=plansData[index];
-document.getElementById('depositAmount').value=plan.price;
-showPage('deposit');
-}
+function buyPlan(index){let plan=plansData[index];document.getElementById('depositAmount').value=plan.price; showPage('deposit');}
 
 // Ads Plans
 let adsPlansData=[];
@@ -224,6 +217,7 @@ container.appendChild(div);
 });
 }
 function buyAds(index){alert('Ads Plan Bought!');}
+
 document.addEventListener('DOMContentLoaded',()=>{loadData(); if(currentUser){updateDashboard();} else{showPage('loginPage');}});
 </script>
 </body>
