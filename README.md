@@ -6,25 +6,29 @@
 <title>NEXA EARN</title>
 <style>
 :root {
-  --primary: #ff9800;
-  --secondary: #ffeb3b;
-  --bg: #f5f5f5;
-  --card-bg: #ffffff;
-  --text-dark: #333;
+  --primary:#ff9800;
+  --secondary:#ffeb3b;
+  --bg:#f0f0f0;
+  --card-bg:#fff;
+  --text-dark:#333;
 }
 body {
-  margin: 0; font-family: 'Segoe UI', sans-serif;
-  background: var(--bg); color: var(--text-dark);
+  margin:0; font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--text-dark);
 }
-header { background: var(--primary); color:#fff; text-align:center; padding:20px; font-size:24px; font-weight:bold; }
-.page { max-width:500px; margin:20px auto; padding:15px; background:var(--card-bg); border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.2);}
-input, select, button { width:100%; padding:10px; margin-top:10px; border-radius:8px; border:1px solid #ccc; }
-button { cursor:pointer; background:linear-gradient(90deg,var(--primary),var(--secondary)); color:#fff; font-weight:bold; }
-.card { background:var(--card-bg); border-radius:12px; padding:10px; margin:10px 0; box-shadow:0 3px 10px rgba(0,0,0,0.15);}
-.card h3{margin:0;}
+header { background:var(--primary); color:#fff; text-align:center; padding:20px; font-size:24px; font-weight:bold; }
+.page { max-width:500px; margin:20px auto; padding:15px; border-radius:12px; }
+.hidden{display:none;}
+input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:1px solid #ccc;}
+button{cursor:pointer;background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;font-weight:bold;}
+
+/* App-style cards & icons */
+.cards { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;}
+.card { background:var(--card-bg); border-radius:12px; padding:15px; text-align:center; box-shadow:0 3px 12px rgba(0,0,0,0.15); cursor:pointer; transition:0.3s;}
+.card:hover{transform:translateY(-5px); box-shadow:0 6px 20px rgba(0,0,0,0.2);}
+.card h3{margin:0;font-size:16px;}
+.card p{margin:5px 0 0; font-size:12px; color:#555;}
 .nav { display:flex; justify-content:space-around; padding:10px 0; background:#eee; position:fixed; bottom:0; left:0; right:0; border-top:1px solid #ccc;}
 .nav div{cursor:pointer;text-align:center;}
-.hidden {display:none;}
 </style>
 </head>
 <body>
@@ -41,25 +45,28 @@ button { cursor:pointer; background:linear-gradient(90deg,var(--primary),var(--s
 
 <!-- Dashboard -->
 <div id="dashboard" class="page hidden">
-  <div class="card"><strong>Username:</strong> <span id="dashUser">-</span></div>
-  <div class="card"><strong>Balance:</strong> Rs <span id="dashBalance">0</span></div>
-  <div class="card"><strong>Daily Profit:</strong> Rs <span id="dashDaily">0</span></div>
-  <div class="card"><strong>Total Profit:</strong> Rs <span id="dashTotal">0</span></div>
-  <div class="card"><strong>Active Members:</strong> <span id="dashActive">0</span></div>
+  <div class="cards">
+    <div class="card">Username<br><strong id="dashUser">-</strong></div>
+    <div class="card">Balance<br><strong>Rs <span id="dashBalance">0</span></strong></div>
+    <div class="card">Daily Profit<br><strong>Rs <span id="dashDaily">0</span></strong></div>
+    <div class="card">Total Profit<br><strong>Rs <span id="dashTotal">0</span></strong></div>
+    <div class="card">Active Members<br><strong><span id="dashActive">0</span></strong></div>
+    <div class="card" onclick="showPage('supportPage')">Support<br>Contact Us</div>
+  </div>
   <h3>Company Info</h3>
-  <p>NEXA EARN provides digital investment & ads watch plans. Running since 2022. Safe, reliable, fast profits.</p>
+  <p>NEXA EARN provides digital investment & ads watch plans since 2022. Safe, fast & reliable profits.</p>
 </div>
 
 <!-- Plans Page -->
 <div id="plansPage" class="page hidden">
   <h2>Investment Plans</h2>
-  <div id="plansList"></div>
+  <div id="plansList" class="cards"></div>
 </div>
 
 <!-- Ads Page -->
 <div id="adsPage" class="page hidden">
   <h2>Ads Watch Plans</h2>
-  <div id="adsList"></div>
+  <div id="adsList" class="cards"></div>
 </div>
 
 <!-- Deposit Page -->
@@ -94,7 +101,8 @@ button { cursor:pointer; background:linear-gradient(90deg,var(--primary),var(--s
 <!-- Support Page -->
 <div id="supportPage" class="page hidden">
   <h2>Support</h2>
-  <p>Contact us via email: rock.earn92@gmail.com or <a href="https://chat.whatsapp.com/GJEVKhdDeNKCNkA8r3gONu" target="_blank">WhatsApp Group</a></p>
+  <p>Email: rock.earn92@gmail.com</p>
+  <p><a href="https://chat.whatsapp.com/GJEVKhdDeNKCNkA8r3gONu" target="_blank">WhatsApp Group</a></p>
 </div>
 
 <div class="nav">
