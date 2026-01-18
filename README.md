@@ -6,27 +6,25 @@
 <title>NEXA EARN</title>
 <style>
 :root {
-  --primary:#ff0044;
-  --secondary:#00fff7;
-  --accent:#ffcc00;
-  --bg:#111;
-  --card-bg:rgba(255,255,255,0.05);
-  --card-border:rgba(255,204,0,0.2);
+  --primary: #ff0044;
+  --secondary: #ffcc00;
+  --bg: #111;
+  --accent: #00fff7;
 }
-body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#fff;overflow-x:hidden;}
-header{text-align:center;font-size:28px;padding:20px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.page{max-width:480px;margin:20px auto;padding:20px;border-radius:12px;background:var(--card-bg);border:1px solid var(--card-border);}
-input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:none;background:var(--card-bg);color:#fff;}
-button{background:linear-gradient(90deg,var(--primary),var(--accent));font-weight:700;cursor:pointer;}
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px 0;background: rgba(0,0,0,0.8);}
-.nav div{text-align:center;cursor:pointer;}
-.nav div .ico{font-size:22px;display:block;margin-bottom:4px;}
+body { margin:0; font-family: Arial, sans-serif; background: var(--bg); color:#fff; overflow-x:hidden; }
+header { text-align:center; font-size:28px; padding:20px; background: linear-gradient(90deg,var(--primary),var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.page { max-width:480px; margin:20px auto; padding:20px; border-radius:12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,204,0,0.2);}
+input,select,button { width:100%; padding:10px; margin-top:10px; border-radius:8px; border:none; background: rgba(255,255,255,0.05); color:#fff; }
+button { background: linear-gradient(90deg,var(--primary),var(--accent)); font-weight:700; cursor:pointer; }
+.nav { position: fixed; bottom:0; left:0; right:0; display:flex; justify-content:space-around; padding:10px 0; background: rgba(0,0,0,0.8);}
+.nav div { text-align:center; cursor:pointer;}
+.nav div .ico { font-size:22px; display:block; margin-bottom:4px;}
 .hidden{display:none;}
-.box{padding:15px;margin:10px 0;background:var(--card-bg);border-radius:12px;border:1px solid var(--card-border);}
-.icon-box{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0;}
-.icon-item{flex:1 1 45%;background:var(--card-bg);border-radius:12px;padding:15px;text-align:center;cursor:pointer;border:1px solid var(--card-border);}
-.icon-item:hover{box-shadow:0 4px 15px rgba(255,204,0,0.3);}
-img{width:100%;border-radius:12px;margin-top:10px;}
+.box { padding:15px; margin:10px 0; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,204,0,0.2);}
+.icon-box { display:flex; flex-wrap:wrap; gap:10px; margin:15px 0;}
+.icon-item { flex:1 1 45%; background:rgba(255,255,255,0.05); border-radius:12px; padding:15px; text-align:center; cursor:pointer; border:1px solid rgba(255,204,0,0.2);}
+.icon-item:hover { box-shadow:0 4px 15px rgba(255,204,0,0.3);}
+img { width:100%; border-radius:12px; margin-top:10px;}
 </style>
 </head>
 <body>
@@ -56,7 +54,7 @@ img{width:100%;border-radius:12px;margin-top:10px;}
 
 <div class="box" id="companyInfo">
 <h3>About NEXA EARN</h3>
-<p>Operating since 2022, NEXA EARN provides digital investment opportunities with fast profit growth. Watch ads or buy plans to earn daily rewards.</p>
+<p>Operating since 2022, NEXA EARN provides digital investment opportunities. Watch ads or buy plans to earn daily rewards, enjoy special offers, and track your profits easily.</p>
 <img src="https://picsum.photos/400/200?random=1"/>
 <img src="https://picsum.photos/400/200?random=2"/>
 <img src="https://picsum.photos/400/200?random=3"/>
@@ -177,7 +175,7 @@ function submitDeposit(){
   const amount = parseFloat(document.getElementById('depositAmount').value);
   if(!amount){alert('Enter amount'); return;}
   balance += amount;
-  totalProfit += amount*0.1;
+  totalProfit += amount*0.1; // example profit
   localStorage.setItem('nexa_balance',balance);
   localStorage.setItem('nexa_total',totalProfit);
   alert('Deposit submitted');
@@ -198,16 +196,8 @@ function invite(){prompt('Share this code with friends: NEXA123');}
 // Plans
 let plans=[];
 for(let i=1;i<=50;i++){
-  plans.push({
-    id:i,
-    name:'Plan '+i,
-    invest:200+i*50,
-    days:25+Math.floor(i*2),
-    multiplier:i<=5?2.4:2.2,
-    special:i<=5
-  });
+  plans.push({id:i,name:'Plan '+i, invest:200+i*50, days:25+Math.floor(i*2), multiplier:i<=5?2.4:2.2, special:i<=5});
 }
-
 function showPlans(){
   let html='';
   plans.forEach(p=>{
@@ -221,7 +211,6 @@ function showPlans(){
   });
   document.getElementById('plansList').innerHTML=html;
 }
-
 function buyPlan(id){
   const plan = plans.find(p=>p.id===id);
   document.getElementById('depositAmount').value=plan.invest;
@@ -233,7 +222,6 @@ let adsPlans=[];
 for(let i=1;i<=7;i++){
   adsPlans.push({id:i,name:'Ads Plan '+i, invest:500+i*50, days:10});
 }
-
 function showAds(){
   let html='';
   adsPlans.forEach(a=>{
@@ -246,7 +234,6 @@ function showAds(){
   });
   document.getElementById('adsList').innerHTML=html;
 }
-
 function buyAds(id){
   const ad = adsPlans.find(a=>a.id===id);
   document.getElementById('depositAmount').value=ad.invest;
