@@ -5,27 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA EARN</title>
 <style>
-:root {
+:root{
   --primary:#FFD700;
   --secondary:#1a1a1a;
   --accent:#FF69B4;
   --text:#fff;
-  --bgAnim1:#222;
-  --bgAnim2:#444;
 }
-body {
+body{
   margin:0;
   font-family:'Segoe UI',sans-serif;
-  background:linear-gradient(270deg,var(--bgAnim1),var(--bgAnim2));
-  background-size:400% 400%;
-  animation:gradientBG 20s ease infinite;
-  color: var(--text);
+  background:#1a1a1a;
+  color:var(--text);
   overflow-x:hidden;
-}
-@keyframes gradientBG{
-  0%{background-position:0% 50%;}
-  50%{background-position:100% 50%;}
-  100%{background-position:0% 50%;}
 }
 header{
   padding:20px;
@@ -36,7 +27,7 @@ header{
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-.page{ max-width:480px; margin:20px auto; padding:20px; background: rgba(255,255,255,0.02); border-radius:12px; border:1px solid rgba(255,191,0,0.2);}
+.page{max-width:480px;margin:20px auto;padding:20px;background: rgba(255,255,255,0.02);border-radius:12px; border:1px solid rgba(255,191,0,0.2);}
 input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:1px solid rgba(255,191,0,0.2);background:transparent;color:#fff;}
 button{background:linear-gradient(90deg,var(--primary),var(--accent));font-weight:700;cursor:pointer;transition:0.3s;}
 button:hover{opacity:0.85;}
@@ -53,6 +44,7 @@ button:hover{opacity:0.85;}
 img.dashboard-img{width:100%;border-radius:12px;margin:10px 0;transition:0.5s;}
 img.dashboard-img:hover{transform:scale(1.05);}
 .timer{margin-top:10px;font-weight:700;}
+.logout-btn{margin-top:10px;background:#ff4c4c;color:#fff;}
 </style>
 </head>
 <body>
@@ -60,10 +52,7 @@ img.dashboard-img:hover{transform:scale(1.05);}
 
 <div id="loginPage" class="page">
   <h2>Login / Signup</h2>
-  <select id="userOption">
-    <option value="login">Login</option>
-    <option value="signup">New User Signup</option>
-  </select>
+  <select id="userOption"><option value="login">Login</option><option value="signup">New User Signup</option></select>
   <input id="user" placeholder="Username"/>
   <input id="pass" placeholder="Password" type="password"/>
   <button onclick="login()">Submit</button>
@@ -88,7 +77,7 @@ img.dashboard-img:hover{transform:scale(1.05);}
   </div>
   <div id="plansList"></div>
   <div id="adsList"></div>
-  <button onclick="logout()">Logout</button>
+  <button class="logout-btn" onclick="logout()">Logout</button>
 </div>
 
 <div id="deposit" class="page hidden">
