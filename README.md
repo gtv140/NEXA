@@ -1,36 +1,142 @@
-<NEXA>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXA EARN Dashboard</title>
+<title>NEXA EARN</title>
 <style>
-:root{--primary:#1a1a1a;--accent:#00f7ff;--accent2:#ff5cff;--text:#fff;}
-body{margin:0;font-family:Arial,sans-serif;background:var(--primary);color:var(--text);}
-header{text-align:center;font-size:28px;padding:20px;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.page{max-width:500px;margin:20px auto;padding:20px;background:rgba(255,255,255,0.02);border-radius:12px;border:1px solid rgba(0,255,240,0.06);}
-input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:1px solid rgba(0,255,240,0.08);background:transparent;color:#e6f7fb;}
-button{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#001;font-weight:700;cursor:pointer;}
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px 0;background:rgba(0,0,0,0.8);}
-.nav div{text-align:center;cursor:pointer;}
-.nav div .ico{font-size:20px;display:block;margin-bottom:4px;}
+:root{
+  --bg:#111;
+  --card:#1c1c1c;
+  --accent:#00d4ff;
+  --accent2:#ff00ff;
+  --text:#fff;
+  --btn:#00d4ff;
+}
+body{
+  margin:0;
+  font-family: 'Arial', sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+header{
+  text-align:center;
+  font-size:32px;
+  padding:25px;
+  background: linear-gradient(90deg,var(--accent),var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.page{
+  max-width:550px;
+  margin:20px auto;
+  padding:20px;
+  background:var(--card);
+  border-radius:15px;
+}
+input,select,button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:8px;
+  border:none;
+  background:#222;
+  color:#fff;
+}
+button{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  font-weight:700;
+  cursor:pointer;
+  transition:0.2s;
+}
+button:hover{
+  transform:translateY(-2px);
+}
+.nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  display:flex;
+  justify-content:space-around;
+  padding:12px 0;
+  background:var(--card);
+}
+.nav div{
+  text-align:center;
+  cursor:pointer;
+}
+.nav div .ico{
+  font-size:22px;
+  display:block;
+  margin-bottom:4px;
+}
 .hidden{display:none;}
-.plan-box{border:1px solid rgba(0,255,240,0.06);padding:12px;margin:10px 0;border-radius:10px;background:rgba(0,0,0,0.1);display:flex;justify-content:space-between;align-items:center;transition:0.2s;}
-.plan-box:hover{box-shadow:0 6px 20px rgba(0,255,240,0.3);}
-.countdown{color:var(--accent);font-weight:700;}
-.support-icon{display:flex;align-items:center;gap:6px;padding:10px;background:rgba(0,255,240,0.06);border-radius:10px;cursor:pointer;}
-.support-icon:hover{box-shadow:0 6px 20px rgba(0,255,240,0.2);transform:translateY(-2px);}
-.alert-box{padding:12px;background:rgba(255,0,136,0.05);border-radius:10px;margin-bottom:12px;border:1px solid rgba(255,0,136,0.1);}
-.user-box{display:flex;justify-content:space-between;align-items:center;padding:12px;border:1px solid rgba(0,255,240,0.06);border-radius:10px;margin-bottom:12px;background:rgba(0,255,240,0.02);}
+.plan-box{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px;
+  margin:10px 0;
+  background:#222;
+  border-radius:10px;
+  transition:0.2s;
+}
+.plan-box:hover{
+  box-shadow:0 6px 15px rgba(0,212,255,0.4);
+}
+.countdown{color:var(--accent);font-weight:700;margin-top:5px;}
+.user-box{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px;
+  border-radius:12px;
+  background:#222;
+  margin-bottom:15px;
+}
+.alert-box{
+  padding:12px;
+  border-radius:12px;
+  background:rgba(0,212,255,0.05);
+  margin-bottom:12px;
+}
+.support-icon{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:12px;
+  border-radius:10px;
+  background:rgba(0,212,255,0.08);
+  cursor:pointer;
+}
+.support-icon:hover{
+  box-shadow:0 6px 20px rgba(0,212,255,0.3);
+  transform:translateY(-2px);
+}
+img.home-img{
+  width:100px;
+  height:100px;
+  object-fit:cover;
+  border-radius:12px;
+}
+.home-gallery{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:10px;
+}
 </style>
 </head>
 <body>
-<header>NEXA EARN</header>
+<header>NEXA EARN Premium</header>
 
 <!-- LOGIN -->
 <div id="loginPage" class="page">
 <h2>Login / Signup</h2>
-<select id="userOption"><option value="login">Login</option><option value="signup">Signup</option></select>
+<select id="userOption">
+  <option value="login">Login</option>
+  <option value="signup">Signup</option>
+</select>
 <input id="user" placeholder="Username" />
 <input id="pass" placeholder="Password" type="password"/>
 <button onclick="login()">Submit</button>
@@ -49,12 +155,16 @@ Daily: Rs <span id="dashDaily">0</span>
 </div>
 </div>
 <div class="alert-box">Active Members: <span id="activeMembers">0</span></div>
-<div id="homePhotos" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
-<img src="https://picsum.photos/100/100?random=1" style="border-radius:8px;">
-<img src="https://picsum.photos/100/100?random=2" style="border-radius:8px;">
-<img src="https://picsum.photos/100/100?random=3" style="border-radius:8px;">
-<img src="https://picsum.photos/100/100?random=4" style="border-radius:8px;">
+
+<div class="home-gallery">
+<img src="https://picsum.photos/100/100?random=1" class="home-img">
+<img src="https://picsum.photos/100/100?random=2" class="home-img">
+<img src="https://picsum.photos/100/100?random=3" class="home-img">
+<img src="https://picsum.photos/100/100?random=4" class="home-img">
 </div>
+
+<p>Welcome to NEXA EARN Premium. We provide fast, secure investment plans with guaranteed daily profits. Our support team is available 24/7 to assist you.</p>
+
 <button onclick="showPage('plans')">View Plans</button>
 <button onclick="showPage('deposit')">Deposit</button>
 <button onclick="showPage('withdrawal')">Withdraw</button>
@@ -64,7 +174,7 @@ Daily: Rs <span id="dashDaily">0</span>
 
 <!-- PLANS -->
 <div id="plans" class="page hidden">
-<h2>Plans</h2>
+<h2>Investment Plans</h2>
 <div id="plansList"></div>
 </div>
 
@@ -99,8 +209,8 @@ Daily: Rs <span id="dashDaily">0</span>
 
 <!-- ABOUT -->
 <div id="about" class="page hidden">
-<h2>About NEXA</h2>
-<p>NEXA EARN is a premium digital investment platform offering fast, secure, and reliable profit opportunities. Our team ensures top support for all users.</p>
+<h2>About NEXA EARN</h2>
+<p>NEXA EARN is a modern, premium digital investment platform offering secure, fast, and reliable profits. Join thousands of satisfied members worldwide.</p>
 <div class="support-icon" onclick="openSupport()">
 <span class="ico">🛠️</span> Support
 </div>
@@ -121,7 +231,6 @@ let currentUser = localStorage.getItem('nexa_user')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 let userPlans = JSON.parse(localStorage.getItem('nexa_userPlans')||'[]');
-let totalUsers = parseInt(localStorage.getItem('nexa_totalUsers')||'1');
 
 // ===== PLANS DATA =====
 let plansData=[];
