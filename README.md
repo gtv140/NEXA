@@ -6,101 +6,38 @@
 <title>NEXA EARN</title>
 <style>
 :root {
-  --primary:#ffcc00;
-  --secondary:#ff0044;
-  --accent:#00fff7;
-  --bg:#111;
-  --text:#fff;
+  --primary: #ff0044;
+  --secondary: #00fff7;
+  --accent: #ffcc00;
+  --bg: #111;
 }
 body {
   margin:0;
-  font-family:Arial,sans-serif;
+  font-family: Arial, sans-serif;
   background: var(--bg);
-  color: var(--text);
+  color:#fff;
   overflow-x:hidden;
 }
-header{
+header {
   text-align:center;
   font-size:28px;
   padding:20px;
-  background: linear-gradient(90deg,var(--primary),var(--secondary),var(--accent));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+  background: linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-.page{
-  max-width:480px;
-  margin:20px auto;
-  padding:20px;
-  border-radius:12px;
-  background: rgba(255,255,255,0.05);
-  border:1px solid rgba(255,204,0,0.2);
-}
-input,select,button{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-  border-radius:8px;
-  border:none;
-  background: rgba(255,255,255,0.05);
-  color:#fff;
-}
-button{
-  background: linear-gradient(90deg,var(--primary),var(--accent));
-  font-weight:700;
-  cursor:pointer;
-}
-.nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  display:flex;
-  justify-content:space-around;
-  padding:10px 0;
-  background: rgba(0,0,0,0.85);
-}
-.nav div{
-  text-align:center;
-  cursor:pointer;
-}
-.nav div .ico{
-  font-size:22px;
-  display:block;
-  margin-bottom:4px;
-}
+.page { max-width:480px; margin:20px auto; padding:20px; border-radius:12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,204,0,0.2);}
+input,select,button { width:100%; padding:10px; margin-top:10px; border-radius:8px; border:none; background: rgba(255,255,255,0.05); color:#fff; }
+button { background: linear-gradient(90deg,var(--primary),var(--accent)); font-weight:700; cursor:pointer; }
+.nav { position: fixed; bottom:0; left:0; right:0; display:flex; justify-content:space-around; padding:10px 0; background: rgba(0,0,0,0.85);}
+.nav div { text-align:center; cursor:pointer;}
+.nav div .ico { font-size:22px; display:block; margin-bottom:4px;}
 .hidden{display:none;}
-.box{
-  padding:15px;
-  margin:10px 0;
-  background:rgba(255,255,255,0.05);
-  border-radius:12px;
-  border:1px solid rgba(255,204,0,0.2);
-}
-.icon-box{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin:15px 0;
-}
-.icon-item{
-  flex:1 1 45%;
-  background:rgba(255,255,255,0.05);
-  border-radius:12px;
-  padding:15px;
-  text-align:center;
-  cursor:pointer;
-  border:1px solid rgba(255,204,0,0.2);
-  transition: all 0.3s;
-}
-.icon-item:hover{
-  box-shadow:0 4px 20px rgba(255,204,0,0.4);
-  transform:translateY(-4px);
-}
-img{
-  width:100%;
-  border-radius:12px;
-  margin-top:10px;
-}
+.box { padding:15px; margin:10px 0; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,204,0,0.2);}
+.icon-box { display:flex; flex-wrap:wrap; gap:10px; margin:15px 0;}
+.icon-item { flex:1 1 45%; background:rgba(255,255,255,0.05); border-radius:12px; padding:15px; text-align:center; cursor:pointer; border:1px solid rgba(255,204,0,0.2);}
+.icon-item:hover { box-shadow:0 4px 15px rgba(255,204,0,0.3);}
+img { width:100%; border-radius:12px; margin-top:10px;}
 </style>
 </head>
 <body>
@@ -225,17 +162,17 @@ function showPage(id){
 }
 
 function login(){
-  const u=document.getElementById('user').value.trim();
-  const p=document.getElementById('pass').value.trim();
+  const u = document.getElementById('user').value.trim();
+  const p = document.getElementById('pass').value.trim();
   if(!u || !p){alert('Enter username and password'); return;}
-  currentUser=u;
-  localStorage.setItem('nexa_user',currentUser);
+  currentUser = u;
+  localStorage.setItem('nexa_user', currentUser);
   if(!localStorage.getItem('nexa_balance')) localStorage.setItem('nexa_balance',0);
   if(!localStorage.getItem('nexa_daily')) localStorage.setItem('nexa_daily',0);
   if(!localStorage.getItem('nexa_total')) localStorage.setItem('nexa_total',0);
-  balance=parseFloat(localStorage.getItem('nexa_balance'));
-  dailyProfit=parseFloat(localStorage.getItem('nexa_daily'));
-  totalProfit=parseFloat(localStorage.getItem('nexa_total'));
+  balance = parseFloat(localStorage.getItem('nexa_balance'));
+  dailyProfit = parseFloat(localStorage.getItem('nexa_daily'));
+  totalProfit = parseFloat(localStorage.getItem('nexa_total'));
   updateDashboard();
 }
 
@@ -248,10 +185,10 @@ function updateDepositNumber(){
 function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value); alert('Number copied');}
 
 function submitDeposit(){
-  const amount=parseFloat(document.getElementById('depositAmount').value);
+  const amount = parseFloat(document.getElementById('depositAmount').value);
   if(!amount){alert('Enter amount'); return;}
-  balance+=amount;
-  totalProfit+=amount*0.1;
+  balance += amount;
+  totalProfit += amount*0.1; // example
   localStorage.setItem('nexa_balance',balance);
   localStorage.setItem('nexa_total',totalProfit);
   alert('Deposit submitted');
@@ -259,9 +196,9 @@ function submitDeposit(){
 }
 
 function submitWithdraw(){
-  const amount=parseFloat(document.getElementById('withdrawAmount').value);
+  const amount = parseFloat(document.getElementById('withdrawAmount').value);
   if(!amount || amount>balance){alert('Invalid amount'); return;}
-  balance-=amount;
+  balance -= amount;
   localStorage.setItem('nexa_balance',balance);
   alert('Withdrawal requested');
   updateDashboard();
