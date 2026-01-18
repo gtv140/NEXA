@@ -6,17 +6,26 @@
 <title>NEXA EARN</title>
 <style>
 :root {
-  --primary:#ffbf00;
-  --secondary:#1e1e1e;
-  --accent:#ff5cff;
+  --primary:#FFD700;
+  --secondary:#1a1a1a;
+  --accent:#FF69B4;
   --text:#fff;
+  --bgAnim1:#222;
+  --bgAnim2:#444;
 }
 body {
   margin:0;
   font-family:'Segoe UI',sans-serif;
-  background: var(--secondary);
+  background:linear-gradient(270deg,var(--bgAnim1),var(--bgAnim2));
+  background-size:400% 400%;
+  animation:gradientBG 20s ease infinite;
   color: var(--text);
   overflow-x:hidden;
+}
+@keyframes gradientBG{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
 }
 header{
   padding:20px;
@@ -41,7 +50,8 @@ button:hover{opacity:0.85;}
 .info-box{display:flex;justify-content:space-between;padding:10px;margin:10px 0;background:rgba(255,255,255,0.05);border-radius:12px;box-shadow:0 4px 8px rgba(0,0,0,0.2);}
 .support-icon{display:flex;align-items:center;gap:6px;padding:10px;background:rgba(255,191,0,0.2);border-radius:10px;cursor:pointer;}
 .support-icon:hover{box-shadow:0 6px 20px rgba(255,191,0,0.4);transform:translateY(-2px);}
-img.dashboard-img{width:100%;border-radius:12px;margin:10px 0;}
+img.dashboard-img{width:100%;border-radius:12px;margin:10px 0;transition:0.5s;}
+img.dashboard-img:hover{transform:scale(1.05);}
 </style>
 </head>
 <body>
@@ -73,6 +83,7 @@ img.dashboard-img{width:100%;border-radius:12px;margin:10px 0;}
     <img class="dashboard-img" src="https://picsum.photos/400/150?random=1"/>
     <img class="dashboard-img" src="https://picsum.photos/400/150?random=2"/>
     <img class="dashboard-img" src="https://picsum.photos/400/150?random=3"/>
+    <img class="dashboard-img" src="https://picsum.photos/400/150?random=4"/>
   </div>
   <div id="plansList"></div>
   <div id="adsList"></div>
@@ -121,7 +132,7 @@ img.dashboard-img{width:100%;border-radius:12px;margin:10px 0;}
 </div>
 
 <script>
-// Local storage variables
+// Local storage
 let currentUser = localStorage.getItem('nexa_user')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
@@ -130,26 +141,13 @@ let activeUsers = parseInt(localStorage.getItem('nexa_active')||Math.floor(Math.
 // Plans
 let plansData=[];
 for(let i=1;i<=50;i++){
-  plansData.push({
-    id:i,
-    name:'Plan '+i,
-    invest:200 + (i-1)*100,
-    days:25 + Math.floor((i-1)*(50/49)),
-    multiplier:i<=5?2.4:2.2,
-    offer:i<=5
-  });
+  plansData.push({id:i,name:'Plan '+i,invest:200+(i-1)*100,days:25+Math.floor((i-1)*(50/49)),multiplier:i<=5?2.4:2.2,offer:i<=5});
 }
 
 // Ads Plans
 let adsData=[];
 for(let i=1;i<=10;i++){
-  adsData.push({
-    id:i,
-    name:'Ads Plan '+i,
-    invest:500 + (i-1)*100,
-    days:10,
-    dailyAds:3
-  });
+  adsData.push({id:i,name:'Ads Plan '+i,invest:500+(i-1)*100,days:10,dailyAds:3});
 }
 
 // Functions
@@ -163,7 +161,7 @@ function showPage(id){
 function login(){
   const u=document.getElementById('user').value.trim();
   if(!u){alert('Enter username');return;}
-  currentUser=u; 
+  currentUser=u;
   localStorage.setItem('nexa_user',currentUser);
   if(!localStorage.getItem('nexa_balance')) balance=0;
   localStorage.setItem('nexa_balance',balance);
@@ -172,7 +170,7 @@ function login(){
   localStorage.setItem('nexa_active',activeUsers);
   updateDashboard();
 }
-function logout(){currentUser=null;localStorage.removeItem('nexa_user'); location.reload();}
+function logout(){currentUser=null;localStorage.removeItem('nexa_user');location.reload();}
 function updateDashboard(){
   document.getElementById('dashUser').innerText=currentUser;
   document.getElementById('dashBalance').innerText=balance;
@@ -181,8 +179,7 @@ function updateDashboard(){
   document.getElementById('bottomNav').classList.remove('hidden');
 }
 function renderPlans(){
-  const container=document.getElementById('plansList');
-  container.innerHTML='';
+  const container=document.getElementById('plansList');container.innerHTML='';
   plansData.forEach(p=>{
     const card=document.createElement('div');
     card.className='card';
@@ -196,8 +193,7 @@ function renderPlans(){
   });
 }
 function renderAds(){
-  const container=document.getElementById('adsList');
-  container.innerHTML='';
+  const container=document.getElementById('adsList');container.innerHTML='';
   adsData.forEach(a=>{
     const card=document.createElement('div');
     card.className='card';
@@ -210,16 +206,11 @@ function renderAds(){
 }
 function buyPlan(id){alert('Plan '+id+' selected. Proceed to deposit.');showPage('deposit');document.getElementById('depositAmount').value=plansData[id-1].invest;}
 function buyAds(id){alert('Ads Plan '+id+' selected. Proceed to deposit.');showPage('deposit');document.getElementById('depositAmount').value=adsData[id-1].invest;}
-function updateDepositNumber(){
-  const method=document.getElementById('depositMethod').value;
-  document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';
-}
+function updateDepositNumber(){const method=document.getElementById('depositMethod').value;document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';}
 function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value);alert('Number copied');}
 function submitDeposit(){alert('Deposit submitted');balance+=parseFloat(document.getElementById('depositAmount').value);dailyProfit+=Math.floor(document.getElementById('depositAmount').value*0.02);localStorage.setItem('nexa_balance',balance);localStorage.setItem('nexa_daily',dailyProfit);updateDashboard();}
 function submitWithdraw(){alert('Withdrawal requested');balance-=parseFloat(document.getElementById('withdrawAmount').value);localStorage.setItem('nexa_balance',balance);updateDashboard();}
 function openSupport(){window.open('https://chat.whatsapp.com/GJEVKhdDeNKCNkA8r3gONu','_blank');}
-
-// Random active users update
 setInterval(()=>{activeUsers+=Math.floor(Math.random()*5);localStorage.setItem('nexa_active',activeUsers);if(document.getElementById('dashActive'))document.getElementById('dashActive').innerText=activeUsers;},5000);
 </script>
 </body>
