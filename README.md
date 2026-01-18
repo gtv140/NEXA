@@ -52,6 +52,7 @@ button:hover{opacity:0.85;}
 .support-icon:hover{box-shadow:0 6px 20px rgba(255,191,0,0.4);transform:translateY(-2px);}
 img.dashboard-img{width:100%;border-radius:12px;margin:10px 0;transition:0.5s;}
 img.dashboard-img:hover{transform:scale(1.05);}
+.timer{margin-top:10px;font-weight:700;}
 </style>
 </head>
 <body>
@@ -150,6 +151,24 @@ for(let i=1;i<=10;i++){
   adsData.push({id:i,name:'Ads Plan '+i,invest:500+(i-1)*100,days:10,dailyAds:3});
 }
 
+// Countdown timer for special offers
+function startCountdown(){
+  setInterval(()=>{
+    const now=Date.now();
+    plansData.forEach((p,i)=>{
+      if(p.offer){
+        if(!p.endTime) p.endTime=now+24*60*60*1000;
+        const diff=p.endTime-now;
+        const h=Math.floor(diff/3600000);
+        const m=Math.floor((diff%3600000)/60000);
+        const s=Math.floor((diff%60000)/1000);
+        const timerEl=document.querySelector(`#planTimer${i}`);
+        if(timerEl) timerEl.innerText=`Offer ends in ${h}h ${m}m ${s}s`;
+      }
+    });
+  },1000);
+}
+
 // Functions
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
@@ -169,6 +188,7 @@ function login(){
   localStorage.setItem('nexa_daily',dailyProfit);
   localStorage.setItem('nexa_active',activeUsers);
   updateDashboard();
+  startCountdown();
 }
 function logout(){currentUser=null;localStorage.removeItem('nexa_user');location.reload();}
 function updateDashboard(){
@@ -180,13 +200,14 @@ function updateDashboard(){
 }
 function renderPlans(){
   const container=document.getElementById('plansList');container.innerHTML='';
-  plansData.forEach(p=>{
+  plansData.forEach((p,i)=>{
     const card=document.createElement('div');
     card.className='card';
     card.innerHTML=`<h3>${p.name} ${p.offer?'🔥Special Offer':''}</h3>
     <p>Invest: Rs ${p.invest}</p>
     <p>Days: ${p.days}</p>
     <p>Total: Rs ${Math.round(p.invest*p.multiplier)}</p>
+    ${p.offer?`<div class="timer" id="planTimer${i}"></div>`:''}
     <div class="progress"><div class="progress-inner" style="width:${Math.floor(Math.random()*100)}%"></div></div>
     <button onclick="buyPlan(${p.id})">Buy Now</button>`;
     container.appendChild(card);
