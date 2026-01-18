@@ -14,7 +14,7 @@
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:linear-gradient(120deg, #1a1a1a, #333);
+  background:linear-gradient(120deg, #222, #444);
   color:#fff;
 }
 header{
@@ -167,6 +167,11 @@ for(let i=1;i<=50;i++){
   plans.push({id:i,name:'Plan '+i,invest,days,multiplier,total:Math.round(invest*multiplier),special:i<=5});
 }
 
+let ads = [];
+for(let i=1;i<=10;i++){
+  ads.push({id:i,name:'Ad '+i,profit:Math.floor(Math.random()*50+20)});
+}
+
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
@@ -252,6 +257,33 @@ function submitDeposit(){
   updateDashboard();
 }
 
+function renderAds(){
+  const container=document.getElementById('adsList');
+  container.innerHTML='';
+  ads.forEach(ad=>{
+    const div=document.createElement('div');
+    div.className='card';
+    div.innerHTML=`<h3>${ad.name}</h3>
+      <p>Profit: Rs ${ad.profit}</p>
+      <button onclick="watchAd(${ad.id})">Watch Ad</button>`;
+    container.appendChild(div);
+  });
+}
+
+function watchAd(id){
+  const ad=ads.find(a=>a.id===id);
+  if(!ad) return;
+  alert('Watching Ad... 5 sec wait');
+  setTimeout(()=>{
+    balance+=ad.profit;
+    dailyProfit+=ad.profit;
+    localStorage.setItem('nexa_balance',balance);
+    localStorage.setItem('nexa_daily',dailyProfit);
+    updateDashboard();
+    alert('Ad Completed! Profit Added');
+  },5000);
+}
+
 function submitWithdraw(){
   alert('Withdrawal Requested!');
 }
@@ -259,6 +291,7 @@ function submitWithdraw(){
 document.addEventListener('DOMContentLoaded',()=>{
   if(currentUser) updateDashboard();
   renderPlans();
+  renderAds();
 });
 </script>
 </body>
