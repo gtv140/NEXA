@@ -5,91 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA EARN</title>
 <style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #fff8f0, #ffe6e0);
-  color: #333;
-}
-header {
-  text-align: center;
-  font-size: 36px;
-  padding: 20px;
-  font-weight: 800;
-  color: #ff5c4d;
-  letter-spacing: 2px;
-}
-.page {
-  max-width: 480px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #ffffffcc;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
-input, select, button {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 10px;
-  border: 1px solid #ffbfb2;
-  font-size: 15px;
-  outline: none;
-}
-button {
-  background: linear-gradient(90deg,#ff5c4d,#ff9980);
-  color: white;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.3s;
-}
-button:hover {opacity: 0.9;}
-.nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  background: #fff4f0;
-  border-top: 1px solid #ffd1c1;
-}
-.nav div {text-align: center; cursor:pointer;}
-.nav div .ico {font-size: 22px; display:block; margin-bottom:4px;}
-.hidden {display:none;}
-.user-box {
-  background: #fff0ef;
-  padding: 22px;
-  border-radius: 16px;
-  margin-bottom: 20px;
-  text-align: center;
-  font-weight: 700;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-}
-.plan-box {
-  border: 1px solid #ffb3aa;
-  padding: 14px;
-  margin: 12px 0;
-  border-radius: 12px;
-  background:#fff0f0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: 0.3s;
-}
-.plan-box:hover {box-shadow:0 8px 20px rgba(0,0,0,0.08);}
-.countdown {color:#ff5c4d;font-weight:700;}
-.support-icon {
-  display:flex;align-items:center;gap:6px;padding:12px;
-  background:#fff0ef;border-radius:12px;cursor:pointer;
-  transition:0.3s;
-}
-.support-icon:hover {box-shadow:0 6px 20px rgba(0,0,0,0.08);}
-img.dashboard-img{width:100%;border-radius:12px;margin:12px 0;}
+/* ===== FONTS & RESET ===== */
+body,html{margin:0;padding:0;font-family:'Segoe UI',sans-serif;}
+body{background:linear-gradient(120deg,#fffaf0,#ffe5d9);color:#333;overflow-x:hidden;}
+header{font-size:36px;text-align:center;padding:20px;font-weight:900;color:#ff5c4d;letter-spacing:2px;}
+.page{max-width:480px;margin:20px auto;padding:25px;background:#ffffffcc;border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,0.08);}
+input,select,button{width:100%;padding:12px;margin:10px 0;border-radius:12px;border:1px solid #ffbfb2;font-size:16px;outline:none;}
+button{background:linear-gradient(90deg,#ff5c4d,#ff9980);color:white;font-weight:700;cursor:pointer;transition:.3s;}
+button:hover{opacity:.9;}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:12px 0;background:#fff4f0;border-top:1px solid #ffd1c1;}
+.nav div{text-align:center;cursor:pointer;}
+.nav div .ico{font-size:22px;display:block;margin-bottom:4px;}
+.hidden{display:none;}
+.user-box{background:#fff0ef;padding:22px;border-radius:16px;margin-bottom:20px;text-align:center;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,0.08);}
+.plan-box{border:1px solid #ffb3aa;padding:16px;margin:12px 0;border-radius:14px;background:#fff0f0;display:flex;justify-content:space-between;align-items:center;transition:.3s;}
+.plan-box:hover{box-shadow:0 8px 25px rgba(0,0,0,0.08);}
+.countdown{color:#ff5c4d;font-weight:700;}
+.support-icon{display:flex;align-items:center;gap:8px;padding:14px;background:#fff0ef;border-radius:14px;cursor:pointer;transition:.3s;}
+.support-icon:hover{box-shadow:0 6px 20px rgba(0,0,0,0.08);}
+img.dashboard-img{width:100%;border-radius:14px;margin:12px 0;}
 </style>
 </head>
 <body>
+
 <header>NEXA EARN</header>
 
 <div id="loginPage" class="page">
@@ -107,14 +45,15 @@ img.dashboard-img{width:100%;border-radius:12px;margin:12px 0;}
     <div>Active Users: <span id="activeMembers">0</span></div>
   </div>
 
-  <h3>Company Overview</h3>
-  <p>NEXA EARN has been operating since 2022, providing trusted digital investment services with transparency and professional support.</p>
+  <h3>About NEXA EARN</h3>
+  <p>NEXA EARN has been providing reliable digital investment services since 2022. Fast, secure, and fully transparent platform with professional support for all users.</p>
+
   <img src="https://picsum.photos/400/200?random=1" class="dashboard-img"/>
   <img src="https://picsum.photos/400/200?random=2" class="dashboard-img"/>
   <img src="https://picsum.photos/400/200?random=3" class="dashboard-img"/>
   <img src="https://picsum.photos/400/200?random=4" class="dashboard-img"/>
   
-  <div id="plansList"></div>
+  <div id="plansListPage"></div>
 </div>
 
 <div id="deposit" class="page hidden">
@@ -146,7 +85,7 @@ img.dashboard-img{width:100%;border-radius:12px;margin:12px 0;}
 
 <div id="about" class="page hidden">
   <h2>About NEXA EARN</h2>
-  <p>Providing reliable and secure investment opportunities with full transparency and continuous professional support for all users.</p>
+  <p>Reliable investment opportunities with full transparency and continuous professional support for all users.</p>
   <div class="support-icon" onclick="openSupport()">
     <span class="ico">🛠️</span> Support
   </div>
