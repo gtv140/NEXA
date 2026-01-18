@@ -3,28 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXA EARN Dashboard</title>
+<title>NEXA EARN</title>
 <style>
 :root{
   --gold:#FFD700;
-  --accent:#FF4500;
+  --accent:#FF8C00;
   --dark:#111;
   --bg:#1a1a1a;
 }
 body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#fff;overflow-x:hidden;}
-header{text-align:center;padding:20px;font-size:30px;font-weight:800;background:linear-gradient(90deg,var(--gold),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.page{max-width:480px;margin:20px auto;padding:20px;background:rgba(255,255,255,0.03);border-radius:15px;box-shadow:0 8px 20px rgba(0,0,0,0.5);}
-input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#fff;outline:none;}
+header{text-align:center;padding:25px;font-size:32px;font-weight:800;background:linear-gradient(90deg,var(--gold),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.page{max-width:500px;margin:20px auto;padding:25px;background:rgba(255,255,255,0.03);border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.5);}
+input,select,button{width:100%;padding:12px;margin-top:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:#fff;outline:none;}
 button{cursor:pointer;font-weight:700;background:linear-gradient(90deg,var(--gold),var(--accent));color:#111;transition:.2s;}
 button:hover{transform:translateY(-2px);box-shadow:0 6px 15px rgba(0,0,0,0.5);}
 .nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:12px;background:rgba(0,0,0,0.85);border-top:1px solid rgba(255,255,255,0.05);}
 .nav div{text-align:center;cursor:pointer;}
 .nav div .ico{font-size:22px;margin-bottom:4px;}
 .hidden{display:none;}
-.user-box{display:flex;justify-content:space-between;align-items:center;padding:15px;border-radius:12px;background:linear-gradient(90deg,rgba(255,215,0,0.1),rgba(255,69,0,0.1));margin-bottom:15px;}
-.plan{padding:12px;border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,215,0,0.1);}
-.plan img{width:100%;border-radius:8px;margin-bottom:6px;}
-.ad-box{padding:10px;margin:10px 0;background:rgba(255,215,0,0.1);border-radius:10px;text-align:center;}
+.user-box{display:flex;justify-content:space-between;align-items:center;padding:15px;border-radius:15px;background:linear-gradient(90deg,rgba(255,215,0,0.1),rgba(255,140,0,0.1));margin-bottom:15px;font-weight:600;}
+.plan{padding:15px;border-radius:15px;margin-bottom:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,215,0,0.1);}
+.plan img{width:100%;border-radius:10px;margin-bottom:8px;}
+.ad-box{padding:12px;margin:12px 0;background:rgba(255,215,0,0.1);border-radius:12px;text-align:center;}
 .countdown{font-weight:700;color:#FFD700;}
 </style>
 </head>
@@ -85,10 +85,10 @@ button:hover{transform:translateY(-2px);box-shadow:0 6px 15px rgba(0,0,0,0.5);}
 
 <div id="about" class="page hidden">
 <h2>About NEXA EARN</h2>
-<p>NEXA EARN is running since 2022, providing fast & secure digital investment with daily profits. Enjoy premium features, random ads, and active member tracking.</p>
-<div class="ad-box">Random Photo / Ad Space</div>
-<div class="ad-box">Random Photo / Ad Space</div>
-<div class="ad-box">Random Photo / Ad Space</div>
+<p>NEXA EARN is operating since 2022. We provide secure digital investment plans, daily profits, and a premium investment experience. Our active members enjoy random offers, ads, and continuous updates.</p>
+<div class="ad-box">Random Photo / Ad</div>
+<div class="ad-box">Random Photo / Ad</div>
+<div class="ad-box">Random Photo / Ad</div>
 </div>
 
 <div id="bottomNav" class="nav hidden">
@@ -153,15 +153,14 @@ function buyPlan(amount){
   updateDepositNumber();
 }
 
-// Load dashboard or login
 if(currentUser){updateDashboard(); loadPlans();} else{showPage('loginPage');loadPlans();}
 
-// Ads-watch example
+// Random ads
 const adsBox=document.getElementById('adsBox');
 for(let i=1;i<=3;i++){
   const ad=document.createElement('div');
   ad.className='ad-box';
-  ad.innerText=`Watch Ad ${i}: Earn Rs ${50*i}`;
+  ad.innerText=`Random Special Offer / Ad ${i}`;
   adsBox.appendChild(ad);
 }
 </script>
