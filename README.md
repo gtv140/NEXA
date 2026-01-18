@@ -8,26 +8,27 @@
 :root{
   --gold:#FFD700;
   --accent:#FF8C00;
-  --bg:#1a1a1a;
-  --card-bg:rgba(255,255,255,0.05);
+  --bg:#f2f2f2;
+  --card-bg:#fff;
+  --text-dark:#111;
 }
-body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#fff;overflow-x:hidden;}
-header{text-align:center;padding:25px;font-size:32px;font-weight:800;background:linear-gradient(90deg,var(--gold),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.page{max-width:500px;margin:20px auto;padding:25px;background:var(--card-bg);border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.5);}
-input,select,button{width:100%;padding:12px;margin-top:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:#fff;outline:none;}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text-dark);}
+header{text-align:center;padding:25px;font-size:32px;font-weight:700;background:linear-gradient(90deg,var(--gold),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.page{max-width:550px;margin:20px auto;padding:25px;background:var(--card-bg);border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.1);}
+input,select,button{width:100%;padding:12px;margin-top:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.1);outline:none;}
 button{cursor:pointer;font-weight:700;background:linear-gradient(90deg,var(--gold),var(--accent));color:#111;transition:.2s;}
-button:hover{transform:translateY(-2px);box-shadow:0 6px 15px rgba(0,0,0,0.5);}
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:12px;background:rgba(0,0,0,0.85);border-top:1px solid rgba(255,255,255,0.05);}
+button:hover{transform:translateY(-2px);box-shadow:0 6px 15px rgba(0,0,0,0.2);}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:12px;background:rgba(255,255,255,0.95);border-top:1px solid rgba(0,0,0,0.05);}
 .nav div{text-align:center;cursor:pointer;}
 .nav div .ico{font-size:22px;margin-bottom:4px;}
 .hidden{display:none;}
-.user-box{display:flex;justify-content:space-between;align-items:center;padding:15px;border-radius:15px;background:linear-gradient(90deg,rgba(255,215,0,0.1),rgba(255,140,0,0.1));margin-bottom:15px;font-weight:600;}
-.plan{padding:15px;border-radius:15px;margin-bottom:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,215,0,0.1);}
+.user-box{display:flex;justify-content:space-between;align-items:center;padding:15px;border-radius:15px;background:rgba(255,215,0,0.1);margin-bottom:15px;font-weight:600;}
+.plan{padding:15px;border-radius:15px;margin-bottom:12px;background:#f9f9f9;border:1px solid rgba(255,215,0,0.2);}
 .plan img{width:100%;border-radius:10px;margin-bottom:8px;}
-.ad-box{padding:12px;margin:12px 0;background:rgba(255,215,0,0.1);border-radius:12px;text-align:center;}
-.countdown{font-weight:700;color:#FFD700;}
-.company-box{padding:15px;margin-bottom:20px;background:rgba(255,255,255,0.03);border-radius:12px;}
-.company-box h3{margin-bottom:8px;color:#FFD700;}
+.ad-box{padding:12px;margin:12px 0;background:rgba(255,140,0,0.1);border-radius:12px;text-align:center;}
+.countdown{font-weight:700;color:#FF8C00;}
+.company-box{padding:15px;margin-bottom:20px;background:rgba(255,255,255,0.05);border-radius:12px;}
+.company-box h3{margin-bottom:8px;color:#FF8C00;}
 </style>
 </head>
 <body>
@@ -56,7 +57,7 @@ button:hover{transform:translateY(-2px);box-shadow:0 6px 15px rgba(0,0,0,0.5);}
 
 <div class="company-box">
 <h3>About NEXA EARN</h3>
-<p>NEXA EARN 2022 se digital investment aur ads watching platform provide kar raha hai. Hum safe aur reliable ways offer karte hain daily profit grow karne ke liye. Users ko flexible plans aur ads watch options available hain jahan se wo earn kar sakte hain.</p>
+<p>NEXA EARN 2022 se digital investment aur ads watching platform provide kar raha hai. Safe aur reliable ways offer karte hain daily profit grow karne ke liye. Users ko flexible plans aur ads watch options available hain.</p>
 <ul>
 <li>50+ Investment Plans Rs 200 se start</li>
 <li>Daily Profit Automatic Update</li>
@@ -91,6 +92,17 @@ button:hover{transform:translateY(-2px);box-shadow:0 6px 15px rgba(0,0,0,0.5);}
 <button onclick="submitDeposit()">Submit Deposit</button>
 </div>
 
+<div id="withdrawal" class="page hidden">
+<h2>Withdrawal</h2>
+<select id="withdrawMethod">
+<option value="jazzcash">JazzCash</option>
+<option value="easypaisa">EasyPaisa</option>
+</select>
+<input id="withdrawAccount" placeholder="Account Number" />
+<input id="withdrawAmount" placeholder="Amount" />
+<button onclick="submitWithdraw()">Request Withdrawal</button>
+</div>
+
 <script>
 let currentUser = localStorage.getItem('nexa_user')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
@@ -98,8 +110,8 @@ let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 let totalProfit = parseFloat(localStorage.getItem('nexa_total')||'0');
 let activeMembers = Math.floor(Math.random()*5000+1000);
 
-// Dashboard
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+
 function login(){
   const u=document.getElementById('user').value.trim();
   if(!u){alert('Enter username'); return;}
@@ -109,12 +121,14 @@ function login(){
   totalProfit = parseFloat(localStorage.getItem('nexa_total_'+u)||'0');
   updateDashboard();
 }
+
 function logout(){
   localStorage.setItem('nexa_balance_'+currentUser,balance);
   localStorage.setItem('nexa_daily_'+currentUser,dailyProfit);
   localStorage.setItem('nexa_total_'+currentUser,totalProfit);
-  currentUser=null;location.reload();
+  currentUser=null; location.reload();
 }
+
 function updateDashboard(){
   document.getElementById('dashUser').innerText=currentUser;
   document.getElementById('dashBalance').innerText=balance.toFixed(2);
@@ -139,8 +153,9 @@ function submitDeposit(){
   updateDashboard();
   alert('Deposit submitted');
 }
+function submitWithdraw(){alert('Withdrawal requested');}
 
-// Investment plans
+// Plans
 function loadPlans(){
   const plansList=document.getElementById('plansList');
   plansList.innerHTML='';
@@ -160,7 +175,7 @@ function buyPlan(amount){
   updateDepositNumber();
 }
 
-// Ads Watch Plans + Daily Reward
+// Ads Watch Plans
 function loadAdsPlans(){
   const adsPlans=document.getElementById('adsPlans');
   adsPlans.innerHTML='';
@@ -174,7 +189,6 @@ function loadAdsPlans(){
     adsPlans.appendChild(plan);
   });
 }
-
 function startAds(id,price,daily,days){
   showPage('deposit');
   document.getElementById('depositAmount').value=price;
@@ -192,7 +206,6 @@ function startAds(id,price,daily,days){
   },3000);
 }
 
-// Initialize
 if(currentUser){updateDashboard(); loadPlans(); loadAdsPlans();}
 else{showPage('loginPage');loadPlans();loadAdsPlans();}
 </script>
