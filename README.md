@@ -9,9 +9,8 @@
   --primary:#00aaff;
   --secondary:#ff55aa;
   --bg:#f4f4f4;
-  --dark-bg:#111;
-  --text:#111;
   --white:#fff;
+  --text:#111;
 }
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
 body{background:var(--bg);color:var(--text);}
@@ -31,6 +30,8 @@ button:hover{opacity:0.9;}
 .countdown{font-weight:700;margin-top:6px;font-size:14px;}
 .support-icon{display:flex;align-items:center;gap:8px;padding:10px;background:#eee;border-radius:10px;cursor:pointer;margin-top:10px;}
 .support-icon:hover{background:#ddd;}
+.photo-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+.photo-grid img{width:48%;border-radius:12px;}
 </style>
 </head>
 <body>
@@ -48,11 +49,24 @@ button:hover{opacity:0.9;}
 <!-- DASHBOARD -->
 <div id="dashboard" class="page hidden">
   <div style="margin-bottom:12px;">Welcome, <b id="dashUser">-</b></div>
-  <div style="margin-bottom:6px;">Balance: Rs <span id="dashBalance">0</span></div>
-  <div style="margin-bottom:6px;">Daily Profit: Rs <span id="dashDaily">0</span></div>
-  <div style="margin-bottom:12px;">Active Members: <span id="activeMembers">0</span></div>
-  <div id="plansList"></div>
+  <div style="margin-bottom:12px;"><b>About NEXA EARN:</b> NEXA EARN is a premium digital investment platform providing fast, secure, and reliable profit growth. Trusted by thousands of users worldwide.</div>
+  <div class="photo-grid">
+    <img src="https://via.placeholder.com/200x120?text=Photo+1"/>
+    <img src="https://via.placeholder.com/200x120?text=Photo+2"/>
+    <img src="https://via.placeholder.com/200x120?text=Photo+3"/>
+    <img src="https://via.placeholder.com/200x120?text=Photo+4"/>
+    <img src="https://via.placeholder.com/200x120?text=Photo+5"/>
+  </div>
+  <div style="margin-top:12px;">Your Balance: Rs <span id="dashBalance">0</span></div>
+  <div>Daily Profit: Rs <span id="dashDaily">0</span></div>
+  <div>Active Members: <span id="activeMembers">0</span></div>
   <button onclick="logout()">Logout</button>
+</div>
+
+<!-- PLANS PAGE -->
+<div id="plans" class="page hidden">
+  <h2>Investment Plans</h2>
+  <div id="plansList"></div>
 </div>
 
 <!-- DEPOSIT -->
@@ -103,33 +117,33 @@ button:hover{opacity:0.9;}
 </div>
 
 <script>
-// ===== STORAGE =====
+// STORAGE
 let currentUser = localStorage.getItem('nexa_user')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 let userPlans = JSON.parse(localStorage.getItem('nexa_userPlans')||'[]');
 let savedEndTimes = JSON.parse(localStorage.getItem('nexa_offerEndTimes')||'{}');
 
-// ===== PLANS DATA =====
+// PLANS DATA
 let plansData=[];
 for(let i=1;i<=50;i++){
-  let invest=200 + (i-1)*200;
-  let days = 25 + Math.floor((i-1)/2);
+  let invest=200+(i-1)*200;
+  let days=25+Math.floor((i-1)/2);
   let multiplier = i<=5?2.4:2.2;
   let special = i<=5;
-  let endTime = savedEndTimes[i] || (special? new Date().getTime()+24*60*60*1000 : new Date().getTime()+days*24*60*60*1000);
+  let endTime = savedEndTimes[i]||(special? new Date().getTime()+24*60*60*1000:new Date().getTime()+days*24*60*60*1000);
   if(special) savedEndTimes[i]=endTime;
   plansData.push({id:i,name:special?`Special Plan ${i}`:`Plan ${i}`,invest,days,total:Math.round(invest*multiplier),daily:Math.round(invest*multiplier/days),special,endTime});
 }
 localStorage.setItem('nexa_offerEndTimes',JSON.stringify(savedEndTimes));
 
-// ===== FUNCTIONS =====
+// FUNCTIONS
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
 function login(){
   const u=document.getElementById('user').value.trim();
   if(!u){alert('Enter username'); return;}
   currentUser=u; localStorage.setItem('nexa_user',currentUser);
-  balance = 0; dailyProfit = 0; userPlans=[];
+  balance=0; dailyProfit=0; userPlans=[];
   localStorage.setItem('nexa_balance',balance);
   localStorage.setItem('nexa_daily',dailyProfit);
   localStorage.setItem('nexa_userPlans',JSON.stringify(userPlans));
@@ -152,7 +166,7 @@ function copyDepositNumber(){navigator.clipboard.writeText(document.getElementBy
 function submitDeposit(){alert('Deposit submitted');}
 function submitWithdraw(){alert('Withdrawal requested');}
 
-// ===== RENDER PLANS =====
+// RENDER PLANS
 function renderPlans(){
   const list=document.getElementById('plansList'); list.innerHTML='';
   plansData.forEach(p=>{
@@ -191,7 +205,7 @@ function startCountdown(id){
   },1000);
 }
 
-// ===== INIT =====
+// INIT
 renderPlans();
 </script>
 </body>
