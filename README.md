@@ -98,21 +98,26 @@ img.dashboard-img{width:100%;border-radius:12px;margin:8px 0;}
 </div>
 
 <script>
-// STORAGE
+// ===== STORAGE =====
 let currentUser = localStorage.getItem('nexa_user')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 let activeMembers = parseInt(localStorage.getItem('nexa_activeMembers')||'0');
 let savedTimers = JSON.parse(localStorage.getItem('nexa_offerTimers')||'{}');
 
-// DASHBOARD
-function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+// ===== DASHBOARD =====
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
 function login(){
   const u=document.getElementById('user').value.trim();
-  if(!u){alert('Enter username'); return;}
+  if(!u){alert('Enter username');return;}
   currentUser=u; localStorage.setItem('nexa_user',currentUser);
-  if(!localStorage.getItem('nexa_balance')){balance=0;dailyProfit=0;activeMembers=Math.floor(Math.random()*50)+1;}
-  localStorage.setItem('nexa_balance',balance); localStorage.setItem('nexa_daily',dailyProfit); localStorage.setItem('nexa_activeMembers',activeMembers);
+  if(!localStorage.getItem('nexa_balance')) balance=0, dailyProfit=0, activeMembers=Math.floor(Math.random()*50)+1;
+  localStorage.setItem('nexa_balance',balance);
+  localStorage.setItem('nexa_daily',dailyProfit);
+  localStorage.setItem('nexa_activeMembers',activeMembers);
   document.getElementById('dashUser').innerText=currentUser;
   document.getElementById('dashBalance').innerText=balance;
   document.getElementById('dashDaily').innerText=dailyProfit;
@@ -121,7 +126,7 @@ function login(){
   renderPlans();
   showPage('dashboard');
 }
-function logout(){currentUser=null; localStorage.removeItem('nexa_user'); location.reload();}
+function logout(){showPage('loginPage');} // localStorage safe
 function openSupport(){window.open('https://chat.whatsapp.com/Example','_blank');}
 function updateDepositNumber(){
   const method=document.getElementById('depositMethod').value;
@@ -131,7 +136,7 @@ function copyDepositNumber(){navigator.clipboard.writeText(document.getElementBy
 function submitDeposit(){alert('Deposit submitted');}
 function submitWithdraw(){alert('Withdrawal requested');}
 
-// ACTIVE MEMBERS SIM
+// ===== ACTIVE MEMBERS SIM =====
 setInterval(()=>{
   activeMembers=parseInt(localStorage.getItem('nexa_activeMembers')||'0');
   activeMembers=Math.max(1,activeMembers + Math.floor(Math.random()*5)-2);
@@ -139,7 +144,7 @@ setInterval(()=>{
   localStorage.setItem('nexa_activeMembers',activeMembers);
 },5000);
 
-// PLANS
+// ===== PLANS =====
 let plansData=[];
 for(let i=1;i<=50;i++){
   let invest=200+i*200, days=25+Math.floor(i/2), multiplier=i<=5?2.4:2.2, special=i<=5;
@@ -168,7 +173,7 @@ function buyNow(id){
   document.getElementById('depositAmount').value=plan.invest;
 }
 
-// SPECIAL OFFER COUNTDOWN
+// ===== SPECIAL OFFER COUNTDOWN =====
 function startCountdown(id){
   const el=document.getElementById(`countdown${id}`);
   if(!el) return;
