@@ -7,38 +7,39 @@
 
 <style>
 :root{
-  --bg:#f9f7f4;
+  --bg:#f4f6f8;
   --card:#ffffff;
-  --accent:#c9a24d;
-  --accent2:#e6d3a3;
-  --text:#3b3b3b;
-  --soft:#f1eee8;
+  --gold:#c8a24a;
+  --soft:#f1f1f1;
+  --text:#333;
 }
 
 *{box-sizing:border-box}
+
 body{
   margin:0;
-  font-family: 'Segoe UI', sans-serif;
+  font-family:Arial,Helvetica,sans-serif;
   background:var(--bg);
   color:var(--text);
 }
 
 header{
-  padding:18px;
+  background:#fff;
+  padding:16px;
   text-align:center;
-  font-size:26px;
+  font-size:24px;
   font-weight:700;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#fff;
+  color:var(--gold);
+  box-shadow:0 4px 10px rgba(0,0,0,.05);
 }
 
 .page{
-  max-width:420px;
+  max-width:430px;
   margin:20px auto 90px;
   background:var(--card);
-  border-radius:18px;
+  border-radius:14px;
   padding:18px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
+  box-shadow:0 8px 25px rgba(0,0,0,.08);
 }
 
 .hidden{display:none}
@@ -49,13 +50,13 @@ input,select,button{
   width:100%;
   padding:12px;
   margin-top:12px;
-  border-radius:12px;
+  border-radius:10px;
   border:1px solid #ddd;
   font-size:15px;
 }
 
 button{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  background:var(--gold);
   color:#fff;
   font-weight:600;
   border:none;
@@ -68,24 +69,28 @@ button:active{transform:scale(.98)}
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:12px;
-  margin-top:12px;
+  margin-top:14px;
 }
 
 .box{
   background:var(--soft);
   padding:14px;
-  border-radius:14px;
+  border-radius:12px;
   text-align:center;
 }
 
 .box b{
   font-size:18px;
-  color:#8b6b2f;
+  color:var(--gold);
+}
+
+.section{
+  margin-top:18px;
 }
 
 img{
   width:100%;
-  border-radius:16px;
+  border-radius:14px;
   margin-top:12px;
 }
 
@@ -98,23 +103,24 @@ img{
   display:flex;
   justify-content:space-around;
   padding:10px 0;
-  box-shadow:0 -4px 18px rgba(0,0,0,.1);
+  box-shadow:0 -4px 14px rgba(0,0,0,.08);
 }
 
 .nav div{
   font-size:13px;
-  cursor:pointer;
-  color:#8b6b2f;
   font-weight:600;
+  color:var(--gold);
+  cursor:pointer;
 }
 
 .plan{
   background:var(--soft);
   padding:14px;
-  border-radius:14px;
+  border-radius:12px;
   margin-top:12px;
 }
-.plan b{color:#8b6b2f}
+
+.plan b{color:var(--gold)}
 
 .small{font-size:13px;color:#666}
 </style>
@@ -126,10 +132,10 @@ img{
 
 <!-- LOGIN -->
 <div id="loginPage" class="page">
-  <h3>Secure Login</h3>
+  <h3>Account Access</h3>
   <select id="mode">
     <option value="login">Login</option>
-    <option value="signup">Signup</option>
+    <option value="signup">Create Account</option>
   </select>
   <input id="username" placeholder="Username">
   <input id="password" type="password" placeholder="Password">
@@ -138,7 +144,7 @@ img{
 
 <!-- DASHBOARD -->
 <div id="dashboard" class="page hidden">
-  <h3>Hello, <span id="uName"></span></h3>
+  <h3>Welcome, <span id="uName"></span></h3>
 
   <div class="stats">
     <div class="box">Balance<br><b>Rs <span id="bal">0</span></b></div>
@@ -147,19 +153,27 @@ img{
     <div class="box">Active Users<br><b><span id="users">0</span></b></div>
   </div>
 
-  <img src="https://picsum.photos/400/220?random=1">
-  <img src="https://picsum.photos/400/220?random=2">
+  <div class="section">
+    <p class="small">
+      NEXA EARN is a digital earning platform designed to provide
+      stable returns through structured investment plans.
+      Your earnings update automatically based on active plans.
+    </p>
+  </div>
+
+  <img src="https://picsum.photos/400/230?random=11">
+  <img src="https://picsum.photos/400/230?random=12">
 </div>
 
 <!-- PLANS -->
 <div id="plans" class="page hidden">
-  <h3>Investment Plans</h3>
+  <h3>Available Plans</h3>
   <div id="plansList"></div>
 </div>
 
 <!-- DEPOSIT -->
 <div id="deposit" class="page hidden">
-  <h3>Deposit Funds</h3>
+  <h3>Deposit</h3>
   <select id="depMethod" onchange="setNumber()">
     <option value="jazz">JazzCash</option>
     <option value="easy">EasyPaisa</option>
@@ -187,7 +201,7 @@ let total=Number(localStorage.getItem('total')||0)
 
 function login(){
   let u=username.value.trim()
-  if(!u) return alert('Username required')
+  if(!u) return alert('Enter username')
   localStorage.setItem('user',u)
   if(mode.value==='signup'){
     balance=0;daily=0;total=0
@@ -208,7 +222,7 @@ function load(){
   bal.innerText=balance
   daily.innerText=daily
   total.innerText=total
-  users.innerText=Math.floor(1500+Math.random()*3500)
+  users.innerText=Math.floor(1200+Math.random()*3800)
 }
 
 function logout(){
@@ -235,7 +249,7 @@ function loadPlans(){
   let h=''
   for(let i=1;i<=50;i++){
     let inv=200*i
-    let tot=Math.round(inv*2.3)
+    let tot=Math.round(inv*2.2)
     h+=`
     <div class="plan">
       <b>Plan ${i}</b><br>
