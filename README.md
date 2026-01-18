@@ -8,12 +8,12 @@
 :root{
   --gold:#FFD700;
   --accent:#FF8C00;
-  --dark:#111;
   --bg:#1a1a1a;
+  --card-bg:rgba(255,255,255,0.05);
 }
 body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#fff;overflow-x:hidden;}
 header{text-align:center;padding:25px;font-size:32px;font-weight:800;background:linear-gradient(90deg,var(--gold),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.page{max-width:500px;margin:20px auto;padding:25px;background:rgba(255,255,255,0.03);border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.5);}
+.page{max-width:500px;margin:20px auto;padding:25px;background:var(--card-bg);border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.5);}
 input,select,button{width:100%;padding:12px;margin-top:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:#fff;outline:none;}
 button{cursor:pointer;font-weight:700;background:linear-gradient(90deg,var(--gold),var(--accent));color:#111;transition:.2s;}
 button:hover{transform:translateY(-2px);box-shadow:0 6px 15px rgba(0,0,0,0.5);}
@@ -26,6 +26,8 @@ button:hover{transform:translateY(-2px);box-shadow:0 6px 15px rgba(0,0,0,0.5);}
 .plan img{width:100%;border-radius:10px;margin-bottom:8px;}
 .ad-box{padding:12px;margin:12px 0;background:rgba(255,215,0,0.1);border-radius:12px;text-align:center;}
 .countdown{font-weight:700;color:#FFD700;}
+.company-box{padding:15px;margin-bottom:20px;background:rgba(255,255,255,0.03);border-radius:12px;}
+.company-box h3{margin-bottom:8px;color:#FFD700;}
 </style>
 </head>
 <body>
@@ -52,7 +54,19 @@ button:hover{transform:translateY(-2px);box-shadow:0 6px 15px rgba(0,0,0,0.5);}
 <span>Active Members: <b id="activeMembers">0</b></span>
 </div>
 
-<h3>Ads Watch Plans</h3>
+<div class="company-box">
+<h3>About NEXA EARN</h3>
+<p>NEXA EARN 2022 se digital investment aur ads watching platform provide kar raha hai. Hum safe aur reliable ways offer karte hain daily profit grow karne ke liye. Users ko flexible plans aur ads watch options available hain jahan se wo earn kar sakte hain.</p>
+<ul>
+<li>50+ Investment Plans Rs 200 se start</li>
+<li>Daily Profit Automatic Update</li>
+<li>Watch Ads & Earn Bonus</li>
+<li>Fast Deposit & Withdrawal Options (JazzCash / EasyPaisa)</li>
+<li>Active Members Tracking</li>
+</ul>
+</div>
+
+<h3>Watch & Earn Ads</h3>
 <div id="adsPlans"></div>
 
 <h3>Investment Plans</h3>
@@ -166,7 +180,6 @@ function startAds(id,price,daily,days){
   document.getElementById('depositAmount').value=price;
   updateDepositNumber();
   setTimeout(()=>{
-    // Simulate Ads Watch
     for(let i=0;i<daily;i++){
       let reward = Math.round(price/days/daily);
       balance+=reward; totalProfit+=reward; dailyProfit+=reward;
