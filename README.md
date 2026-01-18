@@ -84,6 +84,7 @@ let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 let totalProfit = parseFloat(localStorage.getItem('nexa_total')||'0');
 let activeMembers = Math.floor(Math.random()*5000+1000);
 
+// Dashboard
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
 function login(){
   const u=document.getElementById('user').value.trim();
@@ -94,30 +95,35 @@ function login(){
   totalProfit = parseFloat(localStorage.getItem('nexa_total_'+u)||'0');
   updateDashboard();
 }
-function logout(){localStorage.setItem('nexa_balance_'+currentUser,balance);localStorage.setItem('nexa_daily_'+currentUser,dailyProfit);localStorage.setItem('nexa_total_'+currentUser,totalProfit);currentUser=null;location.reload();}
+function logout(){
+  localStorage.setItem('nexa_balance_'+currentUser,balance);
+  localStorage.setItem('nexa_daily_'+currentUser,dailyProfit);
+  localStorage.setItem('nexa_total_'+currentUser,totalProfit);
+  currentUser=null;location.reload();
+}
 function updateDashboard(){
   document.getElementById('dashUser').innerText=currentUser;
   document.getElementById('dashBalance').innerText=balance.toFixed(2);
   document.getElementById('dashDaily').innerText=dailyProfit.toFixed(2);
   document.getElementById('dashTotal').innerText=totalProfit.toFixed(2);
   document.getElementById('activeMembers').innerText=activeMembers;
-  document.getElementById('bottomNav').classList.remove('hidden');
   showPage('dashboard');
 }
 
+// Deposit
 function updateDepositNumber(){
   const method=document.getElementById('depositMethod').value;
   document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';
 }
 function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value); alert('Number copied');}
 function submitDeposit(){
-  alert('Deposit submitted');
   let amt=parseFloat(document.getElementById('depositAmount').value||0);
   balance+=amt; totalProfit+=amt; dailyProfit+=amt;
   localStorage.setItem('nexa_balance_'+currentUser,balance);
   localStorage.setItem('nexa_daily_'+currentUser,dailyProfit);
   localStorage.setItem('nexa_total_'+currentUser,totalProfit);
   updateDashboard();
+  alert('Deposit submitted');
 }
 
 // Investment plans
@@ -140,7 +146,7 @@ function buyPlan(amount){
   updateDepositNumber();
 }
 
-// Ads Watch Plans
+// Ads Watch Plans + Daily Reward
 function loadAdsPlans(){
   const adsPlans=document.getElementById('adsPlans');
   adsPlans.innerHTML='';
@@ -148,26 +154,35 @@ function loadAdsPlans(){
   adsArray.forEach((ad,i)=>{
     let plan=document.createElement('div');
     plan.className='plan';
-    plan.innerHTML=`<b>${ad.name}</b><br>Price: Rs ${ad.price}<br>Daily Ads: ${ad.daily}<br>Days: ${ad.days}<br><button onclick="buyAdsPlan(${ad.price})">Buy Now</button>`;
+    plan.innerHTML=`<b>${ad.name}</b><br>Price: Rs ${ad.price}<br>Daily Ads: ${ad.daily}<br>Days: ${ad.days}<br>
+    <button onclick="startAds(${i},${ad.price},${ad.daily},${ad.days})">Buy & Watch</button>
+    <div id="adBox${i}" class="ad-box hidden">Time: <span id="adCountdown${i}" class="countdown">0</span>s</div>`;
     adsPlans.appendChild(plan);
   });
-});
-function buyAdsPlan(amount){
+}
+
+function startAds(id,price,daily,days){
   showPage('deposit');
-  document.getElementById('depositAmount').value=amount;
+  document.getElementById('depositAmount').value=price;
   updateDepositNumber();
+  setTimeout(()=>{
+    // Simulate Ads Watch
+    for(let i=0;i<daily;i++){
+      let reward = Math.round(price/days/daily);
+      balance+=reward; totalProfit+=reward; dailyProfit+=reward;
+    }
+    localStorage.setItem('nexa_balance_'+currentUser,balance);
+    localStorage.setItem('nexa_daily_'+currentUser,dailyProfit);
+    localStorage.setItem('nexa_total_'+currentUser,totalProfit);
+    updateDashboard();
+    alert('Daily Ads completed. Balance updated.');
+  },3000);
 }
 
 // Initialize
-if(currentUser){updateDashboard(); loadPlans(); loadAdsPlans();}else{showPage('loginPage');loadPlans();loadAdsPlans();}
+if(currentUser){updateDashboard(); loadPlans(); loadAdsPlans();}
+else{showPage('loginPage');loadPlans();loadAdsPlans();}
 </script>
 
-<div id="bottomNav" class="nav hidden">
-<div onclick="showPage('dashboard')"><span class='ico'>🏠</span>Home</div>
-<div onclick="showPage('plans')"><span class='ico'>📦</span>Plans</div>
-<div onclick="showPage('deposit')"><span class='ico'>💰</span>Deposit</div>
-<div onclick="showPage('withdrawal')"><span class='ico'>💵</span>Withdraw</div>
-<div onclick="showPage('about')"><span class='ico'>ℹ️</span>About</div>
-</div>
 </body>
 </html>
