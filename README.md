@@ -51,8 +51,13 @@ button:hover{transform:translateY(-2px);box-shadow:0 6px 15px rgba(0,0,0,0.5);}
 <div class="user-box">
 <span>Active Members: <b id="activeMembers">0</b></span>
 </div>
-<div id="adsBox"></div>
+
+<h3>Ads Watch Plans</h3>
+<div id="adsPlans"></div>
+
+<h3>Investment Plans</h3>
 <div id="plansList"></div>
+
 <button onclick="logout()">Logout</button>
 </div>
 
@@ -70,33 +75,6 @@ button:hover{transform:translateY(-2px);box-shadow:0 6px 15px rgba(0,0,0,0.5);}
 <input id="depositTxId" placeholder="Transaction ID" />
 <input type="file" id="depositProof" />
 <button onclick="submitDeposit()">Submit Deposit</button>
-</div>
-
-<div id="withdrawal" class="page hidden">
-<h2>Withdrawal</h2>
-<select id="withdrawMethod">
-<option value="jazzcash">JazzCash</option>
-<option value="easypaisa">EasyPaisa</option>
-</select>
-<input id="withdrawAccount" placeholder="Account Number" />
-<input id="withdrawAmount" placeholder="Amount" />
-<button onclick="submitWithdraw()">Request Withdrawal</button>
-</div>
-
-<div id="about" class="page hidden">
-<h2>About NEXA EARN</h2>
-<p>NEXA EARN is operating since 2022. We provide secure digital investment plans, daily profits, and a premium investment experience. Our active members enjoy random offers, ads, and continuous updates.</p>
-<div class="ad-box">Random Photo / Ad</div>
-<div class="ad-box">Random Photo / Ad</div>
-<div class="ad-box">Random Photo / Ad</div>
-</div>
-
-<div id="bottomNav" class="nav hidden">
-<div onclick="showPage('dashboard')"><span class='ico'>🏠</span>Home</div>
-<div onclick="showPage('plans')"><span class='ico'>📦</span>Plans</div>
-<div onclick="showPage('deposit')"><span class='ico'>💰</span>Deposit</div>
-<div onclick="showPage('withdrawal')"><span class='ico'>💵</span>Withdraw</div>
-<div onclick="showPage('about')"><span class='ico'>ℹ️</span>About</div>
 </div>
 
 <script>
@@ -126,23 +104,32 @@ function updateDashboard(){
   document.getElementById('bottomNav').classList.remove('hidden');
   showPage('dashboard');
 }
+
 function updateDepositNumber(){
   const method=document.getElementById('depositMethod').value;
   document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';
 }
 function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value); alert('Number copied');}
-function submitDeposit(){alert('Deposit submitted'); balance+=parseFloat(document.getElementById('depositAmount').value||0); totalProfit+=parseFloat(document.getElementById('depositAmount').value||0); dailyProfit+=parseFloat(document.getElementById('depositAmount').value||0); localStorage.setItem('nexa_balance_'+currentUser,balance); localStorage.setItem('nexa_total_'+currentUser,totalProfit); localStorage.setItem('nexa_daily_'+currentUser,dailyProfit); updateDashboard();}
-function submitWithdraw(){alert('Withdrawal requested');}
+function submitDeposit(){
+  alert('Deposit submitted');
+  let amt=parseFloat(document.getElementById('depositAmount').value||0);
+  balance+=amt; totalProfit+=amt; dailyProfit+=amt;
+  localStorage.setItem('nexa_balance_'+currentUser,balance);
+  localStorage.setItem('nexa_daily_'+currentUser,dailyProfit);
+  localStorage.setItem('nexa_total_'+currentUser,totalProfit);
+  updateDashboard();
+}
 
+// Investment plans
 function loadPlans(){
-  const plansList = document.getElementById('plansList');
+  const plansList=document.getElementById('plansList');
   plansList.innerHTML='';
   for(let i=1;i<=50;i++){
-    const plan=document.createElement('div');
+    let multiplier=i<=5?2.4:2.2;
+    let days=25+i;
+    let invest=200+i*100;
+    let plan=document.createElement('div');
     plan.className='plan';
-    let multiplier = i<=5?2.4:2.2;
-    let days = 25 + i;
-    let invest = 200 + i*100;
     plan.innerHTML=`<img src='https://picsum.photos/400/150?random=${i}'><b>Plan ${i}</b><br>Invest: Rs ${invest}<br>Days: ${days}<br>Total Profit: Rs ${Math.round(invest*multiplier)}<br><button onclick="buyPlan(${invest})">Buy Now</button>`;
     plansList.appendChild(plan);
   }
@@ -153,16 +140,34 @@ function buyPlan(amount){
   updateDepositNumber();
 }
 
-if(currentUser){updateDashboard(); loadPlans();} else{showPage('loginPage');loadPlans();}
-
-// Random ads
-const adsBox=document.getElementById('adsBox');
-for(let i=1;i<=3;i++){
-  const ad=document.createElement('div');
-  ad.className='ad-box';
-  ad.innerText=`Random Special Offer / Ad ${i}`;
-  adsBox.appendChild(ad);
+// Ads Watch Plans
+function loadAdsPlans(){
+  const adsPlans=document.getElementById('adsPlans');
+  adsPlans.innerHTML='';
+  const adsArray=[{name:'Ads Plan 1',price:500,daily:3,days:10},{name:'Ads Plan 2',price:1000,daily:5,days:15}];
+  adsArray.forEach((ad,i)=>{
+    let plan=document.createElement('div');
+    plan.className='plan';
+    plan.innerHTML=`<b>${ad.name}</b><br>Price: Rs ${ad.price}<br>Daily Ads: ${ad.daily}<br>Days: ${ad.days}<br><button onclick="buyAdsPlan(${ad.price})">Buy Now</button>`;
+    adsPlans.appendChild(plan);
+  });
+});
+function buyAdsPlan(amount){
+  showPage('deposit');
+  document.getElementById('depositAmount').value=amount;
+  updateDepositNumber();
 }
+
+// Initialize
+if(currentUser){updateDashboard(); loadPlans(); loadAdsPlans();}else{showPage('loginPage');loadPlans();loadAdsPlans();}
 </script>
+
+<div id="bottomNav" class="nav hidden">
+<div onclick="showPage('dashboard')"><span class='ico'>🏠</span>Home</div>
+<div onclick="showPage('plans')"><span class='ico'>📦</span>Plans</div>
+<div onclick="showPage('deposit')"><span class='ico'>💰</span>Deposit</div>
+<div onclick="showPage('withdrawal')"><span class='ico'>💵</span>Withdraw</div>
+<div onclick="showPage('about')"><span class='ico'>ℹ️</span>About</div>
+</div>
 </body>
 </html>
