@@ -5,29 +5,93 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA EARN</title>
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#f2f2f2;color:#111;}
-header{text-align:center;font-size:32px;padding:20px;font-weight:700;background:#ff6f61;color:white;}
-.page{max-width:480px;margin:20px auto;padding:20px;background:white;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.1);}
-input,select,button{width:100%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #ccc;outline:none;font-size:15px;}
-button{background:#ff6f61;color:white;font-weight:700;cursor:pointer;transition:0.2s;}
-button:hover{opacity:0.9;}
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px 0;background:white;border-top:1px solid #ddd;}
-.nav div{text-align:center;cursor:pointer;}
-.nav div .ico{font-size:22px;display:block;margin-bottom:4px;}
-.hidden{display:none;}
-.user-box{background:#ffe6e0;padding:20px;border-radius:12px;margin-bottom:15px;text-align:center;font-weight:700;box-shadow:0 4px 15px rgba(0,0,0,0.1);}
-.plan-box{border:1px solid #ffb3aa;padding:12px;margin:10px 0;border-radius:10px;background:#fff0ef;display:flex;justify-content:space-between;align-items:center;}
-.plan-box:hover{box-shadow:0 6px 15px rgba(0,0,0,0.1);}
-.countdown{color:#ff6f61;font-weight:700;}
-.support-icon{display:flex;align-items:center;gap:6px;padding:10px;background:#ffe6e0;border-radius:10px;cursor:pointer;}
-.support-icon:hover{box-shadow:0 4px 15px rgba(0,0,0,0.1);}
-img.dashboard-img{width:100%;border-radius:10px;margin:10px 0;}
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #fff8f0, #ffe6e0);
+  color: #333;
+}
+header {
+  text-align: center;
+  font-size: 36px;
+  padding: 20px;
+  font-weight: 800;
+  color: #ff5c4d;
+  letter-spacing: 2px;
+}
+.page {
+  max-width: 480px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffffcc;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+input, select, button {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ffbfb2;
+  font-size: 15px;
+  outline: none;
+}
+button {
+  background: linear-gradient(90deg,#ff5c4d,#ff9980);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button:hover {opacity: 0.9;}
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  background: #fff4f0;
+  border-top: 1px solid #ffd1c1;
+}
+.nav div {text-align: center; cursor:pointer;}
+.nav div .ico {font-size: 22px; display:block; margin-bottom:4px;}
+.hidden {display:none;}
+.user-box {
+  background: #fff0ef;
+  padding: 22px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 700;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+.plan-box {
+  border: 1px solid #ffb3aa;
+  padding: 14px;
+  margin: 12px 0;
+  border-radius: 12px;
+  background:#fff0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.3s;
+}
+.plan-box:hover {box-shadow:0 8px 20px rgba(0,0,0,0.08);}
+.countdown {color:#ff5c4d;font-weight:700;}
+.support-icon {
+  display:flex;align-items:center;gap:6px;padding:12px;
+  background:#fff0ef;border-radius:12px;cursor:pointer;
+  transition:0.3s;
+}
+.support-icon:hover {box-shadow:0 6px 20px rgba(0,0,0,0.08);}
+img.dashboard-img{width:100%;border-radius:12px;margin:12px 0;}
 </style>
 </head>
 <body>
 <header>NEXA EARN</header>
 
-<!-- LOGIN -->
 <div id="loginPage" class="page">
   <h2>Login / Signup</h2>
   <input id="user" placeholder="Username"/>
@@ -35,7 +99,6 @@ img.dashboard-img{width:100%;border-radius:10px;margin:10px 0;}
   <button onclick="login()">Submit</button>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard" class="page hidden">
   <div class="user-box">
     <div>Username: <span id="dashUser">—</span></div>
@@ -45,7 +108,7 @@ img.dashboard-img{width:100%;border-radius:10px;margin:10px 0;}
   </div>
 
   <h3>Company Overview</h3>
-  <p>NEXA EARN has been providing secure and reliable digital investment opportunities since 2022. We prioritize transparency and customer support.</p>
+  <p>NEXA EARN has been operating since 2022, providing trusted digital investment services with transparency and professional support.</p>
   <img src="https://picsum.photos/400/200?random=1" class="dashboard-img"/>
   <img src="https://picsum.photos/400/200?random=2" class="dashboard-img"/>
   <img src="https://picsum.photos/400/200?random=3" class="dashboard-img"/>
@@ -54,7 +117,6 @@ img.dashboard-img{width:100%;border-radius:10px;margin:10px 0;}
   <div id="plansList"></div>
 </div>
 
-<!-- DEPOSIT -->
 <div id="deposit" class="page hidden">
   <h2>Deposit</h2>
   <select id="depositMethod" onchange="updateDepositNumber()">
@@ -71,7 +133,6 @@ img.dashboard-img{width:100%;border-radius:10px;margin:10px 0;}
   <button onclick="submitDeposit()">Submit Deposit</button>
 </div>
 
-<!-- WITHDRAWAL -->
 <div id="withdrawal" class="page hidden">
   <h2>Withdrawal</h2>
   <select id="withdrawMethod">
@@ -83,16 +144,14 @@ img.dashboard-img{width:100%;border-radius:10px;margin:10px 0;}
   <button onclick="submitWithdraw()">Request Withdrawal</button>
 </div>
 
-<!-- ABOUT & SUPPORT -->
 <div id="about" class="page hidden">
   <h2>About NEXA EARN</h2>
-  <p>We are committed to providing transparent investment opportunities. Our team ensures continuous support and professional service to our users.</p>
+  <p>Providing reliable and secure investment opportunities with full transparency and continuous professional support for all users.</p>
   <div class="support-icon" onclick="openSupport()">
     <span class="ico">🛠️</span> Support
   </div>
 </div>
 
-<!-- NAVIGATION -->
 <div id="bottomNav" class="nav hidden">
   <div onclick="showPage('dashboard')"><span class="ico">🏠</span>Home</div>
   <div onclick="showPage('plansPage')"><span class="ico">📦</span>Plans</div>
@@ -101,7 +160,6 @@ img.dashboard-img{width:100%;border-radius:10px;margin:10px 0;}
   <div onclick="showPage('about')"><span class="ico">ℹ️</span>About</div>
 </div>
 
-<!-- PLANS PAGE -->
 <div id="plansPage" class="page hidden">
   <h2>Investment Plans</h2>
   <div id="plansListPage"></div>
@@ -112,7 +170,6 @@ img.dashboard-img{width:100%;border-radius:10px;margin:10px 0;}
 let currentUser = localStorage.getItem('nexa_user')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
-let totalUsers = parseInt(localStorage.getItem('nexa_totalUsers')||'1000');
 
 // ===== PLANS =====
 let plansData=[];
