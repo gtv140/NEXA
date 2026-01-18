@@ -50,6 +50,7 @@ img.dashboard-img:hover{transform:scale(1.05);}
 <body>
 <header>NEXA EARN</header>
 
+<!-- LOGIN / SIGNUP -->
 <div id="loginPage" class="page">
   <h2>Login / Signup</h2>
   <select id="userOption"><option value="login">Login</option><option value="signup">New User Signup</option></select>
@@ -58,6 +59,7 @@ img.dashboard-img:hover{transform:scale(1.05);}
   <button onclick="login()">Submit</button>
 </div>
 
+<!-- DASHBOARD -->
 <div id="dashboard" class="page hidden">
   <div class="info-box">
     <div>Username: <span id="dashUser"></span></div>
@@ -80,6 +82,7 @@ img.dashboard-img:hover{transform:scale(1.05);}
   <button class="logout-btn" onclick="logout()">Logout</button>
 </div>
 
+<!-- DEPOSIT -->
 <div id="deposit" class="page hidden">
   <h2>Deposit</h2>
   <select id="depositMethod" onchange="updateDepositNumber()">
@@ -96,6 +99,7 @@ img.dashboard-img:hover{transform:scale(1.05);}
   <button onclick="submitDeposit()">Submit Deposit</button>
 </div>
 
+<!-- WITHDRAWAL -->
 <div id="withdrawal" class="page hidden">
   <h2>Withdrawal</h2>
   <select id="withdrawMethod">
@@ -107,11 +111,13 @@ img.dashboard-img:hover{transform:scale(1.05);}
   <button onclick="submitWithdraw()">Request Withdrawal</button>
 </div>
 
+<!-- SUPPORT -->
 <div id="support" class="page hidden">
   <h2>Support</h2>
   <div class="support-icon" onclick="openSupport()"><span class="ico">🛠️</span> WhatsApp Support</div>
 </div>
 
+<!-- NAV -->
 <div class="nav hidden" id="bottomNav">
   <div onclick="showPage('dashboard')"><span class="ico">🏠</span>Home</div>
   <div onclick="showPage('plansList')"><span class="ico">📦</span>Plans</div>
@@ -137,7 +143,7 @@ for(let i=1;i<=50;i++){
 // Ads Plans
 let adsData=[];
 for(let i=1;i<=10;i++){
-  adsData.push({id:i,name:'Ads Plan '+i,invest:500+(i-1)*100,days:10,dailyAds:3});
+  adsData.push({id:i,name:'Ads Plan '+i,invest:500+(i-1)*100,days:10,dailyAds:3,profit:10});
 }
 
 // Countdown timer for special offers
