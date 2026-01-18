@@ -6,46 +6,53 @@
 <title>NEXA EARN Dashboard</title>
 <style>
 :root{
-  --primary:#ff5c5c;
-  --secondary:#ffb86c;
-  --background:#f0f0f0;
-  --card-bg:#fff;
-  --text:#222;
-  --accent:#ff75a0;
+  --gold:#FFD700;
+  --dark-bg:#111;
+  --card-bg:rgba(0,0,0,0.7);
+  --text:#fff;
+  --accent:#FFA500;
 }
 *{box-sizing:border-box;}
-body{margin:0;font-family:'Arial',sans-serif;background:var(--background);color:var(--text);overflow-x:hidden;}
-header{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;text-align:center;padding:25px;font-size:28px;font-weight:700;border-radius:0 0 25px 25px;
-animation: headerGlow 3s ease-in-out infinite alternate;}
-@keyframes headerGlow{
-  0%{text-shadow:0 0 5px #ff5c5c;}
-  50%{text-shadow:0 0 20px #ffb86c;}
-  100%{text-shadow:0 0 5px #ff75a0;}
+body{margin:0;font-family:'Arial',sans-serif;background:var(--dark-bg);color:var(--text);overflow-x:hidden;}
+header{
+  background: linear-gradient(90deg, var(--gold), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size:32px;
+  text-align:center;
+  padding:25px;
+  font-weight:800;
+  text-shadow:0 0 10px var(--gold), 0 0 20px var(--accent);
+  animation: glow 3s ease-in-out infinite alternate;
 }
-.page{max-width:520px;margin:20px auto;padding:20px;background:var(--card-bg);border-radius:20px;box-shadow:0 10px 20px rgba(0,0,0,0.1);transition:all 0.3s ease;}
-input, select, button{width:100%;padding:12px;margin-top:12px;border-radius:12px;border:1px solid #ccc;outline:none;font-size:15px;}
-button{background:var(--accent);color:#fff;font-weight:700;cursor:pointer;transition:all 0.2s ease;border:none;}
-button:hover{opacity:0.9;transform:scale(1.02);}
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:14px;background:var(--card-bg);box-shadow:0 -3px 15px rgba(0,0,0,0.1);}
+@keyframes glow{
+  0%{text-shadow:0 0 10px var(--gold);}
+  50%{text-shadow:0 0 20px var(--accent);}
+  100%{text-shadow:0 0 30px var(--gold);}
+}
+.page{max-width:520px;margin:20px auto;padding:20px;background:var(--card-bg);border-radius:20px;box-shadow:0 0 25px var(--gold);transition:all 0.3s ease;}
+input, select, button{width:100%;padding:12px;margin-top:12px;border-radius:12px;border:1px solid var(--gold);outline:none;font-size:15px;background:rgba(0,0,0,0.6);color:var(--text);}
+button{background:var(--gold);color:#111;font-weight:700;cursor:pointer;transition:all 0.3s ease;box-shadow:0 0 10px var(--gold);}
+button:hover{transform:scale(1.05);box-shadow:0 0 20px var(--accent);}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:14px;background:var(--card-bg);box-shadow:0 -5px 25px var(--gold);}
 .nav div{text-align:center;cursor:pointer;transition:all 0.2s ease;}
 .nav div:hover{transform:scale(1.1);}
 .nav div .ico{font-size:22px;display:block;margin-bottom:4px;}
 .hidden{display:none;}
-.box{background:#fdfdfd;padding:18px;margin-bottom:18px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.08);transition:all 0.3s ease;}
-.box:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,0.15);}
-.box h3{margin:0 0 8px 0;font-size:17px;color:var(--accent);}
+.box{background:rgba(0,0,0,0.8);padding:18px;margin-bottom:18px;border-radius:15px;box-shadow:0 0 15px var(--gold);transition:all 0.3s ease;}
+.box:hover{transform:translateY(-3px);box-shadow:0 0 25px var(--accent);}
+.box h3{margin:0 0 8px 0;font-size:18px;color:var(--gold);}
 .box p{margin:3px 0;font-size:14px;}
-.plan-box{display:flex;justify-content:space-between;align-items:center;padding:15px;margin:12px 0;border-radius:15px;background:#fff;box-shadow:0 5px 15px rgba(0,0,0,0.08);transition:all 0.3s ease;}
-.plan-box:hover{transform:scale(1.02);box-shadow:0 10px 20px rgba(0,0,0,0.15);}
+.plan-box{display:flex;justify-content:space-between;align-items:center;padding:15px;margin:12px 0;border-radius:15px;background:rgba(0,0,0,0.85);box-shadow:0 0 15px var(--gold);transition:all 0.3s ease;}
+.plan-box:hover{transform:scale(1.03);box-shadow:0 0 25px var(--accent);}
 .plan-box .meta{flex:1;}
-.plan-box .meta b{display:block;margin-bottom:6px;color:var(--primary);}
-.plan-box .actions button{padding:10px 15px;transition:all 0.2s ease;}
-.plan-box .actions button:hover{transform:scale(1.05);}
-img.dashboard-photo{width:100%;border-radius:15px;margin-bottom:12px;animation:photoSlide 12s infinite alternate;}
-@keyframes photoSlide{
-  0%{opacity:0;transform:translateY(-10px);}
+.plan-box .meta b{display:block;margin-bottom:6px;color:var(--gold);}
+.plan-box .actions button{padding:10px 15px;}
+img.dashboard-photo{width:100%;border-radius:15px;margin-bottom:12px;animation:photoGlow 12s infinite alternate;}
+@keyframes photoGlow{
+  0%{opacity:0.6;transform:translateY(-5px);}
   50%{opacity:1;transform:translateY(0);}
-  100%{opacity:0;transform:translateY(10px);}
+  100%{opacity:0.6;transform:translateY(5px);}
 }
 </style>
 </head>
@@ -53,7 +60,6 @@ img.dashboard-photo{width:100%;border-radius:15px;margin-bottom:12px;animation:p
 
 <header>NEXA EARN</header>
 
-<!-- LOGIN / SIGNUP -->
 <div id="loginPage" class="page">
   <h2>Login / Signup</h2>
   <input id="username" placeholder="Username" />
@@ -61,7 +67,6 @@ img.dashboard-photo{width:100%;border-radius:15px;margin-bottom:12px;animation:p
   <button onclick="login()">Submit</button>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard" class="page hidden">
   <div class="box"><h3>Username</h3><p id="dashUser">—</p></div>
   <div class="box"><h3>Balance</h3><p>Rs <span id="dashBalance">0</span></p></div>
@@ -71,7 +76,7 @@ img.dashboard-photo{width:100%;border-radius:15px;margin-bottom:12px;animation:p
 
   <div class="box">
     <h3>Company Highlights</h3>
-    <p>NEXA EARN has been empowering digital investors since 2022. Fast, secure, and reliable platform with amazing features and user support.</p>
+    <p>NEXA EARN since 2022: fast, secure, premium investment platform with amazing features.</p>
     <img class="dashboard-photo" src="https://picsum.photos/400/150?random=1" />
     <img class="dashboard-photo" src="https://picsum.photos/400/150?random=2" />
     <img class="dashboard-photo" src="https://picsum.photos/400/150?random=3" />
@@ -80,13 +85,11 @@ img.dashboard-photo{width:100%;border-radius:15px;margin-bottom:12px;animation:p
   </div>
 </div>
 
-<!-- PLANS -->
 <div id="plans" class="page hidden">
   <h2>Investment Plans</h2>
   <div id="plansList"></div>
 </div>
 
-<!-- DEPOSIT -->
 <div id="deposit" class="page hidden">
   <h2>Deposit</h2>
   <select id="depositMethod" onchange="updateDepositNumber()">
@@ -103,7 +106,6 @@ img.dashboard-photo{width:100%;border-radius:15px;margin-bottom:12px;animation:p
   <button onclick="submitDeposit()">Submit Deposit</button>
 </div>
 
-<!-- WITHDRAWAL -->
 <div id="withdrawal" class="page hidden">
   <h2>Withdrawal</h2>
   <select id="withdrawMethod">
@@ -115,7 +117,6 @@ img.dashboard-photo{width:100%;border-radius:15px;margin-bottom:12px;animation:p
   <button onclick="submitWithdraw()">Request Withdrawal</button>
 </div>
 
-<!-- NAV -->
 <div class="nav hidden" id="bottomNav">
   <div onclick="showPage('dashboard')"><span class="ico">🏠</span>Home</div>
   <div onclick="showPage('plans')"><span class="ico">📦</span>Plans</div>
@@ -131,7 +132,6 @@ let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 let totalProfit = parseFloat(localStorage.getItem('nexa_total')||'0');
 let activeMembers = Math.floor(Math.random()*5000)+500;
 
-// ===== DASHBOARD / LOGIN =====
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
 function login(){
   const u=document.getElementById('username').value.trim();
