@@ -8,39 +8,45 @@
 :root{
   --primary:#ff5c5c;
   --secondary:#ffb86c;
-  --background:#f5f5f5;
-  --card-bg:#ffffff;
+  --background:#f0f0f0;
+  --card-bg:#fff;
   --text:#222;
   --accent:#ff75a0;
 }
 *{box-sizing:border-box;}
-body{margin:0;font-family:'Arial',sans-serif;background:var(--background);color:var(--text);}
-header{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;text-align:center;padding:20px;font-size:28px;font-weight:700;border-radius:0 0 20px 20px;}
-.page{max-width:500px;margin:20px auto;padding:20px;background:var(--card-bg);border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.1);}
-input, select, button{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:1px solid #ccc;outline:none;font-size:14px;}
-button{background:var(--accent);color:#fff;font-weight:700;cursor:pointer;border:none;}
-button:hover{opacity:0.9;}
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:12px;background:var(--card-bg);box-shadow:0 -2px 10px rgba(0,0,0,0.1);}
-.nav div{text-align:center;cursor:pointer;}
-.nav div .ico{font-size:20px;display:block;margin-bottom:4px;}
-.hidden{display:none;}
-.box{background:#f0f0f0;padding:15px;margin-bottom:15px;border-radius:12px;box-shadow:0 3px 10px rgba(0,0,0,0.05);}
-.box h3{margin:0 0 8px 0;font-size:16px;}
-.box p{margin:2px 0;font-size:14px;}
-.plan-box{display:flex;justify-content:space-between;align-items:center;padding:12px;margin:10px 0;border-radius:12px;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,0.05);}
-.plan-box .meta{flex:1;}
-.plan-box .meta b{display:block;margin-bottom:5px;}
-.plan-box .actions button{padding:8px 12px;}
-img.dashboard-photo{width:100%;border-radius:12px;margin-bottom:12px;}
-
-/* Animations for photos */
-@keyframes slide{
-  0%{opacity:0;}
-  50%{opacity:1;}
-  100%{opacity:0;}
+body{margin:0;font-family:'Arial',sans-serif;background:var(--background);color:var(--text);overflow-x:hidden;}
+header{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;text-align:center;padding:25px;font-size:28px;font-weight:700;border-radius:0 0 25px 25px;
+animation: headerGlow 3s ease-in-out infinite alternate;}
+@keyframes headerGlow{
+  0%{text-shadow:0 0 5px #ff5c5c;}
+  50%{text-shadow:0 0 20px #ffb86c;}
+  100%{text-shadow:0 0 5px #ff75a0;}
 }
-.slide-img{animation:slide 10s infinite;}
-
+.page{max-width:520px;margin:20px auto;padding:20px;background:var(--card-bg);border-radius:20px;box-shadow:0 10px 20px rgba(0,0,0,0.1);transition:all 0.3s ease;}
+input, select, button{width:100%;padding:12px;margin-top:12px;border-radius:12px;border:1px solid #ccc;outline:none;font-size:15px;}
+button{background:var(--accent);color:#fff;font-weight:700;cursor:pointer;transition:all 0.2s ease;border:none;}
+button:hover{opacity:0.9;transform:scale(1.02);}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:14px;background:var(--card-bg);box-shadow:0 -3px 15px rgba(0,0,0,0.1);}
+.nav div{text-align:center;cursor:pointer;transition:all 0.2s ease;}
+.nav div:hover{transform:scale(1.1);}
+.nav div .ico{font-size:22px;display:block;margin-bottom:4px;}
+.hidden{display:none;}
+.box{background:#fdfdfd;padding:18px;margin-bottom:18px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.08);transition:all 0.3s ease;}
+.box:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,0.15);}
+.box h3{margin:0 0 8px 0;font-size:17px;color:var(--accent);}
+.box p{margin:3px 0;font-size:14px;}
+.plan-box{display:flex;justify-content:space-between;align-items:center;padding:15px;margin:12px 0;border-radius:15px;background:#fff;box-shadow:0 5px 15px rgba(0,0,0,0.08);transition:all 0.3s ease;}
+.plan-box:hover{transform:scale(1.02);box-shadow:0 10px 20px rgba(0,0,0,0.15);}
+.plan-box .meta{flex:1;}
+.plan-box .meta b{display:block;margin-bottom:6px;color:var(--primary);}
+.plan-box .actions button{padding:10px 15px;transition:all 0.2s ease;}
+.plan-box .actions button:hover{transform:scale(1.05);}
+img.dashboard-photo{width:100%;border-radius:15px;margin-bottom:12px;animation:photoSlide 12s infinite alternate;}
+@keyframes photoSlide{
+  0%{opacity:0;transform:translateY(-10px);}
+  50%{opacity:1;transform:translateY(0);}
+  100%{opacity:0;transform:translateY(10px);}
+}
 </style>
 </head>
 <body>
@@ -65,10 +71,12 @@ img.dashboard-photo{width:100%;border-radius:12px;margin-bottom:12px;}
 
   <div class="box">
     <h3>Company Highlights</h3>
-    <p>NEXA EARN has been empowering digital investors since 2022. Fast, secure, and reliable platform.</p>
-    <img class="dashboard-photo slide-img" src="https://picsum.photos/400/150?random=1" />
-    <img class="dashboard-photo slide-img" src="https://picsum.photos/400/150?random=2" />
-    <img class="dashboard-photo slide-img" src="https://picsum.photos/400/150?random=3" />
+    <p>NEXA EARN has been empowering digital investors since 2022. Fast, secure, and reliable platform with amazing features and user support.</p>
+    <img class="dashboard-photo" src="https://picsum.photos/400/150?random=1" />
+    <img class="dashboard-photo" src="https://picsum.photos/400/150?random=2" />
+    <img class="dashboard-photo" src="https://picsum.photos/400/150?random=3" />
+    <img class="dashboard-photo" src="https://picsum.photos/400/150?random=4" />
+    <img class="dashboard-photo" src="https://picsum.photos/400/150?random=5" />
   </div>
 </div>
 
@@ -116,23 +124,20 @@ img.dashboard-photo{width:100%;border-radius:12px;margin-bottom:12px;}
 </div>
 
 <script>
+// ===== LOCAL STORAGE DATA =====
 let currentUser = localStorage.getItem('nexa_user')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 let totalProfit = parseFloat(localStorage.getItem('nexa_total')||'0');
-let userPlans = JSON.parse(localStorage.getItem('nexa_plans')||'[]');
 let activeMembers = Math.floor(Math.random()*5000)+500;
 
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-}
+// ===== DASHBOARD / LOGIN =====
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
 function login(){
   const u=document.getElementById('username').value.trim();
   const p=document.getElementById('password').value.trim();
   if(!u||!p){alert('Enter Username & Password');return;}
-  currentUser=u;
-  localStorage.setItem('nexa_user',currentUser);
+  currentUser=u; localStorage.setItem('nexa_user',currentUser);
   balance=0; dailyProfit=0; totalProfit=0;
   localStorage.setItem('nexa_balance',balance);
   localStorage.setItem('nexa_daily',dailyProfit);
@@ -153,9 +158,9 @@ function updateDashboard(){
 // ===== PLANS =====
 const plansData=[];
 for(let i=1;i<=50;i++){
-  const invest=200 + (i-1)*100;
-  const days=25 + i;
-  const multiplier=i<=5?2.4:2.2; // first 5 plans special
+  const invest=200+(i-1)*100;
+  const days=25+i;
+  const multiplier=i<=5?2.4:2.2;
   plansData.push({id:i,name:'Plan '+i,invest,total:Math.round(invest*multiplier),daily:Math.round((invest*multiplier)/days),days,special:i<=5});
 }
 function renderPlans(){
@@ -216,10 +221,10 @@ function submitWithdraw(){
   updateDashboard();
 }
 
-// Auto-increment active members randomly
+// Active members animation
 setInterval(()=>{activeMembers=Math.floor(Math.random()*5000)+500; if(document.getElementById('activeMembers')) document.getElementById('activeMembers').innerText=activeMembers;},5000);
 
+renderPlans();
 </script>
-
 </body>
 </html>
