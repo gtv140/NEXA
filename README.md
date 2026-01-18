@@ -14,7 +14,7 @@
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:linear-gradient(120deg, #222, #444);
+  background:linear-gradient(120deg,#222,#444);
   color:#fff;
 }
 header{
@@ -84,6 +84,10 @@ input,select{
   margin-bottom:4px;
 }
 .hidden{display:none;}
+.special-timer{
+  font-weight:bold;
+  color:#00ff00;
+}
 </style>
 </head>
 <body>
@@ -103,7 +107,7 @@ input,select{
   <div class="card">Active Members: <span id="activeMembers">0</span></div>
   <div class="card" id="companyInfo">
     <h3>About NEXA EARN</h3>
-    <p>Operating since 2022, NEXA EARN provides premium earning plans, ads rewards, and daily profits. Secure & reliable.</p>
+    <p>Operating since 2022, NEXA EARN provides premium earning plans, ads rewards, and daily profits. Secure & reliable platform with multiple earning options.</p>
   </div>
   <div id="randomPhotos"></div>
 </div>
@@ -172,6 +176,18 @@ for(let i=1;i<=10;i++){
   ads.push({id:i,name:'Ad '+i,profit:Math.floor(Math.random()*50+20)});
 }
 
+let specialCountdown = 24*60*60; // 24 hours in seconds
+function startCountdown(){
+  const timerEl = document.querySelectorAll('.special-timer');
+  setInterval(()=>{
+    if(specialCountdown>0) specialCountdown--;
+    let h=Math.floor(specialCountdown/3600);
+    let m=Math.floor((specialCountdown%3600)/60);
+    let s=specialCountdown%60;
+    timerEl.forEach(el=>el.innerText=`Time Left: ${h}h ${m}m ${s}s`);
+  },1000);
+}
+
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
@@ -225,9 +241,11 @@ function renderPlans(){
     div.innerHTML=`<h3>${p.name}${p.special?' (Special Offer)':''}</h3>
       <p>Invest: Rs ${p.invest}</p>
       <p>Total: Rs ${p.total} | Days: ${p.days}</p>
+      ${p.special?'<div class="special-timer"></div>':''}
       <button onclick="buyPlan(${p.id})">Buy Now</button>`;
     container.appendChild(div);
   });
+  startCountdown();
 }
 
 function buyPlan(id){
