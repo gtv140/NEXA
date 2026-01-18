@@ -6,39 +6,27 @@
 <title>NEXA EARN</title>
 <style>
 :root {
-  --primary: #ff0044;
-  --secondary: #00fff7;
-  --dark: #0e0e0e;
-  --bg: #111;
-  --accent: #ffcc00;
+  --primary:#ff0044;
+  --secondary:#00fff7;
+  --accent:#ffcc00;
+  --bg:#111;
+  --box:#222;
 }
-body {
-  margin:0;
-  font-family: Arial, sans-serif;
-  background: var(--bg);
-  color:#fff;
-  overflow-x:hidden;
-}
-header {
-  text-align:center;
-  font-size:28px;
-  padding:20px;
-  background: linear-gradient(90deg,var(--primary),var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.page { max-width:480px; margin:20px auto; padding:20px; border-radius:12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,204,0,0.2);}
-input,select,button { width:100%; padding:10px; margin-top:10px; border-radius:8px; border:none; background: rgba(255,255,255,0.05); color:#fff; }
-button { background: linear-gradient(90deg,var(--primary),var(--accent)); font-weight:700; cursor:pointer; }
-.nav { position: fixed; bottom:0; left:0; right:0; display:flex; justify-content:space-around; padding:10px 0; background: rgba(0,0,0,0.8);}
-.nav div { text-align:center; cursor:pointer;}
-.nav div .ico { font-size:22px; display:block; margin-bottom:4px;}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#fff;overflow-x:hidden;}
+header{text-align:center;font-size:28px;padding:20px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.page{max-width:480px;margin:20px auto;padding:20px;border-radius:12px;background:var(--box);border:1px solid rgba(255,204,0,0.2);}
+input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:none;background: rgba(255,255,255,0.05); color:#fff;}
+button{background: linear-gradient(90deg,var(--primary),var(--accent)); font-weight:700; cursor:pointer;}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px 0;background: rgba(0,0,0,0.85);}
+.nav div{text-align:center;cursor:pointer;}
+.nav div .ico{font-size:22px;display:block;margin-bottom:4px;}
 .hidden{display:none;}
-.box { padding:15px; margin:10px 0; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,204,0,0.2);}
-.icon-box { display:flex; flex-wrap:wrap; gap:10px; margin:15px 0;}
-.icon-item { flex:1 1 45%; background:rgba(255,255,255,0.05); border-radius:12px; padding:15px; text-align:center; cursor:pointer; border:1px solid rgba(255,204,0,0.2);}
-.icon-item:hover { box-shadow:0 4px 15px rgba(255,204,0,0.3);}
-img { width:100%; border-radius:12px; margin-top:10px;}
+.box{padding:15px;margin:10px 0;background:rgba(255,255,255,0.05);border-radius:12px;border:1px solid rgba(255,204,0,0.2);}
+.icon-box{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0;}
+.icon-item{flex:1 1 45%;background:rgba(255,255,255,0.05);border-radius:12px;padding:15px;text-align:center;cursor:pointer;border:1px solid rgba(255,204,0,0.2);}
+.icon-item:hover{box-shadow:0 4px 15px rgba(255,204,0,0.3);}
+img{width:100%;border-radius:12px;margin-top:10px;}
+.timer{font-weight:700;color:var(--accent);}
 </style>
 </head>
 <body>
@@ -47,10 +35,7 @@ img { width:100%; border-radius:12px; margin-top:10px;}
 <!-- LOGIN / SIGNUP -->
 <div id="loginPage" class="page">
 <h2>Login / Signup</h2>
-<select id="userOption">
-<option value="login">Login</option>
-<option value="signup">Signup</option>
-</select>
+<select id="userOption"><option value="login">Login</option><option value="signup">Signup</option></select>
 <input id="user" placeholder="Username"/>
 <input id="pass" placeholder="Password" type="password"/>
 <button onclick="login()">Submit</button>
@@ -68,7 +53,7 @@ img { width:100%; border-radius:12px; margin-top:10px;}
 
 <div class="box" id="companyInfo">
 <h3>About NEXA EARN</h3>
-<p>Operating since 2022, NEXA EARN provides digital investment opportunities with fast profit growth. Watch ads or buy plans to earn daily rewards.</p>
+<p>Operating since 2022, NEXA EARN provides fast and secure digital earnings through investment plans and ads watching. Daily profit credited automatically.</p>
 <img src="https://picsum.photos/400/200?random=1"/>
 <img src="https://picsum.photos/400/200?random=2"/>
 <img src="https://picsum.photos/400/200?random=3"/>
@@ -83,7 +68,6 @@ img { width:100%; border-radius:12px; margin-top:10px;}
 <div class="icon-item" onclick="showPage('support')">🛠️<br>Support</div>
 <div class="icon-item" onclick="invite()">👥<br>Invite Friends</div>
 </div>
-
 <button onclick="logout()">Logout</button>
 </div>
 
@@ -96,6 +80,7 @@ img { width:100%; border-radius:12px; margin-top:10px;}
 <!-- ADS WATCH -->
 <div id="ads" class="page hidden">
 <h2>Watch Ads</h2>
+<p>Buy ads plan and complete daily tasks to earn profit.</p>
 <div id="adsList"></div>
 </div>
 
@@ -142,133 +127,111 @@ img { width:100%; border-radius:12px; margin-top:10px;}
 </div>
 
 <script>
-// LocalStorage user data
-let currentUser = localStorage.getItem('nexa_user')||null;
-let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
-let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
-let totalProfit = parseFloat(localStorage.getItem('nexa_total')||'0');
+let currentUser=localStorage.getItem('nexa_user')||null;
+let balance=parseFloat(localStorage.getItem('nexa_balance')||'0');
+let dailyProfit=parseFloat(localStorage.getItem('nexa_daily')||'0');
+let totalProfit=parseFloat(localStorage.getItem('nexa_total')||'0');
 
 function updateDashboard(){
-  document.getElementById('dashUser').innerText=currentUser||'-';
-  document.getElementById('dashBalance').innerText=balance.toFixed(2);
-  document.getElementById('dashDaily').innerText=dailyProfit.toFixed(2);
-  document.getElementById('dashTotal').innerText=totalProfit.toFixed(2);
-  document.getElementById('activeMembers').innerText=Math.floor(Math.random()*5000)+100;
-  showPage('dashboard');
+document.getElementById('dashUser').innerText=currentUser||'-';
+document.getElementById('dashBalance').innerText=balance.toFixed(2);
+document.getElementById('dashDaily').innerText=dailyProfit.toFixed(2);
+document.getElementById('dashTotal').innerText=totalProfit.toFixed(2);
+document.getElementById('activeMembers').innerText=Math.floor(Math.random()*5000)+100;
+showPage('dashboard');
 }
 
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-}
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
 
 function login(){
-  const u = document.getElementById('user').value.trim();
-  const p = document.getElementById('pass').value.trim();
-  if(!u || !p){alert('Enter username and password'); return;}
-  currentUser = u;
-  localStorage.setItem('nexa_user', currentUser);
-  if(!localStorage.getItem('nexa_balance')) localStorage.setItem('nexa_balance',0);
-  if(!localStorage.getItem('nexa_daily')) localStorage.setItem('nexa_daily',0);
-  if(!localStorage.getItem('nexa_total')) localStorage.setItem('nexa_total',0);
-  balance = parseFloat(localStorage.getItem('nexa_balance'));
-  dailyProfit = parseFloat(localStorage.getItem('nexa_daily'));
-  totalProfit = parseFloat(localStorage.getItem('nexa_total'));
-  updateDashboard();
+const u=document.getElementById('user').value.trim();
+const p=document.getElementById('pass').value.trim();
+if(!u||!p){alert('Enter username and password');return;}
+currentUser=u;
+localStorage.setItem('nexa_user',currentUser);
+if(!localStorage.getItem('nexa_balance')) localStorage.setItem('nexa_balance',0);
+if(!localStorage.getItem('nexa_daily')) localStorage.setItem('nexa_daily',0);
+if(!localStorage.getItem('nexa_total')) localStorage.setItem('nexa_total',0);
+balance=parseFloat(localStorage.getItem('nexa_balance'));
+dailyProfit=parseFloat(localStorage.getItem('nexa_daily'));
+totalProfit=parseFloat(localStorage.getItem('nexa_total'));
+updateDashboard();
+showPlans();
+showAds();
 }
 
-function logout(){currentUser=null; localStorage.removeItem('nexa_user'); location.reload();}
+function logout(){currentUser=null;localStorage.removeItem('nexa_user');location.reload();}
 
-function updateDepositNumber(){
-  const method=document.getElementById('depositMethod').value;
-  document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';
-}
-function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value); alert('Number copied');}
+function updateDepositNumber(){document.getElementById('depositNumber').value=document.getElementById('depositMethod').value==='jazzcash'?'03705519562':'03379827882';}
+function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value);alert('Number copied');}
 
 function submitDeposit(){
-  const amount = parseFloat(document.getElementById('depositAmount').value);
-  if(!amount){alert('Enter amount'); return;}
-  balance += amount;
-  totalProfit += amount*0.1; // example
-  localStorage.setItem('nexa_balance',balance);
-  localStorage.setItem('nexa_total',totalProfit);
-  alert('Deposit submitted');
-  updateDashboard();
+const amount=parseFloat(document.getElementById('depositAmount').value);
+if(!amount){alert('Enter amount');return;}
+balance+=amount;
+totalProfit+=amount*0.1;
+localStorage.setItem('nexa_balance',balance);
+localStorage.setItem('nexa_total',totalProfit);
+alert('Deposit submitted');
+updateDashboard();
 }
 
 function submitWithdraw(){
-  const amount = parseFloat(document.getElementById('withdrawAmount').value);
-  if(!amount || amount>balance){alert('Invalid amount'); return;}
-  balance -= amount;
-  localStorage.setItem('nexa_balance',balance);
-  alert('Withdrawal requested');
-  updateDashboard();
+const amount=parseFloat(document.getElementById('withdrawAmount').value);
+if(!amount||amount>balance){alert('Invalid amount');return;}
+balance-=amount;
+localStorage.setItem('nexa_balance',balance);
+alert('Withdrawal requested');
+updateDashboard();
 }
 
 function invite(){prompt('Share this code with friends: NEXA123');}
 
 // Plans
 let plans=[];
-for(let i=1;i<=50;i++){
-  plans.push({
-    id:i,
-    name:'Plan '+i,
-    invest:200+i*50,
-    days:25+Math.floor(i*2),
-    multiplier:i<=5?2.4:2.2,
-    special:i<=5
-  });
-}
+for(let i=1;i<=50;i++){plans.push({id:i,name:'Plan '+i,invest:200+i*50,days:25+Math.floor(i*2),multiplier:i<=5?2.4:2.2,special:i<=5});}
 
 function showPlans(){
-  let html='';
-  plans.forEach(p=>{
-    html+=`<div class="box">
-    <strong>${p.name} ${p.special?'[Special Offer]':''}</strong><br>
-    Invest: Rs ${p.invest}<br>
-    Days: ${p.days}<br>
-    Total: Rs ${Math.round(p.invest*p.multiplier)}<br>
-    <button onclick="buyPlan(${p.id})">Buy Now</button>
-    </div>`;
-  });
-  document.getElementById('plansList').innerHTML=html;
+let html='';
+plans.forEach(p=>{html+=`<div class="box">
+<strong>${p.name} ${p.special?'[Special Offer]':''}</strong><br>
+Invest: Rs ${p.invest}<br>
+Days: ${p.days}<br>
+Total: Rs ${Math.round(p.invest*p.multiplier)}<br>
+<button onclick="buyPlan(${p.id})">Buy Now</button>
+</div>`;});
+document.getElementById('plansList').innerHTML=html;
 }
 
 function buyPlan(id){
-  const plan = plans.find(p=>p.id===id);
-  document.getElementById('depositAmount').value=plan.invest;
-  showPage('deposit');
+const plan=plans.find(p=>p.id===id);
+document.getElementById('depositAmount').value=plan.invest;
+showPage('deposit');
 }
 
-// Ads watch plans
+// Ads watch
 let adsPlans=[];
-for(let i=1;i<=7;i++){
-  adsPlans.push({id:i,name:'Ads Plan '+i, invest:500+i*50, days:10});
-}
+for(let i=1;i<=7;i++){adsPlans.push({id:i,name:'Ads Plan '+i,invest:500+i*50,days:10});}
 
 function showAds(){
-  let html='';
-  adsPlans.forEach(a=>{
-    html+=`<div class="box">
-    <strong>${a.name}</strong><br>
-    Invest: Rs ${a.invest}<br>
-    Days: ${a.days}<br>
-    <button onclick="buyAds(${a.id})">Buy Now</button>
-    </div>`;
-  });
-  document.getElementById('adsList').innerHTML=html;
+let html='';
+adsPlans.forEach(a=>{html+=`<div class="box">
+<strong>${a.name}</strong><br>
+Invest: Rs ${a.invest}<br>
+Days: ${a.days}<br>
+<button onclick="buyAds(${a.id})">Buy Now</button>
+</div>`;});
+document.getElementById('adsList').innerHTML=html;
 }
 
 function buyAds(id){
-  const ad = adsPlans.find(a=>a.id===id);
-  document.getElementById('depositAmount').value=ad.invest;
-  showPage('deposit');
+const ad=adsPlans.find(a=>a.id===id);
+document.getElementById('depositAmount').value=ad.invest;
+showPage('deposit');
 }
 
 // Init
 if(currentUser) updateDashboard();
-showPlans();
-showAds();
 </script>
 </body>
 </html>
