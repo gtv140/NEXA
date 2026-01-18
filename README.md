@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA EARN</title>
 <style>
-/* ===== FONTS & RESET ===== */
-body,html{margin:0;padding:0;font-family:'Segoe UI',sans-serif;}
-body{background:linear-gradient(120deg,#fffaf0,#ffe5d9);color:#333;overflow-x:hidden;}
+body,html{margin:0;padding:0;font-family:'Segoe UI',sans-serif;background:#fdf6f0;color:#333;}
 header{font-size:36px;text-align:center;padding:20px;font-weight:900;color:#ff5c4d;letter-spacing:2px;}
 .page{max-width:480px;margin:20px auto;padding:25px;background:#ffffffcc;border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,0.08);}
 input,select,button{width:100%;padding:12px;margin:10px 0;border-radius:12px;border:1px solid #ffbfb2;font-size:16px;outline:none;}
@@ -34,7 +32,7 @@ img.dashboard-img{width:100%;border-radius:14px;margin:12px 0;}
   <h2>Login / Signup</h2>
   <input id="user" placeholder="Username"/>
   <input id="pass" placeholder="Password" type="password"/>
-  <button onclick="login()">Submit</button>
+  <button id="loginBtn">Submit</button>
 </div>
 
 <div id="dashboard" class="page hidden">
@@ -52,7 +50,10 @@ img.dashboard-img{width:100%;border-radius:14px;margin:12px 0;}
   <img src="https://picsum.photos/400/200?random=2" class="dashboard-img"/>
   <img src="https://picsum.photos/400/200?random=3" class="dashboard-img"/>
   <img src="https://picsum.photos/400/200?random=4" class="dashboard-img"/>
-  
+</div>
+
+<div id="plansPage" class="page hidden">
+  <h2>Investment Plans</h2>
   <div id="plansListPage"></div>
 </div>
 
@@ -92,25 +93,19 @@ img.dashboard-img{width:100%;border-radius:14px;margin:12px 0;}
 </div>
 
 <div id="bottomNav" class="nav hidden">
-  <div onclick="showPage('dashboard')"><span class="ico">🏠</span>Home</div>
-  <div onclick="showPage('plansPage')"><span class="ico">📦</span>Plans</div>
-  <div onclick="showPage('deposit')"><span class="ico">💰</span>Deposit</div>
-  <div onclick="showPage('withdrawal')"><span class="ico">💵</span>Withdraw</div>
-  <div onclick="showPage('about')"><span class="ico">ℹ️</span>About</div>
-</div>
-
-<div id="plansPage" class="page hidden">
-  <h2>Investment Plans</h2>
-  <div id="plansListPage"></div>
+  <div id="homeIcon"><span class="ico">🏠</span>Home</div>
+  <div id="plansIcon"><span class="ico">📦</span>Plans</div>
+  <div id="depositIcon"><span class="ico">💰</span>Deposit</div>
+  <div id="withdrawIcon"><span class="ico">💵</span>Withdraw</div>
+  <div id="aboutIcon"><span class="ico">ℹ️</span>About</div>
+  <div id="logoutIcon"><span class="ico">🚪</span>Logout</div>
 </div>
 
 <script>
-// ===== STORAGE =====
 let currentUser = localStorage.getItem('nexa_user')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 
-// ===== PLANS =====
 let plansData=[];
 for(let i=1;i<=50;i++){
   let invest = 200+i*50;
@@ -119,11 +114,18 @@ for(let i=1;i<=50;i++){
   plansData.push({id:i,name:`Plan ${i}`,invest,total:Math.round(invest*multiplier),daily:Math.round((invest*multiplier)/days),days,offerEnd:new Date().getTime()+24*60*60*1000});
 }
 
-// ===== FUNCTIONS =====
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
 }
+
+document.getElementById('loginBtn').onclick=login;
+document.getElementById('homeIcon').onclick=()=>showPage('dashboard');
+document.getElementById('plansIcon').onclick=()=>showPage('plansPage');
+document.getElementById('depositIcon').onclick=()=>showPage('deposit');
+document.getElementById('withdrawIcon').onclick=()=>showPage('withdrawal');
+document.getElementById('aboutIcon').onclick=()=>showPage('about');
+document.getElementById('logoutIcon').onclick=()=>logout();
 
 function login(){
   const u=document.getElementById('user').value.trim();
