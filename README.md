@@ -6,38 +6,45 @@
 <title>NEXA EARN</title>
 <style>
 :root {
-  --primary: #ff0044;
-  --secondary: #00fff7;
-  --accent: #ffcc00;
-  --bg: #111;
+  --primary:#ff0044;
+  --secondary:#00fff7;
+  --accent:#ffcc00;
+  --dark:#111;
+  --light:#fff;
 }
-body {
+body{
   margin:0;
-  font-family: Arial, sans-serif;
-  background: var(--bg);
+  font-family:Arial,sans-serif;
+  background: linear-gradient(120deg,#111,#000,#222);
   color:#fff;
   overflow-x:hidden;
+  animation:bgAnim 15s linear infinite alternate;
 }
-header {
+@keyframes bgAnim{
+  0%{background:linear-gradient(120deg,#111,#000,#222);}
+  50%{background:linear-gradient(120deg,#111,#111,#333);}
+  100%{background:linear-gradient(120deg,#222,#000,#111);}
+}
+header{
   text-align:center;
   font-size:28px;
   padding:20px;
-  background: linear-gradient(90deg,var(--primary),var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background:linear-gradient(90deg,var(--primary),var(--secondary),var(--accent));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
-.page { max-width:480px; margin:20px auto; padding:20px; border-radius:12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,204,0,0.2);}
-input,select,button { width:100%; padding:10px; margin-top:10px; border-radius:8px; border:none; background: rgba(255,255,255,0.05); color:#fff; }
-button { background: linear-gradient(90deg,var(--primary),var(--accent)); font-weight:700; cursor:pointer; }
-.nav { position: fixed; bottom:0; left:0; right:0; display:flex; justify-content:space-around; padding:10px 0; background: rgba(0,0,0,0.85);}
-.nav div { text-align:center; cursor:pointer;}
-.nav div .ico { font-size:22px; display:block; margin-bottom:4px;}
+.page{ max-width:480px;margin:20px auto;padding:20px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,204,0,0.2);}
+input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:none;background: rgba(255,255,255,0.05);color:#fff;}
+button{background:linear-gradient(90deg,var(--primary),var(--accent));font-weight:700;cursor:pointer;}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px 0;background: rgba(0,0,0,0.8);}
+.nav div{text-align:center;cursor:pointer;}
+.nav div .ico{font-size:22px;display:block;margin-bottom:4px;}
 .hidden{display:none;}
-.box { padding:15px; margin:10px 0; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,204,0,0.2);}
-.icon-box { display:flex; flex-wrap:wrap; gap:10px; margin:15px 0;}
-.icon-item { flex:1 1 45%; background:rgba(255,255,255,0.05); border-radius:12px; padding:15px; text-align:center; cursor:pointer; border:1px solid rgba(255,204,0,0.2);}
-.icon-item:hover { box-shadow:0 4px 15px rgba(255,204,0,0.3);}
-img { width:100%; border-radius:12px; margin-top:10px;}
+.box{padding:15px;margin:10px 0;background:rgba(255,255,255,0.05);border-radius:12px;border:1px solid rgba(255,204,0,0.2);}
+.icon-box{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0;}
+.icon-item{flex:1 1 45%;background:rgba(255,255,255,0.05);border-radius:12px;padding:15px;text-align:center;cursor:pointer;border:1px solid rgba(255,204,0,0.2);}
+.icon-item:hover{box-shadow:0 4px 15px rgba(255,204,0,0.3);}
+img{width:100%;border-radius:12px;margin-top:10px;}
 </style>
 </head>
 <body>
@@ -67,7 +74,7 @@ img { width:100%; border-radius:12px; margin-top:10px;}
 
 <div class="box" id="companyInfo">
 <h3>About NEXA EARN</h3>
-<p>Operating since 2022, NEXA EARN provides digital investment opportunities with fast profit growth. Watch ads or buy plans to earn daily rewards.</p>
+<p>Operating since 2022, NEXA EARN provides digital investment opportunities with fast profit growth. Watch ads or buy plans to earn daily rewards. Join thousands of active members!</p>
 <img src="https://picsum.photos/400/200?random=1"/>
 <img src="https://picsum.photos/400/200?random=2"/>
 <img src="https://picsum.photos/400/200?random=3"/>
