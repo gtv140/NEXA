@@ -45,6 +45,7 @@ img.dashboard-img{width:100%;border-radius:12px;margin:10px 0;transition:0.5s;}
 img.dashboard-img:hover{transform:scale(1.05);}
 .timer{margin-top:10px;font-weight:700;}
 .logout-btn{margin-top:10px;background:#ff4c4c;color:#fff;}
+.ad-task-btn{margin-top:10px;background:#1E90FF;color:#fff;}
 </style>
 </head>
 <body>
@@ -71,7 +72,7 @@ img.dashboard-img:hover{transform:scale(1.05);}
   </div>
   <div id="companyDetails">
     <h3>About NEXA EARN</h3>
-    <p>Operating since 2022, NEXA EARN provides safe digital investment opportunities with daily returns. Earn by plans or watching ads. Reliable, fast, and user-friendly.</p>
+    <p>Operating since 2022, NEXA EARN provides safe digital investment opportunities. Earn by plans or watching ads daily.</p>
     <img class="dashboard-img" src="https://picsum.photos/400/150?random=1"/>
     <img class="dashboard-img" src="https://picsum.photos/400/150?random=2"/>
     <img class="dashboard-img" src="https://picsum.photos/400/150?random=3"/>
@@ -133,6 +134,7 @@ let currentUser = localStorage.getItem('nexa_user')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 let activeUsers = parseInt(localStorage.getItem('nexa_active')||Math.floor(Math.random()*5000));
+let adsWatchedToday = parseInt(localStorage.getItem('nexa_ads_watched')||0);
 
 // Plans
 let plansData=[];
@@ -192,7 +194,10 @@ function updateDashboard(){
   document.getElementById('dashDaily').innerText=dailyProfit;
   document.getElementById('dashActive').innerText=activeUsers;
   document.getElementById('bottomNav').classList.remove('hidden');
+  renderAdsTask();
 }
+
+// Render Plans
 function renderPlans(){
   const container=document.getElementById('plansList');container.innerHTML='';
   plansData.forEach((p,i)=>{
@@ -208,6 +213,8 @@ function renderPlans(){
     container.appendChild(card);
   });
 }
+
+// Render Ads Plans
 function renderAds(){
   const container=document.getElementById('adsList');container.innerHTML='';
   adsData.forEach(a=>{
@@ -220,13 +227,43 @@ function renderAds(){
     container.appendChild(card);
   });
 }
+
+// Ads Daily Task
+function renderAdsTask(){
+  const container=document.getElementById('adsList');
+  if(balance===0){container.innerHTML='<p>Deposit first to unlock Ads plans.</p>'; return;}
+  adsData.forEach(a=>{
+    const card=document.createElement('div');
+    card.className='card';
+    card.innerHTML=`<h3>${a.name} Task</h3>
+    <p>Watch ${a.dailyAds} Ads daily to earn Rs ${a.profit} per day</p>
+    <button class="ad-task-btn" onclick="watchAd(${a.id})">Watch Ad</button>`;
+    container.appendChild(card);
+  });
+}
+
+function watchAd(id){
+  alert('Ad is playing... wait 5 sec');
+  setTimeout(()=>{
+    alert('Ad watched! Rs 10 added to balance.');
+    balance+=10;
+    dailyProfit+=10;
+    localStorage.setItem('nexa_balance',balance);
+    localStorage.setItem('nexa_daily',dailyProfit);
+    updateDashboard();
+  },5000);
+}
+
 function buyPlan(id){alert('Plan '+id+' selected. Proceed to deposit.');showPage('deposit');document.getElementById('depositAmount').value=plansData[id-1].invest;}
 function buyAds(id){alert('Ads Plan '+id+' selected. Proceed to deposit.');showPage('deposit');document.getElementById('depositAmount').value=adsData[id-1].invest;}
+
 function updateDepositNumber(){const method=document.getElementById('depositMethod').value;document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';}
 function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value);alert('Number copied');}
 function submitDeposit(){alert('Deposit submitted');balance+=parseFloat(document.getElementById('depositAmount').value);dailyProfit+=Math.floor(document.getElementById('depositAmount').value*0.02);localStorage.setItem('nexa_balance',balance);localStorage.setItem('nexa_daily',dailyProfit);updateDashboard();}
 function submitWithdraw(){alert('Withdrawal requested');balance-=parseFloat(document.getElementById('withdrawAmount').value);localStorage.setItem('nexa_balance',balance);updateDashboard();}
 function openSupport(){window.open('https://chat.whatsapp.com/GJEVKhdDeNKCNkA8r3gONu','_blank');}
+
+// Active Users random update
 setInterval(()=>{activeUsers+=Math.floor(Math.random()*5);localStorage.setItem('nexa_active',activeUsers);if(document.getElementById('dashActive'))document.getElementById('dashActive').innerText=activeUsers;},5000);
 </script>
 </body>
