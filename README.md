@@ -5,51 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA EARN</title>
 <style>
-:root {
-  --primary: #ff0044;
-  --secondary: #00f7ff;
-  --accent: #ffcc00;
-  --bg: #0a0a0a;
-  --hoverGlow: rgba(255,255,255,0.2);
+:root{
+--primary:#ff0044;
+--secondary:#00fff7;
+--accent:#ffcc00;
+--bg:#111;
+--box:#222;
+--text:#fff;
 }
-body {
-  margin:0;
-  font-family: Arial, sans-serif;
-  background: var(--bg);
-  color:#fff;
-  overflow-x:hidden;
-}
-header {
-  text-align:center;
-  font-size:30px;
-  padding:20px;
-  background: linear-gradient(90deg,var(--primary),var(--secondary),var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: neonHeader 2s ease-in-out infinite alternate;
-}
-@keyframes neonHeader{
-  0%{text-shadow:0 0 5px var(--primary),0 0 10px var(--secondary);}
-  50%{text-shadow:0 0 10px var(--accent),0 0 20px var(--secondary);}
-  100%{text-shadow:0 0 5px var(--primary),0 0 15px var(--secondary);}
-}
-.page { max-width:480px; margin:20px auto; padding:20px; border-radius:12px; background:rgba(255,255,255,0.03);}
-input,select,button { width:100%; padding:10px; margin-top:10px; border-radius:8px; border:none; background: rgba(255,255,255,0.05); color:#fff; transition:0.3s; }
-input:focus, select:focus{outline:none; box-shadow:0 0 10px var(--secondary);}
-button { background: linear-gradient(90deg,var(--primary),var(--secondary),var(--accent)); font-weight:700; cursor:pointer; }
-button:hover { transform:scale(1.05); box-shadow:0 0 15px var(--secondary),0 0 20px var(--primary);}
-.box { padding:15px; margin:10px 0; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,204,0,0.2); box-shadow:0 0 10px var(--primary); transition:0.3s;}
-.box:hover { box-shadow:0 0 20px var(--secondary),0 0 25px var(--accent); transform:scale(1.02);}
-.icon-box { display:flex; flex-wrap:wrap; gap:10px; margin:15px 0;}
-.icon-item { flex:1 1 45%; background:rgba(255,255,255,0.05); border-radius:12px; padding:15px; text-align:center; cursor:pointer; border:1px solid rgba(255,204,0,0.2); transition:0.3s; }
-.icon-item:hover { box-shadow:0 0 15px var(--secondary), 0 0 20px var(--primary); transform:scale(1.05);}
-img { width:100%; border-radius:12px; margin-top:10px;}
-.carousel { display:flex; overflow-x:auto; scroll-behavior:smooth; gap:10px; animation:autoSlide 20s linear infinite;}
-.carousel img { flex:0 0 300px; height:150px; object-fit:cover; border:1px solid rgba(255,255,255,0.2);}
-@keyframes autoSlide { 0%{transform:translateX(0);} 25%{transform:translateX(-25%);} 50%{transform:translateX(-50%);} 75%{transform:translateX(-75%);} 100%{transform:translateX(0);} }
-.ad-task { padding:10px; margin:10px 0; background: rgba(0,0,0,0.2); border-radius:12px; text-align:center; box-shadow:0 0 10px var(--primary);}
-.ad-task button { margin-top:10px; background: linear-gradient(90deg,var(--secondary),var(--accent)); transition:0.3s;}
-.ad-task button:hover { transform:scale(1.05);}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+header{text-align:center;font-size:28px;padding:20px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.page{max-width:480px;margin:20px auto;padding:20px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,204,0,0.2);}
+input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:none;background: rgba(255,255,255,0.05);color:#fff;}
+button{background:linear-gradient(90deg,var(--primary),var(--accent));font-weight:700;cursor:pointer;}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px 0;background: rgba(0,0,0,0.8);}
+.nav div{text-align:center;cursor:pointer;}
+.nav div .ico{font-size:22px;display:block;margin-bottom:4px;}
+.hidden{display:none;}
+.box{padding:15px;margin:10px 0;background:var(--box);border-radius:12px;border:1px solid rgba(255,204,0,0.2);}
+.icon-box{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0;}
+.icon-item{flex:1 1 45%;background:var(--box);border-radius:12px;padding:15px;text-align:center;cursor:pointer;border:1px solid rgba(255,204,0,0.2);}
+.icon-item:hover{box-shadow:0 4px 15px rgba(255,204,0,0.3);}
+img{width:100%;border-radius:12px;margin-top:10px;}
 </style>
 </head>
 <body>
@@ -69,7 +46,7 @@ img { width:100%; border-radius:12px; margin-top:10px;}
 
 <!-- DASHBOARD -->
 <div id="dashboard" class="page hidden">
-<div class="box">
+<div class="box" id="userInfo">
 <strong>Username:</strong> <span id="dashUser">-</span><br>
 <strong>Balance:</strong> Rs <span id="dashBalance">0</span><br>
 <strong>Daily Profit:</strong> Rs <span id="dashDaily">0</span><br>
@@ -77,16 +54,12 @@ img { width:100%; border-radius:12px; margin-top:10px;}
 <strong>Active Members:</strong> <span id="activeMembers">0</span>
 </div>
 
-<div class="box">
+<div class="box" id="companyInfo">
 <h3>About NEXA EARN</h3>
-<p>Operating since 2022, NEXA EARN provides fast digital investment opportunities. Earn daily by watching ads or buying plans.</p>
-<div class="carousel">
+<p>Operating since 2022, NEXA EARN provides digital investment opportunities with fast profit growth. Watch ads or buy plans to earn daily rewards.</p>
 <img src="https://picsum.photos/400/200?random=1"/>
 <img src="https://picsum.photos/400/200?random=2"/>
 <img src="https://picsum.photos/400/200?random=3"/>
-<img src="https://picsum.photos/400/200?random=4"/>
-<img src="https://picsum.photos/400/200?random=5"/>
-</div>
 </div>
 
 <div class="icon-box">
@@ -108,11 +81,10 @@ img { width:100%; border-radius:12px; margin-top:10px;}
 <div id="plansList"></div>
 </div>
 
-<!-- ADS -->
+<!-- ADS WATCH -->
 <div id="ads" class="page hidden">
 <h2>Watch Ads</h2>
 <div id="adsList"></div>
-<div id="adsTasks"></div>
 </div>
 
 <!-- DEPOSIT -->
@@ -163,8 +135,6 @@ let currentUser = localStorage.getItem('nexa_user')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 let totalProfit = parseFloat(localStorage.getItem('nexa_total')||'0');
-let lastDaily = parseInt(localStorage.getItem('nexa_lastDay')||0);
-let userAdsTasks = JSON.parse(localStorage.getItem('nexa_adsTasks')||'{}');
 
 function updateDashboard(){
   document.getElementById('dashUser').innerText=currentUser||'-';
@@ -178,7 +148,6 @@ function updateDashboard(){
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
-  if(id==='ads') renderAdsTasks();
 }
 
 function login(){
@@ -193,38 +162,101 @@ function login(){
   balance = parseFloat(localStorage.getItem('nexa_balance'));
   dailyProfit = parseFloat(localStorage.getItem('nexa_daily'));
   totalProfit = parseFloat(localStorage.getItem('nexa_total'));
-  const today = new Date().getDate();
-  if(today!==lastDaily){ dailyProfit=0; lastDaily=today; localStorage.setItem('nexa_lastDay',lastDaily); localStorage.setItem('nexa_daily',dailyProfit);}
-  if(!userAdsTasks[currentUser]) userAdsTasks[currentUser]=[];
-  localStorage.setItem('nexa_adsTasks',JSON.stringify(userAdsTasks));
   updateDashboard();
 }
 
 function logout(){currentUser=null; localStorage.removeItem('nexa_user'); location.reload();}
 
-function updateDepositNumber(){document.getElementById('depositNumber').value=document.getElementById('depositMethod').value==='jazzcash'?'03705519562':'03379827882';}
+function updateDepositNumber(){
+  const method=document.getElementById('depositMethod').value;
+  document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';
+}
 function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value); alert('Number copied');}
-function submitDeposit(){const amount = parseFloat(document.getElementById('depositAmount').value); if(!amount){alert('Enter amount'); return;} balance += amount; totalProfit += amount*0.1; dailyProfit += amount*0.05; localStorage.setItem('nexa_balance',balance); localStorage.setItem('nexa_total',totalProfit); localStorage.setItem('nexa_daily',dailyProfit); alert('Deposit submitted'); updateDashboard();}
-function submitWithdraw(){const amount = parseFloat(document.getElementById('withdrawAmount').value); if(!amount || amount>balance){alert('Invalid amount'); return;} balance -= amount; localStorage.setItem('nexa_balance',balance); alert('Withdrawal requested'); updateDashboard();}
+
+function submitDeposit(){
+  const amount = parseFloat(document.getElementById('depositAmount').value);
+  if(!amount){alert('Enter amount'); return;}
+  balance += amount;
+  totalProfit += amount*0.1; // example
+  localStorage.setItem('nexa_balance',balance);
+  localStorage.setItem('nexa_total',totalProfit);
+  alert('Deposit submitted');
+  updateDashboard();
+}
+
+function submitWithdraw(){
+  const amount = parseFloat(document.getElementById('withdrawAmount').value);
+  if(!amount || amount>balance){alert('Invalid amount'); return;}
+  balance -= amount;
+  localStorage.setItem('nexa_balance',balance);
+  alert('Withdrawal requested');
+  updateDashboard();
+}
+
 function invite(){prompt('Share this code with friends: NEXA123');}
 
 // Plans
 let plans=[];
-for(let i=1;i<=50;i++){plans.push({id:i,name:'Plan '+i,invest:200+i*50,days:25+Math.floor(i*2),multiplier:i<=5?2.4:2.2,special:i<=5});}
-function showPlans(){let html=''; plans.forEach(p=>{html+=`<div class="box"><strong>${p.name} ${p.special?'[Special Offer]':''}</strong><br>Invest: Rs ${p.invest}<br>Days: ${p.days}<br>Total: Rs ${Math.round(p.invest*p.multiplier)}<br><button onclick="buyPlan(${p.id})">Buy Now</button></div>`;}); document.getElementById('plansList').innerHTML=html;}
-function buyPlan(id){const plan = plans.find(p=>p.id===id); document.getElementById('depositAmount').value=plan.invest; showPage('deposit');}
+for(let i=1;i<=50;i++){
+  plans.push({
+    id:i,
+    name:'Plan '+i,
+    invest:200+i*50,
+    days:25+Math.floor(i*2),
+    multiplier:i<=5?2.4:2.2,
+    special:i<=5
+  });
+}
 
-// Ads
+function showPlans(){
+  let html='';
+  plans.forEach(p=>{
+    html+=`<div class="box">
+    <strong>${p.name} ${p.special?'[Special Offer]':''}</strong><br>
+    Invest: Rs ${p.invest}<br>
+    Days: ${p.days}<br>
+    Total: Rs ${Math.round(p.invest*p.multiplier)}<br>
+    <button onclick="buyPlan(${p.id})">Buy Now</button>
+    </div>`;
+  });
+  document.getElementById('plansList').innerHTML=html;
+}
+
+function buyPlan(id){
+  const plan = plans.find(p=>p.id===id);
+  document.getElementById('depositAmount').value=plan.invest;
+  showPage('deposit');
+}
+
+// Ads watch plans
 let adsPlans=[];
-for(let i=1;i<=7;i++){adsPlans.push({id:i,name:'Ads Plan '+i, invest:500+i*50, days:10, dailyAds:3});}
-function showAds(){let html=''; adsPlans.forEach(a=>{html+=`<div class="box"><strong>${a.name}</strong><br>Invest: Rs ${a.invest}<br>Days: ${a.days}<br>Daily Ads: ${a.dailyAds}<br><button onclick="buyAds(${a.id})">Buy Now</button></div>`;}); document.getElementById('adsList').innerHTML=html;}
-function buyAds(id){const ad = adsPlans.find(a=>a.id===id); document.getElementById('depositAmount').value=ad.invest; if(!userAdsTasks[currentUser]) userAdsTasks[currentUser]=[]; userAdsTasks[currentUser].push({planId:id, remainingDays:ad.days, dailyAds:ad.dailyAds, completed:0}); localStorage.setItem('nexa_adsTasks',JSON.stringify(userAdsTasks)); showPage('deposit');}
-function renderAdsTasks(){const tasksDiv = document.getElementById('adsTasks'); tasksDiv.innerHTML=''; if(!userAdsTasks[currentUser] || userAdsTasks[currentUser].length===0){ tasksDiv.innerHTML='<p>No active ads plans. Buy plan to start tasks.</p>'; return;} userAdsTasks[currentUser].forEach((task,index)=>{const planInfo = adsPlans.find(a=>a.id===task.planId); const div = document.createElement('div'); div.className='ad-task'; div.innerHTML=`<strong>${planInfo.name}</strong><br>Remaining Days: ${task.remainingDays}<br>Daily Ads: ${task.dailyAds - task.completed}<br><button onclick="watchAd(${index})">Watch Ad</button><div style="margin-top:8px;"><strong>Coming Soon:</strong><br><img src="https://picsum.photos/100/100?random=${index+10}" style="border-radius:50%; margin-top:5px;"></div>`; tasksDiv.appendChild(div);});}
-function watchAd(index){const task = userAdsTasks[currentUser][index]; if(task.completed >= task.dailyAds){alert('Daily ads completed'); return;} task.completed++; balance += 10; dailyProfit += 10; localStorage.setItem('nexa_balance',balance); localStorage.setItem('nexa_daily',dailyProfit); localStorage.setItem('nexa_adsTasks',JSON.stringify(userAdsTasks)); alert('Ad watched! Rs 10 added'); renderAdsTasks(); updateDashboard();}
+for(let i=1;i<=7;i++){
+  adsPlans.push({id:i,name:'Ads Plan '+i, invest:500+i*50, days:10});
+}
+
+function showAds(){
+  let html='';
+  adsPlans.forEach(a=>{
+    html+=`<div class="box">
+    <strong>${a.name}</strong><br>
+    Invest: Rs ${a.invest}<br>
+    Days: ${a.days}<br>
+    <button onclick="buyAds(${a.id})">Buy Now</button>
+    </div>`;
+  });
+  document.getElementById('adsList').innerHTML=html;
+}
+
+function buyAds(id){
+  const ad = adsPlans.find(a=>a.id===id);
+  document.getElementById('depositAmount').value=ad.invest;
+  showPage('deposit');
+}
 
 // Init
-if(currentUser) login();
-showPlans(); showAds();
+if(currentUser) updateDashboard();
+showPlans();
+showAds();
 </script>
 </body>
 </html>
