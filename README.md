@@ -16,6 +16,7 @@ body{
   font-family:Arial,Helvetica,sans-serif;
   background:linear-gradient(135deg,#0f1117,#14182a);
   color:#fff;
+  overflow-x:hidden;
 }
 header{
   text-align:center;
@@ -37,7 +38,9 @@ header{
   padding:14px;
   margin-bottom:12px;
   box-shadow:0 6px 18px rgba(0,0,0,.4);
+  transition:transform .2s;
 }
+.card:hover{transform:scale(1.02);}
 input,select,button{
   width:100%;
   padding:11px;
@@ -61,12 +64,14 @@ button:active{transform:scale(.98)}
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:10px;
+  margin-bottom:10px;
 }
 .stat{
-  padding:10px;
+  padding:12px;
   border-radius:12px;
   text-align:center;
   font-size:13px;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
 }
 .stat b{display:block;font-size:15px;margin-top:3px}
 .s-user{background:linear-gradient(135deg,#6366f1,#9333ea)}
@@ -87,7 +92,9 @@ button:active{transform:scale(.98)}
   text-align:center;
   cursor:pointer;
   border:1px solid rgba(255,255,255,.06);
+  transition:transform .2s;
 }
+.icon:hover{transform:scale(1.1);}
 .icon span{font-size:22px;display:block;margin-bottom:4px}
 img.banner{
   width:100%;
@@ -109,7 +116,7 @@ img.banner{
 }
 .nav span{font-size:20px;display:block}
 .small{font-size:12px;opacity:.8}
-.timer{margin-top:8px;font-size:12px;color:#facc15;}
+.timer{margin-top:8px;font-size:12px;color:#facc15;font-weight:700;}
 </style>
 </head>
 <body>
@@ -168,7 +175,7 @@ img.banner{
   <h3>Watch Ads & Earn</h3>
   <div class="card">
     <p class="small">
-      Buy Ads Plan → Daily ads unlock → Watch ads → Daily profit auto add.
+      Buy Ads Plan → Unlock Daily Ads → Watch → Profit auto add.
     </p>
   </div>
   <div id="adsList"></div>
@@ -220,6 +227,7 @@ img.banner{
 </div>
 
 <script>
+// User Data
 let user=localStorage.getItem('nx_user');
 let bal=parseFloat(localStorage.getItem('nx_bal')||0);
 let day=parseFloat(localStorage.getItem('nx_day')||0);
@@ -285,7 +293,7 @@ function submitWithdraw(){
   show('dashboard');
 }
 
-/* Plans */
+// Investment Plans
 let planHTML='';
 for(let i=1;i<=50;i++){
   let inv=200+i*50;
@@ -300,12 +308,9 @@ for(let i=1;i<=50;i++){
   </div>`;
 }
 planList.innerHTML=planHTML;
-function buy(a){
-  depAmt.value=a;
-  show('deposit');
-}
+function buy(a){depAmt.value=a; show('deposit');}
 
-/* Ads Plans */
+// Ads Plans
 let adsHTML='';
 for(let i=1;i<=7;i++){
   adsHTML+=`
@@ -327,7 +332,6 @@ function buyAds(id){
   displayAdsTasks();
 }
 
-/* Ads Tasks */
 function displayAdsTasks(){
   let tasksDiv=document.getElementById('adsTasks');
   if(!adsPlan){ tasksDiv.innerHTML='<p>Buy an Ads Plan first.</p>'; return; }
@@ -339,23 +343,21 @@ function displayAdsTasks(){
         <b>Ad Task ${i}</b><br>
         Status: ${done?'✅ Watched':'⏳ Pending'}<br>
         ${done?'':`<button onclick="watchAd(${i})">Watch Ad</button><div id="timer${i}" class="timer"></div>`}
-      </div>
-    `;
+      </div>`;
   }
   tasksDiv.innerHTML=html;
 }
 
-/* Watch Ad Simulation */
 function watchAd(i){
   let timerDiv=document.getElementById('timer'+i);
-  let time=5; // 5 sec countdown
+  let time=5; // countdown in seconds
   let interval=setInterval(()=>{
     if(time<=0){
       clearInterval(interval);
       alert('Ad Completed! Daily profit added.');
       adsPlan.watched++;
       localStorage.setItem('nx_adsPlan',JSON.stringify(adsPlan));
-      let profit=50; // fixed daily ad profit
+      let profit=50;
       bal+=profit;
       day+=profit;
       total+=profit;
@@ -369,7 +371,7 @@ function watchAd(i){
   },1000);
 }
 
-/* Auto login */
+// Auto login
 if(user){
   update();
   show('dashboard');
