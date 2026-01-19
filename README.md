@@ -2,212 +2,333 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXA EARN APP LOOK</title>
+<title>NEXA EARN</title>
+
 <style>
-:root {
-  --primary:#ff0044;
-  --secondary:#00fff7;
-  --accent:#ffcc00;
-  --bg:#111;
-  --text:#fff;
-  --box:#222;
+:root{
+  --red:#ff2d2d;
+  --blue:#2563ff;
+  --gold:#f5c542;
+  --dark:#0f1117;
+  --card:#181b24;
 }
-body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);}
-header{font-size:28px;text-align:center;padding:20px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.page{max-width:480px;margin:20px auto;padding:15px;border-radius:15px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,204,0,0.2);}
-input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:10px;border:none;background: rgba(255,255,255,0.05);color:#fff;font-weight:600;}
-button{background:linear-gradient(90deg,var(--primary),var(--accent));cursor:pointer;transition:0.3s;}
-button:hover{opacity:0.85;}
-.hidden{display:none;}
-.box{padding:15px;margin:10px 0;background:var(--box);border-radius:15px;border:1px solid rgba(255,204,0,0.2);}
-.box:hover{box-shadow:0 5px 20px rgba(255,204,0,0.4);}
-.icon-box{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0;}
-.icon-item{flex:1 1 45%;background:var(--box);border-radius:15px;padding:20px;text-align:center;cursor:pointer;border:1px solid rgba(255,204,0,0.2);transition:0.3s;}
-.icon-item:hover{box-shadow:0 6px 25px rgba(255,204,0,0.4);}
-img{width:100%;border-radius:15px;margin-top:10px;}
-.slide-container{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;padding-bottom:10px;}
-.slide-container::-webkit-scrollbar{display:none;}
-.slide-box{min-width:200px;flex-shrink:0;background:var(--box);padding:15px;border-radius:15px;scroll-snap-align:start;transition:0.3s;}
-.slide-box:hover{box-shadow:0 5px 20px rgba(255,204,0,0.4);}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(135deg,#0f1117,#14182a);
+  color:#fff;
+}
+header{
+  text-align:center;
+  padding:18px;
+  font-size:26px;
+  font-weight:700;
+  color:var(--gold);
+}
+.page{
+  max-width:480px;
+  margin:15px auto 90px;
+  padding:15px;
+  display:none;
+}
+.show{display:block;}
+.card{
+  background:var(--card);
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.4);
+}
+input,select,button{
+  width:100%;
+  padding:11px;
+  margin-top:10px;
+  border-radius:10px;
+  border:none;
+  outline:none;
+}
+input,select{
+  background:#0f1320;
+  color:#fff;
+}
+button{
+  background:linear-gradient(90deg,var(--red),var(--gold));
+  color:#000;
+  font-weight:700;
+  cursor:pointer;
+}
+button:active{transform:scale(.98)}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.stat{
+  padding:10px;
+  border-radius:12px;
+  text-align:center;
+  font-size:13px;
+}
+.stat b{display:block;font-size:15px;margin-top:3px}
+.s-user{background:linear-gradient(135deg,#6366f1,#9333ea)}
+.s-bal{background:linear-gradient(135deg,#16a34a,#4ade80)}
+.s-day{background:linear-gradient(135deg,#ef4444,#f97316)}
+.s-total{background:linear-gradient(135deg,#facc15,#fde047);color:#000}
+.s-mem{background:linear-gradient(135deg,#334155,#475569)}
+
+.icons{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:15px;
+}
+.icon{
+  background:#0f1320;
+  padding:14px 5px;
+  border-radius:14px;
+  text-align:center;
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,.06);
+}
+.icon span{font-size:22px;display:block;margin-bottom:4px}
+
+img.banner{
+  width:100%;
+  border-radius:12px;
+  margin-top:10px;
+}
+
+.nav{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  display:flex;
+  justify-content:space-around;
+  background:#0b0e18;
+  padding:8px 0;
+}
+.nav div{
+  text-align:center;
+  font-size:12px;
+  cursor:pointer;
+}
+.nav span{font-size:20px;display:block}
+
+.small{font-size:12px;opacity:.8}
 </style>
 </head>
+
 <body>
+
 <header>NEXA EARN</header>
 
-<!-- LOGIN / SIGNUP -->
-<div id="loginPage" class="page">
-<h2>Login / Signup</h2>
-<select id="userOption">
-<option value="login">Login</option>
-<option value="signup">Signup</option>
-</select>
-<input id="user" placeholder="Username"/>
-<input id="pass" placeholder="Password" type="password"/>
-<button onclick="login()">Submit</button>
+<!-- LOGIN -->
+<div id="login" class="page show">
+  <div class="card">
+    <h3>Login / Signup</h3>
+    <input id="lUser" placeholder="Username">
+    <input id="lPass" type="password" placeholder="Password">
+    <button onclick="login()">Continue</button>
+  </div>
 </div>
 
 <!-- DASHBOARD -->
-<div id="dashboard" class="page hidden">
-<div class="slide-container">
-<div class="slide-box"><strong>Username:</strong> <span id="dashUser">-</span></div>
-<div class="slide-box"><strong>Balance:</strong> Rs <span id="dashBalance">0</span></div>
-<div class="slide-box"><strong>Daily Profit:</strong> Rs <span id="dashDaily">0</span></div>
-<div class="slide-box"><strong>Total Profit:</strong> Rs <span id="dashTotal">0</span></div>
-<div class="slide-box"><strong>Active Members:</strong> <span id="activeMembers">0</span></div>
-</div>
+<div id="dashboard" class="page">
+  <div class="stats">
+    <div class="stat s-user"><small>User</small><b id="dUser">-</b></div>
+    <div class="stat s-bal"><small>Balance</small><b>Rs <span id="dBal">0</span></b></div>
+    <div class="stat s-day"><small>Daily</small><b>Rs <span id="dDay">0</span></b></div>
+    <div class="stat s-total"><small>Total</small><b>Rs <span id="dTotal">0</span></b></div>
+    <div class="stat s-mem"><small>Active</small><b id="dMem">0</b></div>
+  </div>
 
-<div class="box" id="companyInfo">
-<h3>About NEXA EARN</h3>
-<p>Operating since 2022, NEXA EARN provides fast digital investment growth. Buy plans or watch ads to earn daily rewards.</p>
-<div class="slide-container">
-<img src="https://picsum.photos/400/200?random=1"/>
-<img src="https://picsum.photos/400/200?random=2"/>
-<img src="https://picsum.photos/400/200?random=3"/>
-<img src="https://picsum.photos/400/200?random=4"/>
-</div>
-</div>
+  <div class="card">
+    <h3>About NEXA EARN</h3>
+    <p class="small">
+      Since 2022, NEXA EARN provides digital earning opportunities through
+      investment plans & ad-based tasks. Secure system, fast processing,
+      user-friendly dashboard.
+    </p>
+    <img class="banner" src="https://picsum.photos/500/250?random=11">
+    <img class="banner" src="https://picsum.photos/500/250?random=12">
+  </div>
 
-<div class="icon-box">
-<div class="icon-item" onclick="showPage('plans')">📦<br>Plans</div>
-<div class="icon-item" onclick="showPage('ads')">🎬<br>Watch Ads</div>
-<div class="icon-item" onclick="showPage('deposit')">💰<br>Deposit</div>
-<div class="icon-item" onclick="showPage('withdrawal')">💵<br>Withdraw</div>
-<div class="icon-item" onclick="showPage('history')">🕒<br>History</div>
-<div class="icon-item" onclick="showPage('support')">🛠️<br>Support</div>
-<div class="icon-item" onclick="invite()">👥<br>Invite</div>
-</div>
-
-<button onclick="logout()">Logout</button>
+  <div class="icons">
+    <div class="icon" onclick="openPage('plans')"><span>📦</span>Plans</div>
+    <div class="icon" onclick="openPage('ads')"><span>🎬</span>Watch Ads</div>
+    <div class="icon" onclick="openPage('deposit')"><span>💰</span>Deposit</div>
+    <div class="icon" onclick="openPage('withdraw')"><span>💵</span>Withdraw</div>
+    <div class="icon" onclick="openPage('support')"><span>🛠️</span>Support</div>
+    <div class="icon" onclick="logout()"><span>🚪</span>Logout</div>
+  </div>
 </div>
 
 <!-- PLANS -->
-<div id="plans" class="page hidden">
-<h2>Investment Plans</h2>
-<div id="plansList"></div>
+<div id="plans" class="page">
+  <h3>Investment Plans</h3>
+  <div id="planList"></div>
 </div>
 
-<!-- ADS WATCH -->
-<div id="ads" class="page hidden">
-<h2>Watch Ads</h2>
-<div id="adsList"></div>
+<!-- ADS -->
+<div id="ads" class="page">
+  <h3>Watch Ads & Earn</h3>
+  <div class="card">
+    <p class="small">
+      Buy Ads Plan → Daily ads unlock → Watch ads → Daily profit auto add.
+    </p>
+  </div>
+  <div id="adsList"></div>
 </div>
 
 <!-- DEPOSIT -->
-<div id="deposit" class="page hidden">
-<h2>Deposit</h2>
-<select id="depositMethod" onchange="updateDepositNumber()">
-<option value="jazzcash">JazzCash</option>
-<option value="easypaisa">EasyPaisa</option>
-</select>
-<div style="display:flex;gap:8px;align-items:center;margin-top:10px">
-<input id="depositNumber" readonly style="flex:1"/>
-<button onclick="copyDepositNumber()">Copy</button>
-</div>
-<input id="depositAmount" placeholder="Enter Amount"/>
-<input id="depositTxId" placeholder="Transaction ID"/>
-<input type="file" id="depositProof"/>
-<button onclick="submitDeposit()">Submit Deposit</button>
+<div id="deposit" class="page">
+  <h3>Deposit</h3>
+  <select id="depMethod" onchange="setNumber()">
+    <option value="jazz">JazzCash</option>
+    <option value="easy">EasyPaisa</option>
+  </select>
+  <input id="depNum" readonly>
+  <button onclick="copyNum()">Copy Number</button>
+  <input id="depAmt" placeholder="Amount">
+  <input id="depTx" placeholder="Transaction ID">
+  <button onclick="submitDeposit()">Submit</button>
 </div>
 
-<!-- WITHDRAWAL -->
-<div id="withdrawal" class="page hidden">
-<h2>Withdrawal</h2>
-<select id="withdrawMethod">
-<option value="jazzcash">JazzCash</option>
-<option value="easypaisa">EasyPaisa</option>
-</select>
-<input id="withdrawAccount" placeholder="Account Number"/>
-<input id="withdrawAmount" placeholder="Amount"/>
-<button onclick="submitWithdraw()">Request Withdrawal</button>
-</div>
-
-<!-- HISTORY -->
-<div id="history" class="page hidden">
-<h2>History</h2>
-<div id="historyList"></div>
+<!-- WITHDRAW -->
+<div id="withdraw" class="page">
+  <h3>Withdraw</h3>
+  <select>
+    <option>JazzCash</option>
+    <option>EasyPaisa</option>
+  </select>
+  <input id="wAcc" placeholder="Account Number">
+  <input id="wAmt" placeholder="Amount">
+  <button onclick="submitWithdraw()">Request</button>
 </div>
 
 <!-- SUPPORT -->
-<div id="support" class="page hidden">
-<h2>Support</h2>
-<p>WhatsApp: <a href="https://chat.whatsapp.com/GJEVKhdDeNKCNkA8r3gONu" target="_blank">Join Group</a></p>
-<p>Email: <a href="mailto:rock.earn92@gmail.com">rock.earn92@gmail.com</a></p>
+<div id="support" class="page">
+  <div class="card">
+    <h3>Support</h3>
+    <p>WhatsApp Group</p>
+    <a href="https://chat.whatsapp.com/GJEVKhdDeNKCNkA8r3gONu" target="_blank">Join</a>
+    <p>Email: rock.earn92@gmail.com</p>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div onclick="openPage('dashboard')"><span>🏠</span>Home</div>
+  <div onclick="openPage('plans')"><span>📦</span>Plans</div>
+  <div onclick="openPage('ads')"><span>🎬</span>Ads</div>
+  <div onclick="openPage('deposit')"><span>💰</span>Deposit</div>
 </div>
 
 <script>
-// LocalStorage user data
-let currentUser = localStorage.getItem('nexa_user')||null;
-let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
-let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
-let totalProfit = parseFloat(localStorage.getItem('nexa_total')||'0');
+let user=localStorage.getItem('nx_user');
+let bal=parseFloat(localStorage.getItem('nx_bal')||0);
+let day=parseFloat(localStorage.getItem('nx_day')||0);
+let total=parseFloat(localStorage.getItem('nx_total')||0);
 
-function updateDashboard(){
-  document.getElementById('dashUser').innerText=currentUser||'-';
-  document.getElementById('dashBalance').innerText=balance.toFixed(2);
-  document.getElementById('dashDaily').innerText=dailyProfit.toFixed(2);
-  document.getElementById('dashTotal').innerText=totalProfit.toFixed(2);
-  document.getElementById('activeMembers').innerText=Math.floor(Math.random()*5000)+100;
-  showPage('dashboard');
-}
-
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
+function show(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
 }
 
 function login(){
-  const u=document.getElementById('user').value.trim();
-  const p=document.getElementById('pass').value.trim();
-  if(!u||!p){alert('Enter username & password');return;}
-  currentUser=u;localStorage.setItem('nexa_user',currentUser);
-  if(!localStorage.getItem('nexa_balance')) localStorage.setItem('nexa_balance',0);
-  if(!localStorage.getItem('nexa_daily')) localStorage.setItem('nexa_daily',0);
-  if(!localStorage.getItem('nexa_total')) localStorage.setItem('nexa_total',0);
-  balance=parseFloat(localStorage.getItem('nexa_balance'));
-  dailyProfit=parseFloat(localStorage.getItem('nexa_daily'));
-  totalProfit=parseFloat(localStorage.getItem('nexa_total'));
-  updateDashboard();
+  let u=lUser.value.trim();
+  let p=lPass.value.trim();
+  if(!u||!p)return alert('Enter details');
+  localStorage.setItem('nx_user',u);
+  user=u;
+  update();
+  show('dashboard');
 }
 
-function logout(){currentUser=null; localStorage.removeItem('nexa_user'); location.reload();}
-
-function updateDepositNumber(){
-  const method=document.getElementById('depositMethod').value;
-  document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';
+function update(){
+  dUser.innerText=user;
+  dBal.innerText=bal.toFixed(0);
+  dDay.innerText=day.toFixed(0);
+  dTotal.innerText=total.toFixed(0);
+  dMem.innerText=Math.floor(Math.random()*4000)+800;
+  localStorage.setItem('nx_bal',bal);
+  localStorage.setItem('nx_day',day);
+  localStorage.setItem('nx_total',total);
 }
-function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value); alert('Number copied');}
+
+function logout(){
+  localStorage.removeItem('nx_user');
+  location.reload();
+}
+
+function openPage(p){show(p);}
+
+function setNumber(){
+  depNum.value = depMethod.value==='jazz'?'03705519562':'03379827882';
+}
+setNumber();
+
+function copyNum(){navigator.clipboard.writeText(depNum.value);alert('Copied');}
 
 function submitDeposit(){
-  const amount=parseFloat(document.getElementById('depositAmount').value);
-  if(!amount){alert('Enter amount');return;}
-  balance+=amount;totalProfit+=amount*0.1;
-  localStorage.setItem('nexa_balance',balance);
-  localStorage.setItem('nexa_total',totalProfit);
-  alert('Deposit submitted');updateDashboard();
+  let a=parseFloat(depAmt.value);
+  if(!a)return alert('Enter amount');
+  bal+=a;
+  total+=a*0.1;
+  update();
+  alert('Deposit Submitted');
+  show('dashboard');
 }
 
 function submitWithdraw(){
-  const amount=parseFloat(document.getElementById('withdrawAmount').value);
-  if(!amount||amount>balance){alert('Invalid amount');return;}
-  balance-=amount;
-  localStorage.setItem('nexa_balance',balance);
-  alert('Withdrawal requested');updateDashboard();
+  let a=parseFloat(wAmt.value);
+  if(a>bal)return alert('Low balance');
+  bal-=a;
+  update();
+  alert('Withdraw Requested');
+  show('dashboard');
 }
 
-function invite(){prompt('Share code: NEXA123');}
+/* Plans */
+let planHTML='';
+for(let i=1;i<=50;i++){
+  let inv=200+i*50;
+  let mul=i<=5?2.4:2.2;
+  planHTML+=`
+  <div class="card">
+    <b>Plan ${i} ${i<=5?'(Special)':""}</b><br>
+    Invest: Rs ${inv}<br>
+    Days: ${25+i}<br>
+    Total: Rs ${Math.round(inv*mul)}<br>
+    <button onclick="buy(${inv})">Buy Now</button>
+  </div>`;
+}
+planList.innerHTML=planHTML;
 
-// Plans
-let plans=[];for(let i=1;i<=50;i++){plans.push({id:i,name:'Plan '+i,invest:200+i*50,days:25+Math.floor(i*2),multiplier:i<=5?2.4:2.2,special:i<=5});}
-function showPlans(){let html='';plans.forEach(p=>{html+=`<div class="box"><strong>${p.name} ${p.special?'[Special]':''}</strong><br>Invest: Rs ${p.invest}<br>Days: ${p.days}<br>Total: Rs ${Math.round(p.invest*p.multiplier)}<br><button onclick="buyPlan(${p.id})">Buy Now</button></div>`;});document.getElementById('plansList').innerHTML=html;}
-function buyPlan(id){const plan=plans.find(p=>p.id===id);document.getElementById('depositAmount').value=plan.invest;showPage('deposit');}
+function buy(a){
+  depAmt.value=a;
+  show('deposit');
+}
 
-// Ads watch plans
-let adsPlans=[];for(let i=1;i<=7;i++){adsPlans.push({id:i,name:'Ads Plan '+i, invest:500+i*50, days:10});}
-function showAds(){let html='';adsPlans.forEach(a=>{html+=`<div class="box"><strong>${a.name}</strong><br>Invest: Rs ${a.invest}<br>Days: ${a.days}<br><button onclick="buyAds(${a.id})">Buy Now</button></div>`;});document.getElementById('adsList').innerHTML=html;}
-function buyAds(id){const ad=adsPlans.find(a=>a.id===id);document.getElementById('depositAmount').value=ad.invest;showPage('deposit');}
+/* Ads */
+let adsHTML='';
+for(let i=1;i<=7;i++){
+  adsHTML+=`
+  <div class="card">
+    <b>Ads Plan ${i}</b><br>
+    Price: Rs ${500+i*50}<br>
+    Daily Ads: ${i+2}<br>
+    <button onclick="buy(${500+i*50})">Buy Ads Plan</button>
+  </div>`;
+}
+adsList.innerHTML=adsHTML;
 
-// Init
-if(currentUser) updateDashboard();showPlans();showAds();
+/* Auto login */
+if(user){
+  update();
+  show('dashboard');
+}
 </script>
+
 </body>
 </html>
