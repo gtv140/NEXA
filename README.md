@@ -28,16 +28,20 @@ header {
 }
 .page { max-width:480px; margin:20px auto; padding:20px; border-radius:12px; background:rgba(255,255,255,0.03);}
 input,select,button { width:100%; padding:10px; margin-top:10px; border-radius:8px; border:none; background: rgba(255,255,255,0.05); color:#fff; }
-button { background: linear-gradient(90deg,var(--primary),var(--secondary),var(--accent)); font-weight:700; cursor:pointer; }
-.box { padding:15px; margin:10px 0; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,204,0,0.2); box-shadow:0 0 10px rgba(0,255,255,0.4);}
+button { background: linear-gradient(90deg,var(--primary),var(--secondary),var(--accent)); font-weight:700; cursor:pointer; transition:0.3s; }
+button:hover { transform:scale(1.05); }
+.box { padding:15px; margin:10px 0; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,204,0,0.2); box-shadow:0 0 10px rgba(0,255,255,0.4); transition:0.3s;}
+.box:hover { box-shadow:0 0 20px var(--secondary),0 0 25px var(--primary);}
 .icon-box { display:flex; flex-wrap:wrap; gap:10px; margin:15px 0;}
 .icon-item { flex:1 1 45%; background:rgba(255,255,255,0.05); border-radius:12px; padding:15px; text-align:center; cursor:pointer; border:1px solid rgba(255,204,0,0.2); transition:0.3s; }
 .icon-item:hover { box-shadow:0 0 15px var(--secondary), 0 0 20px var(--primary); transform:scale(1.05);}
 img { width:100%; border-radius:12px; margin-top:10px;}
-.carousel { display:flex; overflow-x:auto; scroll-behavior:smooth; gap:10px; }
+.carousel { display:flex; overflow-x:auto; scroll-behavior:smooth; gap:10px; animation:autoSlide 15s linear infinite;}
 .carousel img { flex:0 0 300px; height:150px; object-fit:cover; border:1px solid rgba(255,255,255,0.2);}
+@keyframes autoSlide { 0%{transform:translateX(0);} 25%{transform:translateX(-25%);} 50%{transform:translateX(-50%);} 75%{transform:translateX(-75%);} 100%{transform:translateX(0);} }
 .ad-task { padding:10px; margin:10px 0; background: rgba(0,0,0,0.2); border-radius:12px; text-align:center; box-shadow:0 0 10px var(--primary);}
-.ad-task button { margin-top:10px; background: linear-gradient(90deg,var(--secondary),var(--accent)); }
+.ad-task button { margin-top:10px; background: linear-gradient(90deg,var(--secondary),var(--accent)); transition:0.3s;}
+.ad-task button:hover { transform:scale(1.05);}
 </style>
 </head>
 <body>
@@ -73,6 +77,7 @@ img { width:100%; border-radius:12px; margin-top:10px;}
 <img src="https://picsum.photos/400/200?random=2"/>
 <img src="https://picsum.photos/400/200?random=3"/>
 <img src="https://picsum.photos/400/200?random=4"/>
+<img src="https://picsum.photos/400/200?random=5"/>
 </div>
 </div>
 
