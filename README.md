@@ -6,115 +6,135 @@
 
 <style>
 :root{
-  --red:#ff2d2d;
-  --blue:#2563ff;
-  --gold:#f5c542;
-  --dark:#0f1117;
-  --card:#181b24;
+ --bg:#0b0f1a;
+ --card:#111827;
+ --blue:#00e5ff;
+ --red:#ff1744;
+ --green:#00e676;
+ --yellow:#ffea00;
+ --border:rgba(255,255,255,0.08);
 }
+
+*{box-sizing:border-box}
+
 body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:linear-gradient(135deg,#0f1117,#14182a);
-  color:#fff;
+ margin:0;
+ font-family:Arial,Helvetica,sans-serif;
+ background:linear-gradient(180deg,#05070d,#0b0f1a);
+ color:#fff;
 }
+
 header{
-  text-align:center;
-  padding:18px;
-  font-size:26px;
-  font-weight:700;
-  color:var(--gold);
+ text-align:center;
+ padding:18px;
+ font-size:28px;
+ font-weight:800;
+ letter-spacing:2px;
+ background:linear-gradient(90deg,var(--blue),var(--red));
+ -webkit-background-clip:text;
+ -webkit-text-fill-color:transparent;
 }
+
 .page{
-  max-width:480px;
-  margin:15px auto 90px;
-  padding:15px;
-  display:none;
+ max-width:520px;
+ margin:20px auto;
+ padding:18px;
 }
-.show{display:block;}
+
+.hidden{display:none}
+
 .card{
-  background:var(--card);
-  border-radius:14px;
-  padding:14px;
-  margin-bottom:12px;
-  box-shadow:0 6px 18px rgba(0,0,0,.4);
+ background:linear-gradient(145deg,#0f172a,#020617);
+ border:1px solid var(--border);
+ border-radius:16px;
+ padding:15px;
+ margin-bottom:15px;
+ box-shadow:0 0 25px rgba(0,229,255,0.08);
 }
+
 input,select,button{
-  width:100%;
-  padding:11px;
-  margin-top:10px;
-  border-radius:10px;
-  border:none;
-  outline:none;
+ width:100%;
+ padding:12px;
+ margin-top:10px;
+ border-radius:12px;
+ border:none;
+ background:#020617;
+ color:#fff;
+ outline:none;
 }
-input,select{
-  background:#0f1320;
-  color:#fff;
-}
+
 button{
-  background:linear-gradient(90deg,var(--red),var(--gold));
-  color:#000;
-  font-weight:700;
-  cursor:pointer;
+ background:linear-gradient(90deg,var(--blue),var(--red));
+ font-weight:700;
+ cursor:pointer;
 }
-button:active{transform:scale(.98)}
 
 .stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
 }
+
 .stat{
-  padding:10px;
-  border-radius:12px;
-  text-align:center;
-  font-size:13px;
+ background:linear-gradient(145deg,#020617,#020617);
+ border:1px solid var(--border);
+ border-radius:14px;
+ padding:14px;
+ text-align:center;
 }
-.stat b{display:block;font-size:15px;margin-top:3px}
-.s-user{background:linear-gradient(135deg,#6366f1,#9333ea)}
-.s-bal{background:linear-gradient(135deg,#16a34a,#4ade80)}
-.s-day{background:linear-gradient(135deg,#ef4444,#f97316)}
-.s-total{background:linear-gradient(135deg,#facc15,#fde047);color:#000}
-.s-mem{background:linear-gradient(135deg,#334155,#475569)}
 
-.icons{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-top:15px;
+.stat span{
+ display:block;
+ margin-top:6px;
+ font-size:18px;
+ font-weight:700;
 }
-.icon{
-  background:#0f1320;
-  padding:14px 5px;
-  border-radius:14px;
-  text-align:center;
-  cursor:pointer;
-  border:1px solid rgba(255,255,255,.06);
-}
-.icon span{font-size:22px;display:block;margin-bottom:4px}
 
-img.banner{
-  width:100%;
-  border-radius:12px;
-  margin-top:10px;
+.blue{color:var(--blue)}
+.red{color:var(--red)}
+.green{color:var(--green)}
+.yellow{color:var(--yellow)}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:12px;
+ margin-top:15px;
+}
+
+.grid div{
+ background:#020617;
+ border:1px solid var(--border);
+ border-radius:14px;
+ padding:16px 10px;
+ text-align:center;
+ cursor:pointer;
+ font-size:14px;
+}
+
+.grid div:hover{
+ box-shadow:0 0 18px rgba(255,23,68,0.4);
+}
+
+img{
+ width:100%;
+ border-radius:14px;
+ margin-top:10px;
 }
 
 .nav{
-  position:fixed;
-  bottom:0;left:0;right:0;
-  display:flex;
-  justify-content:space-around;
-  background:#0b0e18;
-  padding:8px 0;
+ position:fixed;
+ bottom:0;
+ left:0;
+ right:0;
+ background:#020617;
+ border-top:1px solid var(--border);
+ display:flex;
+ justify-content:space-around;
+ padding:10px 0;
 }
-.nav div{
-  text-align:center;
-  font-size:12px;
-  cursor:pointer;
-}
-.nav span{font-size:20px;display:block}
 
-.small{font-size:12px;opacity:.8}
+.nav div{font-size:13px;cursor:pointer}
 </style>
 </head>
 
@@ -123,211 +143,164 @@ img.banner{
 <header>NEXA EARN</header>
 
 <!-- LOGIN -->
-<div id="login" class="page show">
-  <div class="card">
-    <h3>Login / Signup</h3>
-    <input id="lUser" placeholder="Username">
-    <input id="lPass" type="password" placeholder="Password">
-    <button onclick="login()">Continue</button>
-  </div>
+<div id="login" class="page">
+ <div class="card">
+  <h3>Login / Signup</h3>
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Continue</button>
+ </div>
 </div>
 
 <!-- DASHBOARD -->
-<div id="dashboard" class="page">
-  <div class="stats">
-    <div class="stat s-user"><small>User</small><b id="dUser">-</b></div>
-    <div class="stat s-bal"><small>Balance</small><b>Rs <span id="dBal">0</span></b></div>
-    <div class="stat s-day"><small>Daily</small><b>Rs <span id="dDay">0</span></b></div>
-    <div class="stat s-total"><small>Total</small><b>Rs <span id="dTotal">0</span></b></div>
-    <div class="stat s-mem"><small>Active</small><b id="dMem">0</b></div>
-  </div>
+<div id="dashboard" class="page hidden">
 
-  <div class="card">
-    <h3>About NEXA EARN</h3>
-    <p class="small">
-      Since 2022, NEXA EARN provides digital earning opportunities through
-      investment plans & ad-based tasks. Secure system, fast processing,
-      user-friendly dashboard.
-    </p>
-    <img class="banner" src="https://picsum.photos/500/250?random=11">
-    <img class="banner" src="https://picsum.photos/500/250?random=12">
-  </div>
+ <div class="stats">
+  <div class="stat blue">Username<span id="dUser">-</span></div>
+  <div class="stat green">Balance<span>Rs <span id="dBal">0</span></span></div>
+  <div class="stat yellow">Daily Profit<span>Rs <span id="dDaily">0</span></span></div>
+  <div class="stat red">Total Profit<span>Rs <span id="dTotal">0</span></span></div>
+ </div>
 
-  <div class="icons">
-    <div class="icon" onclick="openPage('plans')"><span>📦</span>Plans</div>
-    <div class="icon" onclick="openPage('ads')"><span>🎬</span>Watch Ads</div>
-    <div class="icon" onclick="openPage('deposit')"><span>💰</span>Deposit</div>
-    <div class="icon" onclick="openPage('withdraw')"><span>💵</span>Withdraw</div>
-    <div class="icon" onclick="openPage('support')"><span>🛠️</span>Support</div>
-    <div class="icon" onclick="logout()"><span>🚪</span>Logout</div>
-  </div>
+ <div class="card">
+  <h4>About NEXA EARN</h4>
+  <p>Premium digital earning platform with ads tasks and investment plans.</p>
+  <img src="https://picsum.photos/400/200?random=10">
+ </div>
+
+ <div class="grid">
+  <div onclick="show('plans')">📦<br>Plans</div>
+  <div onclick="show('ads')">🎬<br>Ads</div>
+  <div onclick="show('deposit')">💰<br>Deposit</div>
+  <div onclick="show('withdraw')">💵<br>Withdraw</div>
+  <div onclick="show('history')">🕒<br>History</div>
+  <div onclick="logout()">🚪<br>Logout</div>
+ </div>
+
 </div>
 
 <!-- PLANS -->
-<div id="plans" class="page">
-  <h3>Investment Plans</h3>
-  <div id="planList"></div>
+<div id="plans" class="page hidden">
+ <div class="card"><h3>Investment Plans</h3><div id="planList"></div></div>
 </div>
 
 <!-- ADS -->
-<div id="ads" class="page">
-  <h3>Watch Ads & Earn</h3>
-  <div class="card">
-    <p class="small">
-      Buy Ads Plan → Daily ads unlock → Watch ads → Daily profit auto add.
-    </p>
-  </div>
-  <div id="adsList"></div>
+<div id="ads" class="page hidden">
+ <div class="card">
+  <h3>Watch Ads</h3>
+  <p>Daily ads watch → automatic profit add</p>
+  <button onclick="watchAd()">Watch Ad</button>
+ </div>
 </div>
 
 <!-- DEPOSIT -->
-<div id="deposit" class="page">
+<div id="deposit" class="page hidden">
+ <div class="card">
   <h3>Deposit</h3>
-  <select id="depMethod" onchange="setNumber()">
-    <option value="jazz">JazzCash</option>
-    <option value="easy">EasyPaisa</option>
+  <select id="method">
+   <option>JazzCash</option>
+   <option>EasyPaisa</option>
   </select>
-  <input id="depNum" readonly>
-  <button onclick="copyNum()">Copy Number</button>
-  <input id="depAmt" placeholder="Amount">
-  <input id="depTx" placeholder="Transaction ID">
-  <button onclick="submitDeposit()">Submit</button>
+  <input id="amount" placeholder="Amount">
+  <button onclick="deposit()">Submit</button>
+ </div>
 </div>
 
 <!-- WITHDRAW -->
-<div id="withdraw" class="page">
+<div id="withdraw" class="page hidden">
+ <div class="card">
   <h3>Withdraw</h3>
-  <select>
-    <option>JazzCash</option>
-    <option>EasyPaisa</option>
-  </select>
-  <input id="wAcc" placeholder="Account Number">
-  <input id="wAmt" placeholder="Amount">
-  <button onclick="submitWithdraw()">Request</button>
+  <input id="wAmount" placeholder="Amount">
+  <button onclick="withdraw()">Request</button>
+ </div>
 </div>
 
-<!-- SUPPORT -->
-<div id="support" class="page">
-  <div class="card">
-    <h3>Support</h3>
-    <p>WhatsApp Group</p>
-    <a href="https://chat.whatsapp.com/GJEVKhdDeNKCNkA8r3gONu" target="_blank">Join</a>
-    <p>Email: rock.earn92@gmail.com</p>
-  </div>
-</div>
-
-<!-- NAV -->
-<div class="nav">
-  <div onclick="openPage('dashboard')"><span>🏠</span>Home</div>
-  <div onclick="openPage('plans')"><span>📦</span>Plans</div>
-  <div onclick="openPage('ads')"><span>🎬</span>Ads</div>
-  <div onclick="openPage('deposit')"><span>💰</span>Deposit</div>
+<!-- HISTORY -->
+<div id="history" class="page hidden">
+ <div class="card">
+  <h3>History</h3>
+  <div id="hist"></div>
+ </div>
 </div>
 
 <script>
-let user=localStorage.getItem('nx_user');
-let bal=parseFloat(localStorage.getItem('nx_bal')||0);
-let day=parseFloat(localStorage.getItem('nx_day')||0);
-let total=parseFloat(localStorage.getItem('nx_total')||0);
+let user=localStorage.getItem("user");
+let bal=parseFloat(localStorage.getItem("bal")||0);
+let daily=parseFloat(localStorage.getItem("daily")||0);
+let total=parseFloat(localStorage.getItem("total")||0);
 
-function show(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
-  document.getElementById(id).classList.add('show');
+function save(){
+ localStorage.setItem("bal",bal);
+ localStorage.setItem("daily",daily);
+ localStorage.setItem("total",total);
 }
 
 function login(){
-  let u=lUser.value.trim();
-  let p=lPass.value.trim();
-  if(!u||!p)return alert('Enter details');
-  localStorage.setItem('nx_user',u);
-  user=u;
-  update();
-  show('dashboard');
+ let u=username.value.trim();
+ let p=password.value.trim();
+ if(!u||!p) return alert("Fill all fields");
+ localStorage.setItem("user",u);
+ user=u;
+ load();
 }
 
-function update(){
-  dUser.innerText=user;
-  dBal.innerText=bal.toFixed(0);
-  dDay.innerText=day.toFixed(0);
-  dTotal.innerText=total.toFixed(0);
-  dMem.innerText=Math.floor(Math.random()*4000)+800;
-  localStorage.setItem('nx_bal',bal);
-  localStorage.setItem('nx_day',day);
-  localStorage.setItem('nx_total',total);
+function load(){
+ login.classList.add("hidden");
+ dashboard.classList.remove("hidden");
+ dUser.innerText=user;
+ dBal.innerText=bal.toFixed(0);
+ dDaily.innerText=daily.toFixed(0);
+ dTotal.innerText=total.toFixed(0);
+}
+
+function show(id){
+ document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
 }
 
 function logout(){
-  localStorage.removeItem('nx_user');
-  location.reload();
+ localStorage.clear();
+ location.reload();
 }
 
-function openPage(p){show(p);}
-
-function setNumber(){
-  depNum.value = depMethod.value==='jazz'?'03705519562':'03379827882';
-}
-setNumber();
-
-function copyNum(){navigator.clipboard.writeText(depNum.value);alert('Copied');}
-
-function submitDeposit(){
-  let a=parseFloat(depAmt.value);
-  if(!a)return alert('Enter amount');
-  bal+=a;
-  total+=a*0.1;
-  update();
-  alert('Deposit Submitted');
-  show('dashboard');
+function deposit(){
+ let a=parseFloat(amount.value);
+ if(!a) return;
+ bal+=a;
+ save();
+ load();
 }
 
-function submitWithdraw(){
-  let a=parseFloat(wAmt.value);
-  if(a>bal)return alert('Low balance');
-  bal-=a;
-  update();
-  alert('Withdraw Requested');
-  show('dashboard');
+function withdraw(){
+ let a=parseFloat(wAmount.value);
+ if(a>bal) return alert("Low balance");
+ bal-=a;
+ save();
+ load();
 }
 
-/* Plans */
-let planHTML='';
-for(let i=1;i<=50;i++){
-  let inv=200+i*50;
-  let mul=i<=5?2.4:2.2;
-  planHTML+=`
-  <div class="card">
-    <b>Plan ${i} ${i<=5?'(Special)':""}</b><br>
-    Invest: Rs ${inv}<br>
-    Days: ${25+i}<br>
-    Total: Rs ${Math.round(inv*mul)}<br>
-    <button onclick="buy(${inv})">Buy Now</button>
-  </div>`;
-}
-planList.innerHTML=planHTML;
-
-function buy(a){
-  depAmt.value=a;
-  show('deposit');
+function watchAd(){
+ daily+=50;
+ total+=50;
+ bal+=50;
+ save();
+ alert("Ad watched! Rs 50 added");
+ load();
 }
 
-/* Ads */
-let adsHTML='';
-for(let i=1;i<=7;i++){
-  adsHTML+=`
-  <div class="card">
-    <b>Ads Plan ${i}</b><br>
-    Price: Rs ${500+i*50}<br>
-    Daily Ads: ${i+2}<br>
-    <button onclick="buy(${500+i*50})">Buy Ads Plan</button>
-  </div>`;
+let plansHTML="";
+for(let i=1;i<=6;i++){
+ plansHTML+=`
+ <div class="card">
+  <b>Plan ${i}</b><br>
+  Invest: Rs ${i*500}<br>
+  Days: ${20+i*5}<br>
+  <button onclick="amount.value=${i*500};show('deposit')">Buy</button>
+ </div>`;
 }
-adsList.innerHTML=adsHTML;
+planList.innerHTML=plansHTML;
 
-/* Auto login */
-if(user){
-  update();
-  show('dashboard');
-}
+if(user) load();
 </script>
 
 </body>
