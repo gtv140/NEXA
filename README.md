@@ -3,7 +3,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA EARN</title>
-
 <style>
 :root{
   --red:#ff2d2d;
@@ -58,7 +57,6 @@ button{
   cursor:pointer;
 }
 button:active{transform:scale(.98)}
-
 .stats{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -76,7 +74,6 @@ button:active{transform:scale(.98)}
 .s-day{background:linear-gradient(135deg,#ef4444,#f97316)}
 .s-total{background:linear-gradient(135deg,#facc15,#fde047);color:#000}
 .s-mem{background:linear-gradient(135deg,#334155,#475569)}
-
 .icons{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -92,13 +89,11 @@ button:active{transform:scale(.98)}
   border:1px solid rgba(255,255,255,.06);
 }
 .icon span{font-size:22px;display:block;margin-bottom:4px}
-
 img.banner{
   width:100%;
   border-radius:12px;
   margin-top:10px;
 }
-
 .nav{
   position:fixed;
   bottom:0;left:0;right:0;
@@ -113,15 +108,13 @@ img.banner{
   cursor:pointer;
 }
 .nav span{font-size:20px;display:block}
-
 .small{font-size:12px;opacity:.8}
-.task-card{background:#0f1320;padding:10px;margin:10px 0;border-radius:12px;border:1px solid rgba(255,255,255,0.1);}
-.task-btn{margin-top:8px;background:linear-gradient(90deg,#16a34a,#4ade80);color:#000;font-weight:700;}
+.card-task{background:linear-gradient(90deg,#2563ff,#9333ea);margin:8px 0;padding:10px;border-radius:10px;}
+.timer{font-weight:bold;margin-top:5px;color:#ffcc00;text-align:center;}
+.history-item{background:#0f1320;margin:5px 0;padding:10px;border-radius:10px;font-size:13px;}
 </style>
 </head>
-
 <body>
-
 <header>NEXA EARN</header>
 
 <!-- LOGIN -->
@@ -175,7 +168,11 @@ img.banner{
 <!-- ADS -->
 <div id="ads" class="page">
   <h3>Watch Ads & Earn</h3>
+  <div class="card">
+    <p class="small">Buy Ads Plan → Daily ads unlock → Watch ads → Daily profit auto add.</p>
+  </div>
   <div id="adsList"></div>
+  <div id="tasks"></div>
 </div>
 
 <!-- DEPOSIT -->
@@ -206,7 +203,7 @@ img.banner{
 
 <!-- HISTORY -->
 <div id="history" class="page">
-  <h3>Activity History</h3>
+  <h3>History</h3>
   <div id="historyList"></div>
 </div>
 
@@ -226,23 +223,24 @@ img.banner{
   <div onclick="openPage('plans')"><span>📦</span>Plans</div>
   <div onclick="openPage('ads')"><span>🎬</span>Ads</div>
   <div onclick="openPage('deposit')"><span>💰</span>Deposit</div>
-  <div onclick="openPage('history')"><span>🕒</span>History</div>
 </div>
 
 <script>
+// User Data
 let user=localStorage.getItem('nx_user');
 let bal=parseFloat(localStorage.getItem('nx_bal')||0);
 let day=parseFloat(localStorage.getItem('nx_day')||0);
 let total=parseFloat(localStorage.getItem('nx_total')||0);
+let history=JSON.parse(localStorage.getItem('nx_history')||'[]');
+let userAds=JSON.parse(localStorage.getItem('nx_ads')||'{}');
 
-let userAds=[]; // bought ad plans
-let history=[];
-
+// Show page
 function show(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
   document.getElementById(id).classList.add('show');
 }
 
+// Login
 function login(){
   let u=lUser.value.trim();
   let p=lPass.value.trim();
@@ -253,6 +251,7 @@ function login(){
   show('dashboard');
 }
 
+// Update dashboard
 function update(){
   dUser.innerText=user;
   dBal.innerText=bal.toFixed(0);
@@ -262,24 +261,21 @@ function update(){
   localStorage.setItem('nx_bal',bal);
   localStorage.setItem('nx_day',day);
   localStorage.setItem('nx_total',total);
+  localStorage.setItem('nx_history',JSON.stringify(history));
+  localStorage.setItem('nx_ads',JSON.stringify(userAds));
 }
 
+// Logout
 function logout(){
   localStorage.removeItem('nx_user');
   location.reload();
 }
 
-function openPage(p){
-  show(p);
-  if(p==='ads') renderAds();
-  if(p==='history') renderHistory();
-}
-
+function openPage(p){show(p);}
 function setNumber(){
   depNum.value = depMethod.value==='jazz'?'03705519562':'03379827882';
 }
 setNumber();
-
 function copyNum(){navigator.clipboard.writeText(depNum.value);alert('Copied');}
 
 function submitDeposit(){
@@ -287,7 +283,7 @@ function submitDeposit(){
   if(!a)return alert('Enter amount');
   bal+=a;
   total+=a*0.1;
-  history.push(`Deposited Rs ${a}`);
+  history.unshift(`Deposit Rs ${a}`);
   update();
   alert('Deposit Submitted');
   show('dashboard');
@@ -297,7 +293,7 @@ function submitWithdraw(){
   let a=parseFloat(wAmt.value);
   if(a>bal)return alert('Low balance');
   bal-=a;
-  history.push(`Withdrawal Requested Rs ${a}`);
+  history.unshift(`Withdrawal Rs ${a}`);
   update();
   alert('Withdraw Requested');
   show('dashboard');
@@ -319,79 +315,93 @@ for(let i=1;i<=50;i++){
 }
 planList.innerHTML=planHTML;
 
-function buyPlan(amount,mult,days){
+function buyPlan(amount,mul,days){
   depAmt.value=amount;
-  show('deposit');
+  alert(`Plan bought! Daily tasks will unlock automatically.`);
+  // Initialize ads/tasks for plan
+  if(!userAds[user]) userAds[user]={tasks:[],lastClaim:0};
+  for(let i=0;i<3;i++){
+    userAds[user].tasks.push({daily:Math.floor(amount*mul/days),claimed:false});
+  }
+  update();
+  show('ads');
 }
 
 /* Ads */
-let adsPlans=[];
+let adsHTML='';
 for(let i=1;i<=7;i++){
-  adsPlans.push({id:i,price:500+i*50,daily:i+2});
+  adsHTML+=`
+  <div class="card">
+    <b>Ads Plan ${i}</b><br>
+    Price: Rs ${500+i*50}<br>
+    Daily Ads: ${i+2}<br>
+    <button onclick="buyAds(${500+i*50},${i+2})">Buy Ads Plan</button>
+  </div>`;
+}
+adsList.innerHTML=adsHTML;
+
+function buyAds(price,dailyAds){
+  alert('Ads Plan bought! Daily tasks will unlock.');
+  if(!userAds[user]) userAds[user]={tasks:[],lastClaim:0};
+  for(let i=0;i<dailyAds;i++){
+    userAds[user].tasks.push({daily:Math.floor(price/dailyAds),claimed:false});
+  }
+  update();
+  showTasks();
 }
 
-function renderAds(){
+function showTasks(){
+  if(!userAds[user] || userAds[user].tasks.length===0){
+    tasks.innerHTML="<p>No tasks yet. Buy plan or ads.</p>";
+    return;
+  }
   let html='';
-  adsPlans.forEach(a=>{
-    let bought=userAds.includes(a.id);
-    html+=`<div class="task-card">
-      <b>Ads Plan ${a.id}</b><br>
-      Price: Rs ${a.price}<br>
-      Daily Tasks: ${a.daily}<br>
-      ${bought?`<button class="task-btn" onclick="completeTask(${a.id})">Complete Task</button>
-      <p>Next reset in <span id="timer${a.id}"></span></p>`:
-      `<button onclick="buyAds(${a.id})">Buy Plan</button>`}
+  let now=new Date().getDate();
+  if(userAds[user].lastClaim!=now){
+    userAds[user].tasks.forEach(t=>t.claimed=false);
+    userAds[user].lastClaim=now;
+  }
+  userAds[user].tasks.forEach((t,i)=>{
+    html+=`<div class="card-task">
+      Task ${i+1} - Rs ${t.daily}<br>
+      ${t.claimed?'<span style="color:#4ade80">Claimed</span>':'<button onclick="claimTask('+i+')">Watch</button>'}
     </div>`;
   });
-  adsList.innerHTML=html;
-  userAds.forEach(aid=>{
-    startTaskTimer(aid);
+  tasks.innerHTML=html;
+}
+
+function claimTask(i){
+  let t=userAds[user].tasks[i];
+  if(t.claimed)return;
+  t.claimed=true;
+  bal+=t.daily;
+  day+=t.daily;
+  total+=t.daily;
+  history.unshift(`Task Rs ${t.daily}`);
+  update();
+  showTasks();
+  alert(`Task claimed! Rs ${t.daily} added to balance.`);
+}
+
+// History page
+function showHistory(){
+  if(history.length===0){historyList.innerHTML="<p>No history yet.</p>"; return;}
+  historyList.innerHTML='';
+  history.forEach(h=>{
+    let div=document.createElement('div');
+    div.className='history-item';
+    div.innerText=h;
+    historyList.appendChild(div);
   });
-}
-
-function buyAds(id){
-  if(!userAds.includes(id)) userAds.push(id);
-  history.push(`Bought Ads Plan ${id}`);
-  renderAds();
-  update();
-}
-
-function completeTask(id){
-  let plan=adsPlans.find(a=>a.id===id);
-  let profit=Math.floor(plan.price*0.05);
-  bal+=profit; day+=profit; total+=profit;
-  history.push(`Task Completed from Ads Plan ${id} +Rs ${profit}`);
-  update();
-  renderAds();
-}
-
-function startTaskTimer(id){
-  let timerEl=document.getElementById(`timer${id}`);
-  if(!timerEl) return;
-  let t=24*60*60; // 24 hours reset
-  let interval=setInterval(()=>{
-    let h=Math.floor(t/3600);
-    let m=Math.floor((t%3600)/60);
-    let s=t%60;
-    timerEl.innerText=`${h}h ${m}m ${s}s`;
-    if(t<=0){ clearInterval(interval); timerEl.innerText='Task Reset!'; }
-    t--;
-  },1000);
-}
-
-/* History */
-function renderHistory(){
-  let html='';
-  history.forEach(h=>{ html+=`<div class="task-card">${h}</div>` });
-  historyList.innerHTML=html;
 }
 
 /* Auto login */
 if(user){
   update();
   show('dashboard');
+  showTasks();
+  showHistory();
 }
 </script>
-
 </body>
 </html>
