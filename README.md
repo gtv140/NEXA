@@ -3,7 +3,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA EARN</title>
-
 <style>
 :root{
   --red:#ff2d2d;
@@ -58,7 +57,6 @@ button{
   cursor:pointer;
 }
 button:active{transform:scale(.98)}
-
 .stats{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -76,7 +74,6 @@ button:active{transform:scale(.98)}
 .s-day{background:linear-gradient(135deg,#ef4444,#f97316)}
 .s-total{background:linear-gradient(135deg,#facc15,#fde047);color:#000}
 .s-mem{background:linear-gradient(135deg,#334155,#475569)}
-
 .icons{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -92,13 +89,11 @@ button:active{transform:scale(.98)}
   border:1px solid rgba(255,255,255,.06);
 }
 .icon span{font-size:22px;display:block;margin-bottom:4px}
-
 img.banner{
   width:100%;
   border-radius:12px;
   margin-top:10px;
 }
-
 .nav{
   position:fixed;
   bottom:0;left:0;right:0;
@@ -113,11 +108,10 @@ img.banner{
   cursor:pointer;
 }
 .nav span{font-size:20px;display:block}
-
 .small{font-size:12px;opacity:.8}
+.timer{margin-top:8px;font-size:12px;color:#facc15;}
 </style>
 </head>
-
 <body>
 
 <header>NEXA EARN</header>
@@ -178,6 +172,7 @@ img.banner{
     </p>
   </div>
   <div id="adsList"></div>
+  <div id="adsTasks"></div>
 </div>
 
 <!-- DEPOSIT -->
@@ -229,6 +224,8 @@ let user=localStorage.getItem('nx_user');
 let bal=parseFloat(localStorage.getItem('nx_bal')||0);
 let day=parseFloat(localStorage.getItem('nx_day')||0);
 let total=parseFloat(localStorage.getItem('nx_total')||0);
+let adsPlan = JSON.parse(localStorage.getItem('nx_adsPlan')||'null');
+let adsWatched = parseInt(localStorage.getItem('nx_adsWatched')||0);
 
 function show(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
@@ -261,13 +258,12 @@ function logout(){
   location.reload();
 }
 
-function openPage(p){show(p);}
+function openPage(p){show(p); displayAdsTasks();}
 
 function setNumber(){
   depNum.value = depMethod.value==='jazz'?'03705519562':'03379827882';
 }
 setNumber();
-
 function copyNum(){navigator.clipboard.writeText(depNum.value);alert('Copied');}
 
 function submitDeposit(){
@@ -304,13 +300,12 @@ for(let i=1;i<=50;i++){
   </div>`;
 }
 planList.innerHTML=planHTML;
-
 function buy(a){
   depAmt.value=a;
   show('deposit');
 }
 
-/* Ads */
+/* Ads Plans */
 let adsHTML='';
 for(let i=1;i<=7;i++){
   adsHTML+=`
@@ -318,17 +313,68 @@ for(let i=1;i<=7;i++){
     <b>Ads Plan ${i}</b><br>
     Price: Rs ${500+i*50}<br>
     Daily Ads: ${i+2}<br>
-    <button onclick="buy(${500+i*50})">Buy Ads Plan</button>
+    <button onclick="buyAds(${i})">Buy Ads Plan</button>
   </div>`;
 }
 adsList.innerHTML=adsHTML;
+
+function buyAds(id){
+  adsPlan={id:id, totalAds:id+2, watched:0};
+  localStorage.setItem('nx_adsPlan',JSON.stringify(adsPlan));
+  adsWatched=0;
+  localStorage.setItem('nx_adsWatched',adsWatched);
+  alert('Ads Plan Purchased! Go to Ads page to watch tasks.');
+  displayAdsTasks();
+}
+
+/* Ads Tasks */
+function displayAdsTasks(){
+  let tasksDiv=document.getElementById('adsTasks');
+  if(!adsPlan){ tasksDiv.innerHTML='<p>Buy an Ads Plan first.</p>'; return; }
+  let html='';
+  for(let i=1;i<=adsPlan.totalAds;i++){
+    let done=i<=adsPlan.watched;
+    html+=`
+      <div class="card">
+        <b>Ad Task ${i}</b><br>
+        Status: ${done?'✅ Watched':'⏳ Pending'}<br>
+        ${done?'':`<button onclick="watchAd(${i})">Watch Ad</button><div id="timer${i}" class="timer"></div>`}
+      </div>
+    `;
+  }
+  tasksDiv.innerHTML=html;
+}
+
+/* Watch Ad Simulation */
+function watchAd(i){
+  let timerDiv=document.getElementById('timer'+i);
+  let time=5; // 5 sec countdown
+  let interval=setInterval(()=>{
+    if(time<=0){
+      clearInterval(interval);
+      alert('Ad Completed! Daily profit added.');
+      adsPlan.watched++;
+      localStorage.setItem('nx_adsPlan',JSON.stringify(adsPlan));
+      let profit=50; // fixed daily ad profit
+      bal+=profit;
+      day+=profit;
+      total+=profit;
+      localStorage.setItem('nx_adsWatched',adsPlan.watched);
+      update();
+      displayAdsTasks();
+    }else{
+      timerDiv.innerText='Watching: '+time+'s';
+      time--;
+    }
+  },1000);
+}
 
 /* Auto login */
 if(user){
   update();
   show('dashboard');
+  displayAdsTasks();
 }
 </script>
-
 </body>
 </html>
