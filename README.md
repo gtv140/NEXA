@@ -1,32 +1,46 @@
-<!DOCTYPE html>
+<NEXA>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA EARN</title>
 <style>
-:root{
---primary:#ff0044;
---secondary:#00fff7;
---accent:#ffcc00;
---bg:#111;
---box:#222;
---text:#fff;
+:root {
+  --neon1: #ff0044;
+  --neon2: #00fff7;
+  --neon3: #ffcc00;
+  --dark: #111;
+  --box-bg: rgba(255,255,255,0.05);
 }
-body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
-header{text-align:center;font-size:28px;padding:20px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.page{max-width:480px;margin:20px auto;padding:20px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,204,0,0.2);}
-input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:none;background: rgba(255,255,255,0.05);color:#fff;}
-button{background:linear-gradient(90deg,var(--primary),var(--accent));font-weight:700;cursor:pointer;}
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px 0;background: rgba(0,0,0,0.8);}
-.nav div{text-align:center;cursor:pointer;}
-.nav div .ico{font-size:22px;display:block;margin-bottom:4px;}
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  background: var(--dark);
+  color:#fff;
+  overflow-x:hidden;
+}
+header {
+  text-align:center;
+  font-size:32px;
+  padding:20px;
+  background: linear-gradient(90deg,var(--neon1),var(--neon2),var(--neon3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.page { max-width:480px; margin:20px auto; padding:20px; border-radius:12px; background: rgba(0,0,0,0.6); border:1px solid var(--neon3);}
+input,select,button { width:100%; padding:10px; margin-top:10px; border-radius:8px; border:none; background: var(--box-bg); color:#fff; }
+button { background: linear-gradient(90deg,var(--neon1),var(--neon2),var(--neon3)); font-weight:700; cursor:pointer; }
+.nav { position: fixed; bottom:0; left:0; right:0; display:flex; justify-content:space-around; padding:10px 0; background: rgba(0,0,0,0.8);}
+.nav div { text-align:center; cursor:pointer;}
+.nav div .ico { font-size:22px; display:block; margin-bottom:4px;}
 .hidden{display:none;}
-.box{padding:15px;margin:10px 0;background:var(--box);border-radius:12px;border:1px solid rgba(255,204,0,0.2);}
-.icon-box{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0;}
-.icon-item{flex:1 1 45%;background:var(--box);border-radius:12px;padding:15px;text-align:center;cursor:pointer;border:1px solid rgba(255,204,0,0.2);}
-.icon-item:hover{box-shadow:0 4px 15px rgba(255,204,0,0.3);}
-img{width:100%;border-radius:12px;margin-top:10px;}
+.box { padding:15px; margin:10px 0; background:var(--box-bg); border-radius:12px; border:1px solid var(--neon3);}
+.icon-box { display:flex; flex-wrap:wrap; gap:10px; margin:15px 0;}
+.icon-item { flex:1 1 45%; background:var(--box-bg); border-radius:12px; padding:15px; text-align:center; cursor:pointer; border:1px solid var(--neon3);}
+.icon-item:hover { box-shadow:0 4px 20px rgba(255,204,0,0.4); transform: translateY(-2px);}
+img { width:100%; border-radius:12px; margin-top:10px;}
+.slide { animation: slide 20s infinite linear; }
+@keyframes slide { 0%{transform:translateX(0);}100%{transform:translateX(-100%);} }
 </style>
 </head>
 <body>
@@ -56,10 +70,13 @@ img{width:100%;border-radius:12px;margin-top:10px;}
 
 <div class="box" id="companyInfo">
 <h3>About NEXA EARN</h3>
-<p>Operating since 2022, NEXA EARN provides digital investment opportunities with fast profit growth. Watch ads or buy plans to earn daily rewards.</p>
+<p>Operating since 2022, NEXA EARN provides digital investment opportunities with fast profit growth. Buy plans or watch ads to earn daily rewards.</p>
+<div class="slide">
 <img src="https://picsum.photos/400/200?random=1"/>
 <img src="https://picsum.photos/400/200?random=2"/>
 <img src="https://picsum.photos/400/200?random=3"/>
+<img src="https://picsum.photos/400/200?random=4"/>
+</div>
 </div>
 
 <div class="icon-box">
@@ -177,7 +194,7 @@ function submitDeposit(){
   const amount = parseFloat(document.getElementById('depositAmount').value);
   if(!amount){alert('Enter amount'); return;}
   balance += amount;
-  totalProfit += amount*0.1; // example
+  totalProfit += amount*0.1;
   localStorage.setItem('nexa_balance',balance);
   localStorage.setItem('nexa_total',totalProfit);
   alert('Deposit submitted');
