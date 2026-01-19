@@ -15,16 +15,21 @@ body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#fff;overf
 header{text-align:center;font-size:28px;padding:20px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .page{max-width:480px;margin:20px auto;padding:20px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,204,0,0.2);}
 input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:none;background:rgba(255,255,255,0.05);color:#fff;}
-button{background:linear-gradient(90deg,var(--primary),var(--accent));font-weight:700;cursor:pointer;}
+button{background:linear-gradient(90deg,var(--primary),var(--accent));font-weight:700;cursor:pointer;transition:0.3s;}
+button:hover{transform:scale(1.05);}
 .nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px 0;background:rgba(0,0,0,0.8);}
 .nav div{text-align:center;cursor:pointer;}
 .nav div .ico{font-size:22px;display:block;margin-bottom:4px;}
 .hidden{display:none;}
-.box{padding:15px;margin:10px 0;background:rgba(255,255,255,0.05);border-radius:12px;border:1px solid rgba(255,204,0,0.2);}
+.box{padding:15px;margin:10px 0;border-radius:12px;border:1px solid rgba(255,204,0,0.2);background:linear-gradient(145deg,rgba(255,0,68,0.1),rgba(0,255,247,0.1));transition:0.3s;}
+.box:hover{box-shadow:0 4px 20px rgba(255,204,0,0.5);transform:scale(1.02);}
 .icon-box{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0;}
-.icon-item{flex:1 1 45%;background:rgba(255,255,255,0.05);border-radius:12px;padding:15px;text-align:center;cursor:pointer;border:1px solid rgba(255,204,0,0.2);}
-.icon-item:hover{box-shadow:0 4px 15px rgba(255,204,0,0.3);}
+.icon-item{flex:1 1 45%;background:rgba(255,255,255,0.05);border-radius:12px;padding:15px;text-align:center;cursor:pointer;border:1px solid rgba(255,204,0,0.2);transition:0.3s;}
+.icon-item:hover{box-shadow:0 4px 15px rgba(255,204,0,0.3);transform:scale(1.05);}
 img{width:100%;border-radius:12px;margin-top:10px;}
+.carousel{position:relative;width:100%;height:200px;overflow:hidden;border-radius:12px;margin:10px 0;}
+.carousel img{width:100%;height:200px;object-fit:cover;position:absolute;top:0;left:0;opacity:0;transition:opacity 1s;}
+.carousel img.active{opacity:1;}
 .progress-bar{background:rgba(255,255,255,0.05);border-radius:12px;overflow:hidden;margin-top:10px;}
 .progress-bar-inner{height:20px;width:0%;background:linear-gradient(90deg,var(--primary),var(--accent));transition:0.3s;}
 </style>
@@ -54,9 +59,12 @@ img{width:100%;border-radius:12px;margin-top:10px;}
 <div class="box" id="companyInfo">
 <h3>About NEXA EARN</h3>
 <p>Since 2022, NEXA EARN provides digital investment & ad-earning opportunities. Watch ads or buy plans to earn daily rewards!</p>
-<img src="https://picsum.photos/400/200?random=1"/>
+<div class="carousel">
+<img src="https://picsum.photos/400/200?random=1" class="active"/>
 <img src="https://picsum.photos/400/200?random=2"/>
 <img src="https://picsum.photos/400/200?random=3"/>
+<img src="https://picsum.photos/400/200?random=4"/>
+</div>
 </div>
 
 <div class="icon-box">
@@ -133,6 +141,16 @@ let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 let totalProfit = parseFloat(localStorage.getItem('nexa_total')||'0');
 let adsProgress=0;
+
+// Carousel
+let carouselIndex=0;
+function slideImages(){
+const imgs=document.querySelectorAll('.carousel img');
+imgs.forEach(img=>img.classList.remove('active'));
+carouselIndex=(carouselIndex+1)%imgs.length;
+imgs[carouselIndex].classList.add('active');
+}
+setInterval(slideImages,3000);
 
 function updateDashboard(){
 document.getElementById('dashUser').innerText=currentUser||'-';
@@ -236,7 +254,7 @@ if(adsProgress>100) adsProgress=100;
 document.getElementById('adsProgress').style.width=adsProgress+'%';
 if(adsProgress>=100){
 alert('Daily ads completed! Profit added.');
-dailyProfit+=50; // example profit
+dailyProfit+=50; 
 balance+=50;
 localStorage.setItem('nexa_balance',balance);
 localStorage.setItem('nexa_daily',dailyProfit);
