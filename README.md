@@ -115,6 +115,16 @@ img.banner{
 .nav span{font-size:20px;display:block}
 
 .small{font-size:12px;opacity:.8}
+
+/* Countdown badge */
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:8px;
+  background:linear-gradient(135deg,#2563ff,#9333ea);
+  font-size:12px;
+  margin-top:5px;
+}
 </style>
 </head>
 
@@ -229,10 +239,10 @@ let user=localStorage.getItem('nx_user');
 let bal=parseFloat(localStorage.getItem('nx_bal')||0);
 let day=parseFloat(localStorage.getItem('nx_day')||0);
 let total=parseFloat(localStorage.getItem('nx_total')||0);
-
-/* TASK HISTORY */
 let history=JSON.parse(localStorage.getItem('nx_history')||'[]');
+let adsBought=JSON.parse(localStorage.getItem('nx_ads')||'{}');
 
+/* Utility */
 function show(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
   document.getElementById(id).classList.add('show');
@@ -246,6 +256,7 @@ function login(){
   user=u;
   update();
   show('dashboard');
+  showAdsTasks();
 }
 
 function update(){
@@ -258,50 +269,36 @@ function update(){
   localStorage.setItem('nx_day',day);
   localStorage.setItem('nx_total',total);
   localStorage.setItem('nx_history',JSON.stringify(history));
+  localStorage.setItem('nx_ads',JSON.stringify(adsBought));
 }
 
+/* Logout */
 function logout(){
   localStorage.removeItem('nx_user');
   location.reload();
 }
 
-function openPage(p){show(p);}
-
-function setNumber(){
-  depNum.value = depMethod.value==='jazz'?'03705519562':'03379827882';
-}
+/* Deposit / Withdraw */
+function setNumber(){ depNum.value = depMethod.value==='jazz'?'03705519562':'03379827882'; }
 setNumber();
-
 function copyNum(){navigator.clipboard.writeText(depNum.value);alert('Copied');}
-
 function submitDeposit(){
-  let a=parseFloat(depAmt.value);
-  if(!a)return alert('Enter amount');
-  bal+=a;
-  total+=a*0.1;
+  let a=parseFloat(depAmt.value); if(!a)return alert('Enter amount');
+  bal+=a; total+=a*0.1;
   history.push(`Deposit Rs ${a} - ${new Date().toLocaleString()}`);
-  update();
-  alert('Deposit Submitted');
-  show('dashboard');
+  update(); alert('Deposit Submitted'); show('dashboard');
 }
-
 function submitWithdraw(){
-  let a=parseFloat(wAmt.value);
-  if(a>bal)return alert('Low balance');
-  bal-=a;
-  history.push(`Withdrawal Rs ${a} - ${new Date().toLocaleString()}`);
-  update();
-  alert('Withdraw Requested');
-  show('dashboard');
+  let a=parseFloat(wAmt.value); if(a>bal)return alert('Low balance');
+  bal-=a; history.push(`Withdrawal Rs ${a} - ${new Date().toLocaleString()}`);
+  update(); alert('Withdraw Requested'); show('dashboard');
 }
 
 /* Plans */
 let planHTML='';
 for(let i=1;i<=50;i++){
-  let inv=200+i*50;
-  let mul=i<=5?2.4:2.2;
-  planHTML+=`
-  <div class="card">
+  let inv=200+i*50; let mul=i<=5?2.4:2.2;
+  planHTML+=`<div class="card">
     <b>Plan ${i} ${i<=5?'(Special)':""}</b><br>
     Invest: Rs ${inv}<br>
     Days: ${25+i}<br>
@@ -310,73 +307,77 @@ for(let i=1;i<=50;i++){
   </div>`;
 }
 planList.innerHTML=planHTML;
-
-function buy(a){
-  depAmt.value=a;
-  show('deposit');
-}
+function buy(a){ depAmt.value=a; show('deposit'); }
 
 /* Ads Plans */
 let adsHTML='';
 for(let i=1;i<=7;i++){
-  adsHTML+=`
-  <div class="card">
+  adsHTML+=`<div class="card">
     <b>Ads Plan ${i}</b><br>
     Price: Rs ${500+i*50}<br>
-    Daily Ads: ${i+2}<br>
+    Daily Tasks: ${i+2}<br>
     <button onclick="buyAds(${i})">Buy Ads Plan</button>
   </div>`;
 }
 adsList.innerHTML=adsHTML;
 
-let adsBought={}; // key: planID, value: tasks left
+/* Buy Ads */
 function buyAds(id){
   let price=500+id*50;
   if(price>bal){alert('Insufficient balance'); return;}
   bal-=price;
-  adsBought[id]={tasksLeft:id+2, lastClaim:new Date().toDateString()};
+  adsBought[id]={tasksLeft:id+2,lastClaim:new Date().toDateString(),nextUnlock:null};
   history.push(`Bought Ads Plan ${id} - ${new Date().toLocaleString()}`);
-  update();
-  alert(`Ads Plan ${id} bought! Daily tasks unlocked.`);
-  show('dashboard');
+  update(); alert(`Ads Plan ${id} bought! Daily tasks unlocked.`); show('dashboard'); showAdsTasks();
 }
 
-/* Daily Ads Task System */
+/* Show Ads Tasks with countdown */
 function showAdsTasks(){
-  let html='';
-  let today=new Date().toDateString();
+  let html=''; let today=new Date().toDateString();
   for(let id in adsBought){
     let plan=adsBought[id];
-    if(plan.lastClaim!==today){plan.tasksLeft=id*1+2; plan.lastClaim=today;}
+    if(plan.lastClaim!==today){ plan.tasksLeft=id*1+2; plan.lastClaim=today; plan.nextUnlock=null; notify(`Ads Plan ${id} tasks unlocked for today!`); }
+    let countdown='';
+    if(plan.tasksLeft<=0){
+      if(!plan.nextUnlock){ let t=new Date(); t.setDate(t.getDate()+1); plan.nextUnlock=t; }
+      let now=new Date(); let diff=Math.floor((new Date(plan.nextUnlock)-now)/1000);
+      let h=Math.floor(diff/3600); let m=Math.floor((diff%3600)/60); let s=diff%60;
+      countdown=`<span class="badge">Next task in ${h}h ${m}m ${s}s</span>`;
+    }
     html+=`<div class="card">
       <b>Ads Plan ${id}</b><br>
       Tasks Left Today: ${plan.tasksLeft}<br>
       <button onclick="completeTask(${id})" ${plan.tasksLeft<=0?'disabled':''}>Watch Ad</button>
+      ${countdown}
     </div>`;
   }
   adsList.innerHTML=html;
 }
 
+/* Complete Task */
 function completeTask(id){
-  let plan=adsBought[id];
-  if(plan.tasksLeft<=0)return alert('No tasks left today');
-  plan.tasksLeft--;
-  let profit=50; // example daily profit
-  bal+=profit;
-  day+=profit;
-  total+=profit;
+  let plan=adsBought[id]; if(plan.tasksLeft<=0)return;
+  plan.tasksLeft--; let profit=50;
+  bal+=profit; day+=profit; total+=profit;
   history.push(`Ads Plan ${id} task completed, earned Rs ${profit} - ${new Date().toLocaleString()}`);
-  update();
-  showAdsTasks();
-  alert(`Task completed! Rs ${profit} added to balance`);
+  update(); showAdsTasks(); alert(`Task completed! Rs ${profit} added`);
 }
 
-/* Auto login and daily task init */
-if(user){
-  update();
-  show('dashboard');
-  showAdsTasks();
+/* Notification pop-up */
+function notify(msg){
+  let d=document.createElement('div');
+  d.style.position='fixed'; d.style.top='10px'; d.style.left='50%'; d.style.transform='translateX(-50%)';
+  d.style.background='linear-gradient(135deg,#2563ff,#9333ea)'; d.style.padding='10px 20px'; d.style.borderRadius='12px';
+  d.style.fontWeight='700'; d.style.zIndex=9999; d.innerText=msg;
+  document.body.appendChild(d);
+  setTimeout(()=>d.remove(),5000);
 }
+
+/* Update countdown every second */
+setInterval(()=>{ if(user) showAdsTasks(); },1000);
+
+/* Auto login init */
+if(user){ update(); show('dashboard'); showAdsTasks(); }
 </script>
 
 </body>
