@@ -10,29 +10,25 @@
   --gold:#f5c542;
   --dark:#0f1117;
   --card:#181b24;
-  --neon:#ff00ff;
 }
 body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
   background:linear-gradient(135deg,#0f1117,#14182a);
   color:#fff;
-  overflow-x:hidden;
 }
 header{
   text-align:center;
   padding:18px;
-  font-size:28px;
+  font-size:26px;
   font-weight:700;
   color:var(--gold);
-  text-shadow:0 0 10px var(--gold),0 0 20px var(--red);
 }
 .page{
   max-width:480px;
   margin:15px auto 90px;
   padding:15px;
   display:none;
-  animation:fadeIn 0.5s;
 }
 .show{display:block;}
 .card{
@@ -40,10 +36,8 @@ header{
   border-radius:14px;
   padding:14px;
   margin-bottom:12px;
-  box-shadow:0 0 10px var(--neon),0 6px 18px rgba(0,0,0,.4);
-  transition:0.3s;
+  box-shadow:0 6px 18px rgba(0,0,0,.4);
 }
-.card:hover{box-shadow:0 0 20px var(--neon),0 8px 25px rgba(0,0,0,.5);}
 input,select,button{
   width:100%;
   padding:11px;
@@ -51,38 +45,36 @@ input,select,button{
   border-radius:10px;
   border:none;
   outline:none;
-  transition:0.3s;
 }
-input,select{background:#0f1320;color:#fff;}
+input,select{
+  background:#0f1320;
+  color:#fff;
+}
 button{
   background:linear-gradient(90deg,var(--red),var(--gold));
   color:#000;
   font-weight:700;
   cursor:pointer;
-  text-shadow:0 0 2px #fff;
 }
-button:hover{transform:scale(1.03);box-shadow:0 0 15px var(--neon);}
 button:active{transform:scale(.98)}
 
 .stats{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:10px;
-  margin-bottom:15px;
 }
 .stat{
   padding:10px;
   border-radius:12px;
   text-align:center;
   font-size:13px;
-  animation:pop 0.5s;
 }
 .stat b{display:block;font-size:15px;margin-top:3px}
-.s-user{background:linear-gradient(135deg,#6366f1,#9333ea);box-shadow:0 0 8px #9333ea;}
-.s-bal{background:linear-gradient(135deg,#16a34a,#4ade80);box-shadow:0 0 8px #4ade80;}
-.s-day{background:linear-gradient(135deg,#ef4444,#f97316);box-shadow:0 0 8px #f97316;}
-.s-total{background:linear-gradient(135deg,#facc15,#fde047);color:#000;box-shadow:0 0 8px #fde047;}
-.s-mem{background:linear-gradient(135deg,#334155,#475569);box-shadow:0 0 8px #475569;}
+.s-user{background:linear-gradient(135deg,#6366f1,#9333ea)}
+.s-bal{background:linear-gradient(135deg,#16a34a,#4ade80)}
+.s-day{background:linear-gradient(135deg,#ef4444,#f97316)}
+.s-total{background:linear-gradient(135deg,#facc15,#fde047);color:#000}
+.s-mem{background:linear-gradient(135deg,#334155,#475569)}
 
 .icons{
   display:grid;
@@ -97,12 +89,14 @@ button:active{transform:scale(.98)}
   text-align:center;
   cursor:pointer;
   border:1px solid rgba(255,255,255,.06);
-  transition:0.3s;
-  box-shadow:0 0 5px #fff;
 }
-.icon span{font-size:22px;display:block;margin-bottom:4px;}
-.icon:hover{transform:scale(1.05);box-shadow:0 0 15px var(--neon);}
-img.banner{width:100%;border-radius:12px;margin-top:10px;animation:slide 10s infinite alternate;}
+.icon span{font-size:22px;display:block;margin-bottom:4px}
+
+img.banner{
+  width:100%;
+  border-radius:12px;
+  margin-top:10px;
+}
 
 .nav{
   position:fixed;
@@ -116,27 +110,25 @@ img.banner{width:100%;border-radius:12px;margin-top:10px;animation:slide 10s inf
   text-align:center;
   font-size:12px;
   cursor:pointer;
-  transition:0.3s;
 }
-.nav div:hover{transform:scale(1.1);}
 .nav span{font-size:20px;display:block}
 
-.small{font-size:12px;opacity:.8;}
+.small{font-size:12px;opacity:.8}
 
-@keyframes fadeIn{
-  from{opacity:0;}
-  to{opacity:1;}
+.history-card{
+  background:#0f1320;
+  padding:10px;
+  border-radius:12px;
+  margin-bottom:8px;
+  font-size:13px;
 }
-@keyframes pop{
-  from{transform:scale(.9);}
-  to{transform:scale(1);}
-}
-@keyframes slide{
-  0%{transform:translateX(0);}
-  100%{transform:translateX(-5%);}
+.timer{
+  font-weight:700;
+  color:#facc15;
 }
 </style>
 </head>
+
 <body>
 
 <header>NEXA EARN</header>
@@ -177,6 +169,7 @@ img.banner{width:100%;border-radius:12px;margin-top:10px;animation:slide 10s inf
     <div class="icon" onclick="openPage('ads')"><span>🎬</span>Watch Ads</div>
     <div class="icon" onclick="openPage('deposit')"><span>💰</span>Deposit</div>
     <div class="icon" onclick="openPage('withdraw')"><span>💵</span>Withdraw</div>
+    <div class="icon" onclick="openPage('history')"><span>🕒</span>History</div>
     <div class="icon" onclick="openPage('support')"><span>🛠️</span>Support</div>
     <div class="icon" onclick="logout()"><span>🚪</span>Logout</div>
   </div>
@@ -191,11 +184,6 @@ img.banner{width:100%;border-radius:12px;margin-top:10px;animation:slide 10s inf
 <!-- ADS -->
 <div id="ads" class="page">
   <h3>Watch Ads & Earn</h3>
-  <div class="card">
-    <p class="small">
-      Buy Ads Plan → Daily ads unlock → Watch ads → Daily profit auto add.
-    </p>
-  </div>
   <div id="adsList"></div>
 </div>
 
@@ -225,6 +213,12 @@ img.banner{width:100%;border-radius:12px;margin-top:10px;animation:slide 10s inf
   <button onclick="submitWithdraw()">Request</button>
 </div>
 
+<!-- HISTORY -->
+<div id="history" class="page">
+  <h3>Activity History</h3>
+  <div id="historyList"></div>
+</div>
+
 <!-- SUPPORT -->
 <div id="support" class="page">
   <div class="card">
@@ -248,7 +242,7 @@ let user=localStorage.getItem('nx_user');
 let bal=parseFloat(localStorage.getItem('nx_bal')||0);
 let day=parseFloat(localStorage.getItem('nx_day')||0);
 let total=parseFloat(localStorage.getItem('nx_total')||0);
-let tasks = JSON.parse(localStorage.getItem('nx_tasks')||'[]');
+let tasks=[];
 
 function show(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
@@ -296,6 +290,7 @@ function submitDeposit(){
   bal+=a;
   total+=a*0.1;
   update();
+  addHistory(`Deposit Rs ${a}`);
   alert('Deposit Submitted');
   show('dashboard');
 }
@@ -305,8 +300,17 @@ function submitWithdraw(){
   if(a>bal)return alert('Low balance');
   bal-=a;
   update();
+  addHistory(`Withdraw Rs ${a}`);
   alert('Withdraw Requested');
   show('dashboard');
+}
+
+function addHistory(msg){
+  const hist=document.getElementById('historyList');
+  const div=document.createElement('div');
+  div.className='history-card';
+  div.innerHTML=`${new Date().toLocaleString()} - ${msg}`;
+  hist.prepend(div);
 }
 
 /* Plans */
@@ -320,30 +324,65 @@ for(let i=1;i<=50;i++){
     Invest: Rs ${inv}<br>
     Days: ${25+i}<br>
     Total: Rs ${Math.round(inv*mul)}<br>
-    <button onclick="buy(${inv},'plan${i}')">Buy Now</button>
+    <button onclick="buy(${inv})">Buy Now</button>
   </div>`;
 }
 planList.innerHTML=planHTML;
 
-function buy(amount,planId){
-  depAmt.value=amount;
-  tasks.push({planId:planId,daily:3,completed:0});
-  localStorage.setItem('nx_tasks',JSON.stringify(tasks));
+function buy(a){
+  depAmt.value=a;
   show('deposit');
 }
 
-/* Ads Plans */
+/* Ads */
 let adsHTML='';
 for(let i=1;i<=7;i++){
+  let price=500+i*50;
+  let daily=i+2;
   adsHTML+=`
   <div class="card">
     <b>Ads Plan ${i}</b><br>
-    Price: Rs ${500+i*50}<br>
-    Daily Ads: ${i+2}<br>
-    <button onclick="buy(${500+i*50},'ads${i}')">Buy Ads Plan</button>
+    Price: Rs ${price}<br>
+    Daily Ads: ${daily}<br>
+    <button onclick="buyAds(${i},${price},${daily})">Buy Ads Plan</button>
   </div>`;
 }
 adsList.innerHTML=adsHTML;
+
+function buyAds(id,price,daily){
+  if(bal<price){alert('Low balance'); return;}
+  bal-=price;
+  total+=price*0.05;
+  update();
+  tasks.push({id:id,remaining:daily});
+  addHistory(`Ads Plan ${id} purchased, ${daily} tasks unlocked`);
+  show('ads');
+  renderTasks();
+}
+
+function renderTasks(){
+  let html='';
+  tasks.forEach((t,i)=>{
+    html+=`
+    <div class="card">
+      Task ${t.id} - Remaining: ${t.remaining} <br>
+      <button onclick="watchTask(${i})">Watch</button>
+    </div>`;
+  });
+  adsList.innerHTML=html;
+}
+
+function watchTask(i){
+  if(tasks[i].remaining>0){
+    tasks[i].remaining--;
+    day+=Math.floor(Math.random()*20)+10;
+    bal+=Math.floor(Math.random()*10)+5;
+    total+=Math.floor(Math.random()*10)+5;
+    update();
+    addHistory(`Task ${tasks[i].id} watched, daily profit added`);
+    renderTasks();
+  } else alert('No remaining task');
+}
 
 /* Auto login */
 if(user){
