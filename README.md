@@ -36,6 +36,8 @@ button { background: linear-gradient(90deg,var(--primary),var(--secondary)); fon
 img { width:100%; border-radius:12px; margin-top:10px;}
 .carousel { display:flex; overflow-x:auto; scroll-behavior:smooth; gap:10px; }
 .carousel img { flex:0 0 300px; height:150px; object-fit:cover; }
+.ad-task { padding:10px; margin:10px 0; background: rgba(255,255,255,0.05); border-radius:12px; text-align:center; }
+.ad-task button { margin-top:10px; }
 </style>
 </head>
 <body>
@@ -97,6 +99,7 @@ img { width:100%; border-radius:12px; margin-top:10px;}
 <div id="ads" class="page hidden">
 <h2>Watch Ads</h2>
 <div id="adsList"></div>
+<div id="adsTasks"></div>
 </div>
 
 <!-- DEPOSIT -->
@@ -142,12 +145,17 @@ img { width:100%; border-radius:12px; margin-top:10px;}
 </div>
 
 <script>
-// LocalStorage user data
+// User Data
 let currentUser = localStorage.getItem('nexa_user')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
 let totalProfit = parseFloat(localStorage.getItem('nexa_total')||'0');
+let lastDaily = parseInt(localStorage.getItem('nexa_lastDay')||0);
 
+// Ads Task Data
+let userAdsTasks = JSON.parse(localStorage.getItem('nexa_adsTasks')||'{}');
+
+// Update Dashboard
 function updateDashboard(){
   document.getElementById('dashUser').innerText=currentUser||'-';
   document.getElementById('dashBalance').innerText=balance.toFixed(2);
@@ -157,11 +165,14 @@ function updateDashboard(){
   showPage('dashboard');
 }
 
+// Page Switch
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
+  if(id==='ads') renderAdsTasks();
 }
 
+// Login
 function login(){
   const u = document.getElementById('user').value.trim();
   const p = document.getElementById('pass').value.trim();
@@ -174,103 +185,56 @@ function login(){
   balance = parseFloat(localStorage.getItem('nexa_balance'));
   dailyProfit = parseFloat(localStorage.getItem('nexa_daily'));
   totalProfit = parseFloat(localStorage.getItem('nexa_total'));
+  const today = new Date().getDate();
+  if(today!==lastDaily){ dailyProfit=0; lastDaily=today; localStorage.setItem('nexa_lastDay',lastDaily); localStorage.setItem('nexa_daily',dailyProfit);}
+  if(!userAdsTasks[currentUser]) userAdsTasks[currentUser]=[];
+  localStorage.setItem('nexa_adsTasks',JSON.stringify(userAdsTasks));
   updateDashboard();
 }
 
+// Logout
 function logout(){currentUser=null; localStorage.removeItem('nexa_user'); location.reload();}
 
-function updateDepositNumber(){
-  const method=document.getElementById('depositMethod').value;
-  document.getElementById('depositNumber').value=method==='jazzcash'?'03705519562':'03379827882';
-}
+// Deposit / Withdraw
+function updateDepositNumber(){document.getElementById('depositNumber').value=document.getElementById('depositMethod').value==='jazzcash'?'03705519562':'03379827882';}
 function copyDepositNumber(){navigator.clipboard.writeText(document.getElementById('depositNumber').value); alert('Number copied');}
-
-function submitDeposit(){
-  const amount = parseFloat(document.getElementById('depositAmount').value);
-  if(!amount){alert('Enter amount'); return;}
-  balance += amount;
-  totalProfit += amount*0.1; 
-  dailyProfit += amount*0.05;
-  localStorage.setItem('nexa_balance',balance);
-  localStorage.setItem('nexa_total',totalProfit);
-  localStorage.setItem('nexa_daily',dailyProfit);
-  alert('Deposit submitted');
-  updateDashboard();
-}
-
-function submitWithdraw(){
-  const amount = parseFloat(document.getElementById('withdrawAmount').value);
-  if(!amount || amount>balance){alert('Invalid amount'); return;}
-  balance -= amount;
-  localStorage.setItem('nexa_balance',balance);
-  alert('Withdrawal requested');
-  updateDashboard();
-}
-
+function submitDeposit(){const amount = parseFloat(document.getElementById('depositAmount').value); if(!amount){alert('Enter amount'); return;} balance += amount; totalProfit += amount*0.1; dailyProfit += amount*0.05; localStorage.setItem('nexa_balance',balance); localStorage.setItem('nexa_total',totalProfit); localStorage.setItem('nexa_daily',dailyProfit); alert('Deposit submitted'); updateDashboard();}
+function submitWithdraw(){const amount = parseFloat(document.getElementById('withdrawAmount').value); if(!amount || amount>balance){alert('Invalid amount'); return;} balance -= amount; localStorage.setItem('nexa_balance',balance); alert('Withdrawal requested'); updateDashboard();}
 function invite(){prompt('Share this code with friends: NEXA123');}
 
 // Plans
 let plans=[];
-for(let i=1;i<=50;i++){
-  plans.push({
-    id:i,
-    name:'Plan '+i,
-    invest:200+i*50,
-    days:25+Math.floor(i*2),
-    multiplier:i<=5?2.4:2.2,
-    special:i<=5
-  });
-}
+for(let i=1;i<=50;i++){plans.push({id:i,name:'Plan '+i,invest:200+i*50,days:25+Math.floor(i*2),multiplier:i<=5?2.4:2.2,special:i<=5});}
+function showPlans(){let html=''; plans.forEach(p=>{html+=`<div class="box"><strong>${p.name} ${p.special?'[Special Offer]':''}</strong><br>Invest: Rs ${p.invest}<br>Days: ${p.days}<br>Total: Rs ${Math.round(p.invest*p.multiplier)}<br><button onclick="buyPlan(${p.id})">Buy Now</button></div>`;}); document.getElementById('plansList').innerHTML=html;}
+function buyPlan(id){const plan = plans.find(p=>p.id===id); document.getElementById('depositAmount').value=plan.invest; showPage('deposit');}
 
-function showPlans(){
-  let html='';
-  plans.forEach(p=>{
-    html+=`<div class="box">
-    <strong>${p.name} ${p.special?'[Special Offer]':''}</strong><br>
-    Invest: Rs ${p.invest}<br>
-    Days: ${p.days}<br>
-    Total: Rs ${Math.round(p.invest*p.multiplier)}<br>
-    <button onclick="buyPlan(${p.id})">Buy Now</button>
-    </div>`;
-  });
-  document.getElementById('plansList').innerHTML=html;
-}
-
-function buyPlan(id){
-  const plan = plans.find(p=>p.id===id);
-  document.getElementById('depositAmount').value=plan.invest;
-  showPage('deposit');
-}
-
-// Ads watch plans
+// Ads Watch Plans
 let adsPlans=[];
-for(let i=1;i<=7;i++){
-  adsPlans.push({id:i,name:'Ads Plan '+i, invest:500+i*50, days:10});
-}
+for(let i=1;i<=7;i++){adsPlans.push({id:i,name:'Ads Plan '+i, invest:500+i*50, days:10, dailyAds:3});}
+function showAds(){let html=''; adsPlans.forEach(a=>{html+=`<div class="box"><strong>${a.name}</strong><br>Invest: Rs ${a.invest}<br>Days: ${a.days}<br>Daily Ads: ${a.dailyAds}<br><button onclick="buyAds(${a.id})">Buy Now</button></div>`;}); document.getElementById('adsList').innerHTML=html;}
+function buyAds(id){const ad = adsPlans.find(a=>a.id===id); document.getElementById('depositAmount').value=ad.invest; if(!userAdsTasks[currentUser]) userAdsTasks[currentUser]=[]; userAdsTasks[currentUser].push({planId:id, remainingDays:ad.days, dailyAds:ad.dailyAds, completed:0}); localStorage.setItem('nexa_adsTasks',JSON.stringify(userAdsTasks)); showPage('deposit');}
 
-function showAds(){
-  let html='';
-  adsPlans.forEach(a=>{
-    html+=`<div class="box">
-    <strong>${a.name}</strong><br>
-    Invest: Rs ${a.invest}<br>
-    Days: ${a.days}<br>
-    <button onclick="buyAds(${a.id})">Buy Now</button>
-    </div>`;
+// Render Ads Tasks + Coming Soon Coins
+function renderAdsTasks(){
+  const tasksDiv = document.getElementById('adsTasks'); tasksDiv.innerHTML='';
+  if(!userAdsTasks[currentUser] || userAdsTasks[currentUser].length===0){ tasksDiv.innerHTML='<p>No active ads plans. Buy plan to start tasks.</p>'; return;}
+  userAdsTasks[currentUser].forEach((task,index)=>{
+    const planInfo = adsPlans.find(a=>a.id===task.planId);
+    const div = document.createElement('div'); div.className='ad-task';
+    div.innerHTML=`<strong>${planInfo.name}</strong><br>Remaining Days: ${task.remainingDays}<br>Daily Ads: ${task.dailyAds - task.completed}<br>
+    <button onclick="watchAd(${index})">Watch Ad</button>
+    <div style="margin-top:8px;"><strong>Coming Soon:</strong><br>
+    <img src="https://picsum.photos/100/100?random=${index+10}" style="border-radius:50%; margin-top:5px;"></div>`;
+    tasksDiv.appendChild(div);
   });
-  document.getElementById('adsList').innerHTML=html;
 }
 
-function buyAds(id){
-  const ad = adsPlans.find(a=>a.id===id);
-  document.getElementById('depositAmount').value=ad.invest;
-  showPage('deposit');
-}
+// Watch Ad with auto update
+function watchAd(index){const task = userAdsTasks[currentUser][index]; if(task.completed >= task.dailyAds){alert('Daily ads completed'); return;} task.completed++; balance += 10; dailyProfit += 10; localStorage.setItem('nexa_balance',balance); localStorage.setItem('nexa_daily',dailyProfit); localStorage.setItem('nexa_adsTasks',JSON.stringify(userAdsTasks)); alert('Ad watched! Rs 10 added'); renderAdsTasks(); updateDashboard();}
 
 // Init
-if(currentUser) updateDashboard();
-showPlans();
-showAds();
+if(currentUser) login();
+showPlans(); showAds();
 </script>
 </body>
 </html>
