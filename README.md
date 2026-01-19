@@ -3,6 +3,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXA EARN</title>
+
 <style>
 :root{
   --red:#ff2d2d;
@@ -114,18 +115,8 @@ img.banner{
 .nav span{font-size:20px;display:block}
 
 .small{font-size:12px;opacity:.8}
-
-.history-card{
-  background:#0f1320;
-  padding:10px;
-  border-radius:12px;
-  margin-bottom:8px;
-  font-size:13px;
-}
-.timer{
-  font-weight:700;
-  color:#facc15;
-}
+.task-card{background:#0f1320;padding:10px;margin:10px 0;border-radius:12px;border:1px solid rgba(255,255,255,0.1);}
+.task-btn{margin-top:8px;background:linear-gradient(90deg,#16a34a,#4ade80);color:#000;font-weight:700;}
 </style>
 </head>
 
@@ -235,6 +226,7 @@ img.banner{
   <div onclick="openPage('plans')"><span>📦</span>Plans</div>
   <div onclick="openPage('ads')"><span>🎬</span>Ads</div>
   <div onclick="openPage('deposit')"><span>💰</span>Deposit</div>
+  <div onclick="openPage('history')"><span>🕒</span>History</div>
 </div>
 
 <script>
@@ -242,7 +234,9 @@ let user=localStorage.getItem('nx_user');
 let bal=parseFloat(localStorage.getItem('nx_bal')||0);
 let day=parseFloat(localStorage.getItem('nx_day')||0);
 let total=parseFloat(localStorage.getItem('nx_total')||0);
-let tasks=[];
+
+let userAds=[]; // bought ad plans
+let history=[];
 
 function show(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
@@ -275,7 +269,11 @@ function logout(){
   location.reload();
 }
 
-function openPage(p){show(p);}
+function openPage(p){
+  show(p);
+  if(p==='ads') renderAds();
+  if(p==='history') renderHistory();
+}
 
 function setNumber(){
   depNum.value = depMethod.value==='jazz'?'03705519562':'03379827882';
@@ -289,8 +287,8 @@ function submitDeposit(){
   if(!a)return alert('Enter amount');
   bal+=a;
   total+=a*0.1;
+  history.push(`Deposited Rs ${a}`);
   update();
-  addHistory(`Deposit Rs ${a}`);
   alert('Deposit Submitted');
   show('dashboard');
 }
@@ -299,18 +297,10 @@ function submitWithdraw(){
   let a=parseFloat(wAmt.value);
   if(a>bal)return alert('Low balance');
   bal-=a;
+  history.push(`Withdrawal Requested Rs ${a}`);
   update();
-  addHistory(`Withdraw Rs ${a}`);
   alert('Withdraw Requested');
   show('dashboard');
-}
-
-function addHistory(msg){
-  const hist=document.getElementById('historyList');
-  const div=document.createElement('div');
-  div.className='history-card';
-  div.innerHTML=`${new Date().toLocaleString()} - ${msg}`;
-  hist.prepend(div);
 }
 
 /* Plans */
@@ -324,64 +314,76 @@ for(let i=1;i<=50;i++){
     Invest: Rs ${inv}<br>
     Days: ${25+i}<br>
     Total: Rs ${Math.round(inv*mul)}<br>
-    <button onclick="buy(${inv})">Buy Now</button>
+    <button onclick="buyPlan(${inv},${mul},${25+i})">Buy Now</button>
   </div>`;
 }
 planList.innerHTML=planHTML;
 
-function buy(a){
-  depAmt.value=a;
+function buyPlan(amount,mult,days){
+  depAmt.value=amount;
   show('deposit');
 }
 
 /* Ads */
-let adsHTML='';
+let adsPlans=[];
 for(let i=1;i<=7;i++){
-  let price=500+i*50;
-  let daily=i+2;
-  adsHTML+=`
-  <div class="card">
-    <b>Ads Plan ${i}</b><br>
-    Price: Rs ${price}<br>
-    Daily Ads: ${daily}<br>
-    <button onclick="buyAds(${i},${price},${daily})">Buy Ads Plan</button>
-  </div>`;
-}
-adsList.innerHTML=adsHTML;
-
-function buyAds(id,price,daily){
-  if(bal<price){alert('Low balance'); return;}
-  bal-=price;
-  total+=price*0.05;
-  update();
-  tasks.push({id:id,remaining:daily});
-  addHistory(`Ads Plan ${id} purchased, ${daily} tasks unlocked`);
-  show('ads');
-  renderTasks();
+  adsPlans.push({id:i,price:500+i*50,daily:i+2});
 }
 
-function renderTasks(){
+function renderAds(){
   let html='';
-  tasks.forEach((t,i)=>{
-    html+=`
-    <div class="card">
-      Task ${t.id} - Remaining: ${t.remaining} <br>
-      <button onclick="watchTask(${i})">Watch</button>
+  adsPlans.forEach(a=>{
+    let bought=userAds.includes(a.id);
+    html+=`<div class="task-card">
+      <b>Ads Plan ${a.id}</b><br>
+      Price: Rs ${a.price}<br>
+      Daily Tasks: ${a.daily}<br>
+      ${bought?`<button class="task-btn" onclick="completeTask(${a.id})">Complete Task</button>
+      <p>Next reset in <span id="timer${a.id}"></span></p>`:
+      `<button onclick="buyAds(${a.id})">Buy Plan</button>`}
     </div>`;
   });
   adsList.innerHTML=html;
+  userAds.forEach(aid=>{
+    startTaskTimer(aid);
+  });
 }
 
-function watchTask(i){
-  if(tasks[i].remaining>0){
-    tasks[i].remaining--;
-    day+=Math.floor(Math.random()*20)+10;
-    bal+=Math.floor(Math.random()*10)+5;
-    total+=Math.floor(Math.random()*10)+5;
-    update();
-    addHistory(`Task ${tasks[i].id} watched, daily profit added`);
-    renderTasks();
-  } else alert('No remaining task');
+function buyAds(id){
+  if(!userAds.includes(id)) userAds.push(id);
+  history.push(`Bought Ads Plan ${id}`);
+  renderAds();
+  update();
+}
+
+function completeTask(id){
+  let plan=adsPlans.find(a=>a.id===id);
+  let profit=Math.floor(plan.price*0.05);
+  bal+=profit; day+=profit; total+=profit;
+  history.push(`Task Completed from Ads Plan ${id} +Rs ${profit}`);
+  update();
+  renderAds();
+}
+
+function startTaskTimer(id){
+  let timerEl=document.getElementById(`timer${id}`);
+  if(!timerEl) return;
+  let t=24*60*60; // 24 hours reset
+  let interval=setInterval(()=>{
+    let h=Math.floor(t/3600);
+    let m=Math.floor((t%3600)/60);
+    let s=t%60;
+    timerEl.innerText=`${h}h ${m}m ${s}s`;
+    if(t<=0){ clearInterval(interval); timerEl.innerText='Task Reset!'; }
+    t--;
+  },1000);
+}
+
+/* History */
+function renderHistory(){
+  let html='';
+  history.forEach(h=>{ html+=`<div class="task-card">${h}</div>` });
+  historyList.innerHTML=html;
 }
 
 /* Auto login */
@@ -390,5 +392,6 @@ if(user){
   show('dashboard');
 }
 </script>
+
 </body>
 </html>
