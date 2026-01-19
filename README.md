@@ -10,13 +10,13 @@
   --gold:#f5c542;
   --dark:#0f1117;
   --card:#181b24;
-  --green:#16a34a;
 }
 body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
   background:linear-gradient(135deg,#0f1117,#14182a);
   color:#fff;
+  overflow-x:hidden;
 }
 header{
   text-align:center;
@@ -24,13 +24,13 @@ header{
   font-size:26px;
   font-weight:700;
   color:var(--gold);
-  text-shadow:0 0 10px var(--gold);
 }
 .page{
   max-width:480px;
   margin:15px auto 90px;
   padding:15px;
   display:none;
+  animation:fadeIn 0.5s;
 }
 .show{display:block;}
 .card{
@@ -38,10 +38,8 @@ header{
   border-radius:14px;
   padding:14px;
   margin-bottom:12px;
-  box-shadow:0 0 20px rgba(255,255,255,.2);
-  transition:0.3s;
+  box-shadow:0 6px 18px rgba(0,0,0,.4);
 }
-.card:hover{box-shadow:0 0 25px var(--gold);}
 input,select,button{
   width:100%;
   padding:11px;
@@ -59,30 +57,28 @@ button{
   color:#000;
   font-weight:700;
   cursor:pointer;
-  box-shadow:0 0 8px var(--gold);
-  transition:0.2s;
 }
-button:hover{box-shadow:0 0 15px var(--gold); transform:scale(1.02);}
 button:active{transform:scale(.98)}
 
 .stats{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:10px;
+  margin-bottom:10px;
 }
 .stat{
   padding:10px;
   border-radius:12px;
   text-align:center;
   font-size:13px;
-  box-shadow:0 0 10px rgba(255,255,255,.1);
+  box-shadow:0 3px 10px rgba(255,255,255,.1);
 }
-.stat b{display:block;font-size:15px;margin-top:3px; color:#fff;}
-.s-user{background:linear-gradient(135deg,#6366f1,#9333ea);box-shadow:0 0 10px #9333ea;}
-.s-bal{background:linear-gradient(135deg,#16a34a,#4ade80);box-shadow:0 0 10px #4ade80;}
-.s-day{background:linear-gradient(135deg,#ef4444,#f97316);box-shadow:0 0 10px #f97316;}
-.s-total{background:linear-gradient(135deg,#facc15,#fde047);color:#000;box-shadow:0 0 10px #fde047;}
-.s-mem{background:linear-gradient(135deg,#334155,#475569);box-shadow:0 0 10px #475569;}
+.stat b{display:block;font-size:15px;margin-top:3px; animation:blink 1s infinite alternate;}
+.s-user{background:linear-gradient(135deg,#6366f1,#9333ea)}
+.s-bal{background:linear-gradient(135deg,#16a34a,#4ade80)}
+.s-day{background:linear-gradient(135deg,#ef4444,#f97316)}
+.s-total{background:linear-gradient(135deg,#facc15,#fde047);color:#000}
+.s-mem{background:linear-gradient(135deg,#334155,#475569)}
 
 .icons{
   display:grid;
@@ -97,22 +93,16 @@ button:active{transform:scale(.98)}
   text-align:center;
   cursor:pointer;
   border:1px solid rgba(255,255,255,.06);
-  box-shadow:0 0 10px rgba(255,255,255,.1);
-  transition:0.2s;
+  transition:0.3s;
 }
-.icon:hover{box-shadow:0 0 15px var(--gold);}
-.icon span{font-size:22px;display:block;margin-bottom:4px;}
+.icon:hover{transform:scale(1.05);}
+.icon span{font-size:22px;display:block;margin-bottom:4px}
 
 img.banner{
   width:100%;
   border-radius:12px;
   margin-top:10px;
-  animation:slide 10s infinite alternate;
-}
-@keyframes slide{
-  0%{transform:translateX(0);}
-  50%{transform:translateX(-5px);}
-  100%{transform:translateX(0);}
+  animation:slide 10s infinite;
 }
 
 .nav{
@@ -130,28 +120,17 @@ img.banner{
 }
 .nav span{font-size:20px;display:block}
 
-.small{font-size:12px;opacity:.8;}
-.alert{
-  position:fixed;
-  top:10px;
-  left:50%;
-  transform:translateX(-50%);
-  background:var(--gold);
-  color:#000;
-  padding:10px 15px;
-  border-radius:12px;
-  box-shadow:0 0 15px var(--gold);
-  display:none;
-  z-index:9999;
-}
-.timer{color:#facc15;font-weight:700;}
+.small{font-size:12px;opacity:.8}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes blink{0%{opacity:0.7;}100%{opacity:1;}}
+@keyframes slide{0%,100%{transform:translateX(0);}50%{transform:translateX(-5px);}}
 </style>
 </head>
-
 <body>
-<header>NEXA EARN</header>
 
-<div id="alert" class="alert"></div>
+<header>NEXA EARN</header>
 
 <!-- LOGIN -->
 <div id="login" class="page show">
@@ -189,6 +168,7 @@ img.banner{
     <div class="icon" onclick="openPage('ads')"><span>🎬</span>Watch Ads</div>
     <div class="icon" onclick="openPage('deposit')"><span>💰</span>Deposit</div>
     <div class="icon" onclick="openPage('withdraw')"><span>💵</span>Withdraw</div>
+    <div class="icon" onclick="openPage('history')"><span>🕒</span>History</div>
     <div class="icon" onclick="openPage('support')"><span>🛠️</span>Support</div>
     <div class="icon" onclick="logout()"><span>🚪</span>Logout</div>
   </div>
@@ -203,7 +183,7 @@ img.banner{
 <!-- ADS -->
 <div id="ads" class="page">
   <h3>Watch Ads & Earn</h3>
-  <div id="adsList"></div>
+  <div id="adsTask"></div>
 </div>
 
 <!-- DEPOSIT -->
@@ -232,6 +212,12 @@ img.banner{
   <button onclick="submitWithdraw()">Request</button>
 </div>
 
+<!-- HISTORY -->
+<div id="history" class="page">
+  <h3>Activity History</h3>
+  <div id="historyList"></div>
+</div>
+
 <!-- SUPPORT -->
 <div id="support" class="page">
   <div class="card">
@@ -251,31 +237,33 @@ img.banner{
 </div>
 
 <script>
+// User data
 let user=localStorage.getItem('nx_user');
 let bal=parseFloat(localStorage.getItem('nx_bal')||0);
 let day=parseFloat(localStorage.getItem('nx_day')||0);
 let total=parseFloat(localStorage.getItem('nx_total')||0);
+let history=JSON.parse(localStorage.getItem('nx_history')||'[]');
+let adsBuy=[]; // store ads plan bought by user
+let adsTasks=[];
 
-let adsTasks={}; // track ads per user
-
+// Show page
 function show(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
   document.getElementById(id).classList.add('show');
 }
 
+// Login
 function login(){
   let u=lUser.value.trim();
   let p=lPass.value.trim();
   if(!u||!p)return alert('Enter details');
   localStorage.setItem('nx_user',u);
   user=u;
-  if(!localStorage.getItem('nx_adsTasks')) localStorage.setItem('nx_adsTasks',JSON.stringify({}));
-  adsTasks=JSON.parse(localStorage.getItem('nx_adsTasks'));
-  if(!adsTasks[user]) adsTasks[user]=[];
   update();
   show('dashboard');
 }
 
+// Update dashboard
 function update(){
   dUser.innerText=user;
   dBal.innerText=bal.toFixed(0);
@@ -285,39 +273,47 @@ function update(){
   localStorage.setItem('nx_bal',bal);
   localStorage.setItem('nx_day',day);
   localStorage.setItem('nx_total',total);
-  localStorage.setItem('nx_adsTasks',JSON.stringify(adsTasks));
+  localStorage.setItem('nx_history',JSON.stringify(history));
 }
 
+// Logout
 function logout(){
   localStorage.removeItem('nx_user');
   location.reload();
 }
 
-function openPage(p){show(p);}
+// Navigation
+function openPage(p){
+  show(p);
+  if(p=='ads') showAdsTasks();
+  if(p=='history') renderHistory();
+}
 
+// Deposit
 function setNumber(){
   depNum.value = depMethod.value==='jazz'?'03705519562':'03379827882';
 }
 setNumber();
-
 function copyNum(){navigator.clipboard.writeText(depNum.value);alert('Copied');}
-
 function submitDeposit(){
   let a=parseFloat(depAmt.value);
   if(!a)return alert('Enter amount');
   bal+=a;
   total+=a*0.1;
-  showAlert('Deposit Submitted!');
+  history.push({type:'Deposit',amt:a,date:new Date().toLocaleString()});
   update();
+  alert('Deposit Submitted');
   show('dashboard');
 }
 
+// Withdraw
 function submitWithdraw(){
   let a=parseFloat(wAmt.value);
   if(a>bal)return alert('Low balance');
   bal-=a;
-  showAlert('Withdraw Requested!');
+  history.push({type:'Withdraw',amt:a,date:new Date().toLocaleString()});
   update();
+  alert('Withdraw Requested');
   show('dashboard');
 }
 
@@ -332,19 +328,16 @@ for(let i=1;i<=50;i++){
     Invest: Rs ${inv}<br>
     Days: ${25+i}<br>
     Total: Rs ${Math.round(inv*mul)}<br>
-    <button onclick="buyPlan(${i})">Buy Now</button>
+    <button onclick="buyPlan(${inv})">Buy Now</button>
   </div>`;
 }
 planList.innerHTML=planHTML;
-
-function buyPlan(id){
-  let inv=200+id*50;
-  depAmt.value=inv;
+function buyPlan(a){
+  depAmt.value=a;
   show('deposit');
-  showAlert(`Plan ${id} selected. Please deposit to unlock tasks.`);
 }
 
-/* Ads */
+/* Ads plans & tasks */
 let adsHTML='';
 for(let i=1;i<=7;i++){
   adsHTML+=`
@@ -352,74 +345,62 @@ for(let i=1;i<=7;i++){
     <b>Ads Plan ${i}</b><br>
     Price: Rs ${500+i*50}<br>
     Daily Ads: ${i+2}<br>
-    <button onclick="buyAds(${i})">Buy Ads Plan</button>
+    <button onclick="buyAds(${i},${500+i*50})">Buy Ads Plan</button>
   </div>`;
 }
 adsList.innerHTML=adsHTML;
 
-function buyAds(id){
-  if(!adsTasks[user]) adsTasks[user]=[];
-  adsTasks[user].push({plan:id,remaining:id+2,lastClaim:Date.now()});
-  localStorage.setItem('nx_adsTasks',JSON.stringify(adsTasks));
-  showAlert(`Ads Plan ${id} bought! Daily tasks unlocked.`);
-  show('ads');
-  renderTasks();
+function buyAds(id,price){
+  depAmt.value=price;
+  if(!adsBuy.includes(id)){
+    adsBuy.push(id);
+    adsTasks.push({id:id,remaining:id+2,date:new Date().toLocaleDateString()});
+  }
+  show('deposit');
 }
 
-function renderTasks(){
+// Show Ads Tasks with daily unlock
+function showAdsTasks(){
   let html='';
-  let userTasks=adsTasks[user]||[];
-  userTasks.forEach((t,i)=>{
-    let now=Date.now();
-    let last=new Date(t.lastClaim).getTime();
-    let diff=Math.floor((now-last)/1000);
-    let waitTime=86400-diff; // 24h cooldown
-    if(waitTime<0) waitTime=0;
-    html+=`
-    <div class="card">
-      <b>Ads Task Plan ${t.plan}</b><br>
-      Remaining: ${t.remaining}<br>
-      ${waitTime>0?`Next Task in: <span class="timer">${formatTime(waitTime)}</span>`:`<button onclick="claimTask(${i})">Watch Task</button>`}
-    </div>`;
+  let today=new Date().toLocaleDateString();
+  adsTasks.forEach(a=>{
+    let remaining=a.remaining;
+    if(a.date!=today){a.remaining=remaining;a.date=today;}
+    for(let i=1;i<=a.remaining;i++){
+      html+=`<div class="card">Task ${i} for Ads Plan ${a.id} <br>
+      <button onclick="completeTask(${a.id},${i})">Watch</button></div>`;
+    }
   });
-  adsList.innerHTML=html;
+  adsTask.innerHTML=html;
 }
 
-function claimTask(index){
-  let t=adsTasks[user][index];
-  if(t.remaining<=0)return alert('No remaining tasks');
-  let now=Date.now();
-  if((now - t.lastClaim)<86400000)return alert('Task not yet available');
-  t.remaining--;
-  t.lastClaim=now;
-  bal+=50; // profit per task
-  day+=50;
-  total+=50;
-  showAlert(`Task completed! Rs 50 added.`);
+// Complete Ads Task
+function completeTask(planId,taskNo){
+  let plan=adsTasks.find(a=>a.id==planId);
+  if(!plan) return;
+  plan.remaining--;
+  day+=10; // daily profit per task example
+  bal+=10;
+  total+=10;
+  history.push({type:'Ads Task',plan:planId,amt:10,date:new Date().toLocaleString()});
   update();
-  renderTasks();
+  alert('Task Completed! Rs 10 added');
+  showAdsTasks();
 }
 
-function formatTime(sec){
-  let h=Math.floor(sec/3600);
-  let m=Math.floor((sec%3600)/60);
-  let s=sec%60;
-  return `${h}h ${m}m ${s}s`;
+// Render history
+function renderHistory(){
+  let html='';
+  history.slice(-20).reverse().forEach(h=>{
+    html+=`<div class="card">${h.date} - ${h.type} - Rs ${h.amt}</div>`;
+  });
+  historyList.innerHTML=html;
 }
 
-function showAlert(msg){
-  let a=document.getElementById('alert');
-  a.innerText=msg;
-  a.style.display='block';
-  setTimeout(()=>{a.style.display='none';},3000);
-}
-
-/* Auto login */
+// Auto login
 if(user){
-  adsTasks=JSON.parse(localStorage.getItem('nx_adsTasks')||'{}');
   update();
   show('dashboard');
-  renderTasks();
 }
 </script>
 </body>
