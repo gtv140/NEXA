@@ -10,6 +10,7 @@
   --gold:#f5c542;
   --dark:#0f1117;
   --card:#181b24;
+  --green:#16a34a;
 }
 body{
   margin:0;
@@ -23,7 +24,7 @@ header{
   font-size:26px;
   font-weight:700;
   color:var(--gold);
-  text-shadow:0 0 12px #f5c542,0 0 18px #2563ff;
+  text-shadow:0 0 10px var(--gold);
 }
 .page{
   max-width:480px;
@@ -37,13 +38,10 @@ header{
   border-radius:14px;
   padding:14px;
   margin-bottom:12px;
-  box-shadow:0 6px 18px rgba(0,0,0,.4);
-  transition:all 0.3s ease;
+  box-shadow:0 0 20px rgba(255,255,255,.2);
+  transition:0.3s;
 }
-.card:hover{
-  transform:scale(1.02);
-  box-shadow:0 8px 25px rgba(255,204,0,0.4);
-}
+.card:hover{box-shadow:0 0 25px var(--gold);}
 input,select,button{
   width:100%;
   padding:11px;
@@ -61,8 +59,11 @@ button{
   color:#000;
   font-weight:700;
   cursor:pointer;
+  box-shadow:0 0 8px var(--gold);
+  transition:0.2s;
 }
-button:active{transform:scale(.97)}
+button:hover{box-shadow:0 0 15px var(--gold); transform:scale(1.02);}
+button:active{transform:scale(.98)}
 
 .stats{
   display:grid;
@@ -70,23 +71,18 @@ button:active{transform:scale(.97)}
   gap:10px;
 }
 .stat{
-  padding:12px;
+  padding:10px;
   border-radius:12px;
   text-align:center;
   font-size:13px;
-  background:linear-gradient(135deg,#14182a,#1e2030);
-  transition:0.3s;
+  box-shadow:0 0 10px rgba(255,255,255,.1);
 }
-.stat:hover{
-  transform:scale(1.05);
-  box-shadow:0 6px 20px rgba(255,204,0,0.4);
-}
-.stat b{display:block;font-size:15px;margin-top:3px}
-.s-user{background:linear-gradient(135deg,#6366f1,#9333ea)}
-.s-bal{background:linear-gradient(135deg,#16a34a,#4ade80)}
-.s-day{background:linear-gradient(135deg,#ef4444,#f97316)}
-.s-total{background:linear-gradient(135deg,#facc15,#fde047);color:#000}
-.s-mem{background:linear-gradient(135deg,#334155,#475569)}
+.stat b{display:block;font-size:15px;margin-top:3px; color:#fff;}
+.s-user{background:linear-gradient(135deg,#6366f1,#9333ea);box-shadow:0 0 10px #9333ea;}
+.s-bal{background:linear-gradient(135deg,#16a34a,#4ade80);box-shadow:0 0 10px #4ade80;}
+.s-day{background:linear-gradient(135deg,#ef4444,#f97316);box-shadow:0 0 10px #f97316;}
+.s-total{background:linear-gradient(135deg,#facc15,#fde047);color:#000;box-shadow:0 0 10px #fde047;}
+.s-mem{background:linear-gradient(135deg,#334155,#475569);box-shadow:0 0 10px #475569;}
 
 .icons{
   display:grid;
@@ -101,18 +97,22 @@ button:active{transform:scale(.97)}
   text-align:center;
   cursor:pointer;
   border:1px solid rgba(255,255,255,.06);
-  transition:all 0.3s;
+  box-shadow:0 0 10px rgba(255,255,255,.1);
+  transition:0.2s;
 }
-.icon:hover{
-  transform:scale(1.05);
-  box-shadow:0 6px 20px rgba(255,204,0,0.4);
-}
-.icon span{font-size:22px;display:block;margin-bottom:4px}
+.icon:hover{box-shadow:0 0 15px var(--gold);}
+.icon span{font-size:22px;display:block;margin-bottom:4px;}
 
 img.banner{
   width:100%;
   border-radius:12px;
   margin-top:10px;
+  animation:slide 10s infinite alternate;
+}
+@keyframes slide{
+  0%{transform:translateX(0);}
+  50%{transform:translateX(-5px);}
+  100%{transform:translateX(0);}
 }
 
 .nav{
@@ -130,18 +130,28 @@ img.banner{
 }
 .nav span{font-size:20px;display:block}
 
-.small{font-size:12px;opacity:.8}
-.timer{
-  font-size:14px;
-  color:#facc15;
-  font-weight:700;
-  margin-top:8px;
+.small{font-size:12px;opacity:.8;}
+.alert{
+  position:fixed;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  background:var(--gold);
+  color:#000;
+  padding:10px 15px;
+  border-radius:12px;
+  box-shadow:0 0 15px var(--gold);
+  display:none;
+  z-index:9999;
 }
+.timer{color:#facc15;font-weight:700;}
 </style>
 </head>
-<body>
 
+<body>
 <header>NEXA EARN</header>
+
+<div id="alert" class="alert"></div>
 
 <!-- LOGIN -->
 <div id="login" class="page show">
@@ -241,30 +251,31 @@ img.banner{
 </div>
 
 <script>
-// User data
 let user=localStorage.getItem('nx_user');
 let bal=parseFloat(localStorage.getItem('nx_bal')||0);
 let day=parseFloat(localStorage.getItem('nx_day')||0);
 let total=parseFloat(localStorage.getItem('nx_total')||0);
 
-// Pages
+let adsTasks={}; // track ads per user
+
 function show(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
   document.getElementById(id).classList.add('show');
 }
 
-// Login
 function login(){
   let u=lUser.value.trim();
   let p=lPass.value.trim();
-  if(!u||!p){alert('Enter details');return;}
+  if(!u||!p)return alert('Enter details');
   localStorage.setItem('nx_user',u);
   user=u;
+  if(!localStorage.getItem('nx_adsTasks')) localStorage.setItem('nx_adsTasks',JSON.stringify({}));
+  adsTasks=JSON.parse(localStorage.getItem('nx_adsTasks'));
+  if(!adsTasks[user]) adsTasks[user]=[];
   update();
   show('dashboard');
 }
 
-// Update dashboard
 function update(){
   dUser.innerText=user;
   dBal.innerText=bal.toFixed(0);
@@ -274,23 +285,43 @@ function update(){
   localStorage.setItem('nx_bal',bal);
   localStorage.setItem('nx_day',day);
   localStorage.setItem('nx_total',total);
+  localStorage.setItem('nx_adsTasks',JSON.stringify(adsTasks));
 }
 
-// Logout
 function logout(){
   localStorage.removeItem('nx_user');
   location.reload();
 }
 
-// Navigation
 function openPage(p){show(p);}
-function setNumber(){depNum.value=depMethod.value==='jazz'?'03705519562':'03379827882';}
-setNumber();
-function copyNum(){navigator.clipboard.writeText(depNum.value);alert('Copied');}
-function submitDeposit(){let a=parseFloat(depAmt.value);if(!a)return alert('Enter amount');bal+=a;total+=a*0.1;update();alert('Deposit Submitted');show('dashboard');}
-function submitWithdraw(){let a=parseFloat(wAmt.value);if(a>bal)return alert('Low balance');bal-=a;update();alert('Withdraw Requested');show('dashboard');}
 
-// Plans
+function setNumber(){
+  depNum.value = depMethod.value==='jazz'?'03705519562':'03379827882';
+}
+setNumber();
+
+function copyNum(){navigator.clipboard.writeText(depNum.value);alert('Copied');}
+
+function submitDeposit(){
+  let a=parseFloat(depAmt.value);
+  if(!a)return alert('Enter amount');
+  bal+=a;
+  total+=a*0.1;
+  showAlert('Deposit Submitted!');
+  update();
+  show('dashboard');
+}
+
+function submitWithdraw(){
+  let a=parseFloat(wAmt.value);
+  if(a>bal)return alert('Low balance');
+  bal-=a;
+  showAlert('Withdraw Requested!');
+  update();
+  show('dashboard');
+}
+
+/* Plans */
 let planHTML='';
 for(let i=1;i<=50;i++){
   let inv=200+i*50;
@@ -301,67 +332,95 @@ for(let i=1;i<=50;i++){
     Invest: Rs ${inv}<br>
     Days: ${25+i}<br>
     Total: Rs ${Math.round(inv*mul)}<br>
-    <button onclick="buyPlan(${inv})">Buy Now</button>
+    <button onclick="buyPlan(${i})">Buy Now</button>
   </div>`;
 }
 planList.innerHTML=planHTML;
-function buyPlan(a){depAmt.value=a;show('deposit');}
 
-// Ads
-let adsPlans=[];
-for(let i=1;i<=7;i++){
-  adsPlans.push({id:i,price:500+i*50,daily:i+2,completed:0});
+function buyPlan(id){
+  let inv=200+id*50;
+  depAmt.value=inv;
+  show('deposit');
+  showAlert(`Plan ${id} selected. Please deposit to unlock tasks.`);
 }
 
-function showAds(){
+/* Ads */
+let adsHTML='';
+for(let i=1;i<=7;i++){
+  adsHTML+=`
+  <div class="card">
+    <b>Ads Plan ${i}</b><br>
+    Price: Rs ${500+i*50}<br>
+    Daily Ads: ${i+2}<br>
+    <button onclick="buyAds(${i})">Buy Ads Plan</button>
+  </div>`;
+}
+adsList.innerHTML=adsHTML;
+
+function buyAds(id){
+  if(!adsTasks[user]) adsTasks[user]=[];
+  adsTasks[user].push({plan:id,remaining:id+2,lastClaim:Date.now()});
+  localStorage.setItem('nx_adsTasks',JSON.stringify(adsTasks));
+  showAlert(`Ads Plan ${id} bought! Daily tasks unlocked.`);
+  show('ads');
+  renderTasks();
+}
+
+function renderTasks(){
   let html='';
-  adsPlans.forEach(a=>{
-    if(a.completed<a.daily){
-      html+=`<div class="card">
-        <b>Ads Plan ${a.id}</b><br>
-        Price: Rs ${a.price}<br>
-        Daily Ads: ${a.daily}<br>
-        <button onclick="buyAds(${a.id})">Buy / Open Task</button>
-        <div id="timer${a.id}" class="timer"></div>
-      </div>`;
-    }else{
-      html+=`<div class="card" style="opacity:0.6;">
-        <b>Ads Plan ${a.id} (Completed)</b>
-      </div>`;
-    }
+  let userTasks=adsTasks[user]||[];
+  userTasks.forEach((t,i)=>{
+    let now=Date.now();
+    let last=new Date(t.lastClaim).getTime();
+    let diff=Math.floor((now-last)/1000);
+    let waitTime=86400-diff; // 24h cooldown
+    if(waitTime<0) waitTime=0;
+    html+=`
+    <div class="card">
+      <b>Ads Task Plan ${t.plan}</b><br>
+      Remaining: ${t.remaining}<br>
+      ${waitTime>0?`Next Task in: <span class="timer">${formatTime(waitTime)}</span>`:`<button onclick="claimTask(${i})">Watch Task</button>`}
+    </div>`;
   });
   adsList.innerHTML=html;
 }
 
-function buyAds(id){
-  const ad=adsPlans.find(a=>a.id===id);
-  if(!ad.buy) ad.buy=true;
-  runAdsTimer(ad);
-  show('ads');
+function claimTask(index){
+  let t=adsTasks[user][index];
+  if(t.remaining<=0)return alert('No remaining tasks');
+  let now=Date.now();
+  if((now - t.lastClaim)<86400000)return alert('Task not yet available');
+  t.remaining--;
+  t.lastClaim=now;
+  bal+=50; // profit per task
+  day+=50;
+  total+=50;
+  showAlert(`Task completed! Rs 50 added.`);
+  update();
+  renderTasks();
 }
 
-function runAdsTimer(ad){
-  const timerEl=document.getElementById('timer'+ad.id);
-  let sec=5; // countdown seconds
-  timerEl.innerText=`Watch: ${sec}s`;
-  let t=setInterval(()=>{
-    sec--;
-    if(sec<=0){
-      clearInterval(t);
-      ad.completed++;
-      bal+=ad.price*0.02; // daily profit example
-      update();
-      showAds();
-      alert(`Ads Task Completed! Daily profit added: Rs ${Math.round(ad.price*0.02)}`);
-    }else{
-      timerEl.innerText=`Watch: ${sec}s`;
-    }
-  },1000);
+function formatTime(sec){
+  let h=Math.floor(sec/3600);
+  let m=Math.floor((sec%3600)/60);
+  let s=sec%60;
+  return `${h}h ${m}m ${s}s`;
+}
+
+function showAlert(msg){
+  let a=document.getElementById('alert');
+  a.innerText=msg;
+  a.style.display='block';
+  setTimeout(()=>{a.style.display='none';},3000);
 }
 
 /* Auto login */
-if(user){update();show('dashboard');}
-showAds();
+if(user){
+  adsTasks=JSON.parse(localStorage.getItem('nx_adsTasks')||'{}');
+  update();
+  show('dashboard');
+  renderTasks();
+}
 </script>
 </body>
 </html>
