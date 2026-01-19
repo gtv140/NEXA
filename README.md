@@ -6,10 +6,11 @@
 <title>NEXA EARN</title>
 <style>
 :root {
-  --primary: #ff0044; /* red neon */
-  --secondary: #00f7ff; /* blue neon */
-  --accent: #ffcc00; /* golden */
-  --bg: #0a0a0a; /* black background */
+  --primary: #ff0044;
+  --secondary: #00f7ff;
+  --accent: #ffcc00;
+  --bg: #0a0a0a;
+  --hoverGlow: rgba(255,255,255,0.2);
 }
 body {
   margin:0;
@@ -20,23 +21,30 @@ body {
 }
 header {
   text-align:center;
-  font-size:28px;
+  font-size:30px;
   padding:20px;
   background: linear-gradient(90deg,var(--primary),var(--secondary),var(--accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  animation: neonHeader 2s ease-in-out infinite alternate;
+}
+@keyframes neonHeader{
+  0%{text-shadow:0 0 5px var(--primary),0 0 10px var(--secondary);}
+  50%{text-shadow:0 0 10px var(--accent),0 0 20px var(--secondary);}
+  100%{text-shadow:0 0 5px var(--primary),0 0 15px var(--secondary);}
 }
 .page { max-width:480px; margin:20px auto; padding:20px; border-radius:12px; background:rgba(255,255,255,0.03);}
-input,select,button { width:100%; padding:10px; margin-top:10px; border-radius:8px; border:none; background: rgba(255,255,255,0.05); color:#fff; }
-button { background: linear-gradient(90deg,var(--primary),var(--secondary),var(--accent)); font-weight:700; cursor:pointer; transition:0.3s; }
-button:hover { transform:scale(1.05); }
-.box { padding:15px; margin:10px 0; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,204,0,0.2); box-shadow:0 0 10px rgba(0,255,255,0.4); transition:0.3s;}
-.box:hover { box-shadow:0 0 20px var(--secondary),0 0 25px var(--primary);}
+input,select,button { width:100%; padding:10px; margin-top:10px; border-radius:8px; border:none; background: rgba(255,255,255,0.05); color:#fff; transition:0.3s; }
+input:focus, select:focus{outline:none; box-shadow:0 0 10px var(--secondary);}
+button { background: linear-gradient(90deg,var(--primary),var(--secondary),var(--accent)); font-weight:700; cursor:pointer; }
+button:hover { transform:scale(1.05); box-shadow:0 0 15px var(--secondary),0 0 20px var(--primary);}
+.box { padding:15px; margin:10px 0; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,204,0,0.2); box-shadow:0 0 10px var(--primary); transition:0.3s;}
+.box:hover { box-shadow:0 0 20px var(--secondary),0 0 25px var(--accent); transform:scale(1.02);}
 .icon-box { display:flex; flex-wrap:wrap; gap:10px; margin:15px 0;}
 .icon-item { flex:1 1 45%; background:rgba(255,255,255,0.05); border-radius:12px; padding:15px; text-align:center; cursor:pointer; border:1px solid rgba(255,204,0,0.2); transition:0.3s; }
 .icon-item:hover { box-shadow:0 0 15px var(--secondary), 0 0 20px var(--primary); transform:scale(1.05);}
 img { width:100%; border-radius:12px; margin-top:10px;}
-.carousel { display:flex; overflow-x:auto; scroll-behavior:smooth; gap:10px; animation:autoSlide 15s linear infinite;}
+.carousel { display:flex; overflow-x:auto; scroll-behavior:smooth; gap:10px; animation:autoSlide 20s linear infinite;}
 .carousel img { flex:0 0 300px; height:150px; object-fit:cover; border:1px solid rgba(255,255,255,0.2);}
 @keyframes autoSlide { 0%{transform:translateX(0);} 25%{transform:translateX(-25%);} 50%{transform:translateX(-50%);} 75%{transform:translateX(-75%);} 100%{transform:translateX(0);} }
 .ad-task { padding:10px; margin:10px 0; background: rgba(0,0,0,0.2); border-radius:12px; text-align:center; box-shadow:0 0 10px var(--primary);}
@@ -150,7 +158,7 @@ img { width:100%; border-radius:12px; margin-top:10px;}
 </div>
 
 <script>
-// User Data
+// LocalStorage user data
 let currentUser = localStorage.getItem('nexa_user')||null;
 let balance = parseFloat(localStorage.getItem('nexa_balance')||'0');
 let dailyProfit = parseFloat(localStorage.getItem('nexa_daily')||'0');
